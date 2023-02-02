@@ -12,8 +12,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "16.x"
-          cache: "yarn"
+          cache: "npm"
       - name: Install dependencies NUI
-        run: yarn install --frozen-lockfile
+        run: npm install
       - name: Build Bundles
-        run: yarn build
+        run: npm build
