@@ -16,4 +16,4 @@ jobs:
       - name: Install dependencies NUI
         run: npm install
       - name: Build Bundles
-        run: npm build
+        run: npm run build
