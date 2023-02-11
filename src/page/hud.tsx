@@ -7,7 +7,9 @@ const Hud = () => {
   return <div>Hud</div>;
 }
 
-export default {
+const HudPage = {
   element: Hud,
   needLogin: true
 };
+
+export default HudPage

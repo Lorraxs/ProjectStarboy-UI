@@ -94,7 +94,7 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
       paper: mode === "light" ? "#FFF" : "#30334E",
-      default: defaultBgColor(),
+      default: "transparent",
     },
     action: {
       active: `rgba(${mainColor}, 0.54)`,
