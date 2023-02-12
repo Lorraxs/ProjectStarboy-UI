@@ -2,13 +2,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 
-const Hud = () => {
+const HUD = () => {
   
-  return <div>Hud</div>;
+  return <div>HUD</div>;
 }
 
 const HudPage = {
-  element: Hud,
+  element: HUD,
   needLogin: true
 };
 

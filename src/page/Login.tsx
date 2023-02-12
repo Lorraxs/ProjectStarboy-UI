@@ -19,13 +19,11 @@ import HCaptcha from 'starboy-hcaptcha'
 const schema = yup.object().shape({
   email: yup.string().required('Vui lòng nhập email'),
   password: yup.string().required('Vui lòng nhập mật khẩu'),
-  token: yup.string().required('Vui lòng xác thực bạn không phải người máy')
 })
 
 const defaultValues: ILoginPlayer = {
   email: '',
   password: '',
-  token: ''
 }
 
 const AnimatedGrid = animated(Grid)
@@ -56,7 +54,7 @@ const Shape = styled(animated.img)`
 const request = new cRequest()
 
 const Login = () => {
-  const [show, setShow] = useShow(process.env.NODE_ENV === 'development', 'Login', true, true, false, false)
+  const [show, setShow] = useShow(process.env.NODE_ENV === 'development', 'Login', true, true, true, false)
   const springRef = useSpringRef()
   const springs = useSpring({
     ref: springRef,
@@ -107,6 +105,7 @@ const Login = () => {
 
   const onSubmit = (data:any)=>{
     console.log(data)
+    request.post('Login', data)
   }
 
   const onRegisterClick = ()=>{
