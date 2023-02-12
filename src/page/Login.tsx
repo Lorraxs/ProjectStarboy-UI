@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import * as yup from 'yup'
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,97 +10,171 @@ import FormLabel from '@mui/material/FormLabel/FormLabel';
 import TextField from '@mui/material/TextField';
 import {Avatar, Button, FormHelperText, Grid} from '@mui/material'
 import styled from 'styled-components';
-import { useSpring, animated, config, useTransition, useSpringRef  } from '@react-spring/web'
+import { useSpring, animated, config, useTransition, useSpringRef, useChain, useTrail  } from '@react-spring/web'
+import useShow from '../hooks/useShow';
+import { cRequest } from '../utils/request';
+//import HCaptcha from "@hcaptcha/react-hcaptcha";
+import HCaptcha from 'starboy-hcaptcha'
 
 const schema = yup.object().shape({
   email: yup.string().required('Vui lòng nhập email'),
   password: yup.string().required('Vui lòng nhập mật khẩu'),
+  token: yup.string().required('Vui lòng xác thực bạn không phải người máy')
 })
 
 const defaultValues: ILoginPlayer = {
   email: '',
-  password: ''
+  password: '',
+  token: ''
 }
 
 const AnimatedGrid = animated(Grid)
+const AnimatedTypography = animated(Typography)
+const AnimatedFormControl = animated(FormControl)
 
 const Container = styled(AnimatedGrid)`
   background-image: url('./assets/backgrounds/login.jpg');
+  pointer-events: auto;
 `
 
-const Wrapper = styled(Grid)`
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  /* backdrop-filter: blur(10.7px);
-  -webkit-backdrop-filter: blur(10.7px); */
-  border: 1px solid rgba(255, 255, 255,  0.14);
+const Wrapper = styled(AnimatedGrid)`
+  width: 25% !important;
+  position: absolute;
+  left: 5%;
 `
+
+const Shape = styled(animated.img)`
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: absolute;
+  object-fit: contain;
+  object-position: left;
+`
+
+const request = new cRequest()
 
 const Login = () => {
+  const [show, setShow] = useShow(process.env.NODE_ENV === 'development', 'Login', true, true, false, false)
+  const springRef = useSpringRef()
   const springs = useSpring({
+    ref: springRef,
     from: { x: -100, opacity: 0 },
-    to: { x: 0, opacity: 1 },
-    config: config.molasses
+    to: { x: show ? 0 : -100, opacity: show ? 1 : 0 },
+    config: {...config.molasses, duration: 500}
   })
   const transRef = useSpringRef()
-  const [transitions, api] = useTransition(1, () => ({
+  const transitions = useTransition(show, {
     ref: transRef,
+    from: { opacity: 0},
+    enter: { opacity: 1},
+    leave: { opacity: 0},
+    config: {...config.molasses, duration: 500}
+  })
+  const shapeTransRef = useSpringRef()
+  const shapeTransistions = useTransition(show, {
+    ref: shapeTransRef,
+    from: { x: -1000},
+    enter: { x: 0},
+    leave: { x: -1000},
+    config: {...config.molasses, duration: 300}
+  })
+  const trailsRef = useSpringRef()
+  const trails = useTrail(5, {
+    ref: trailsRef,
     from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  }))
+    to: { opacity: show ? 1 : 0 },
+    config: {...config.molasses, duration: 500}
+  })
   const {control, watch, reset, handleSubmit, formState: { errors }, setValue} = useForm({
     defaultValues,
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
+  const captchaRef = useRef<HCaptcha>(null);
 
-  useEffect(() => {
-    transRef.start()
-  }, [])
+  const onLoad = () => {
+    // this reaches out to the hCaptcha JS API and runs the
+    // execute function on it. you can use other functions as
+    // documented here:
+    // https://docs.hcaptcha.com/configuration#jsapi
+    captchaRef?.current?.execute();
+  };
 
+  console.log('rerender Login')
+  useChain(show ? [transRef, shapeTransRef, trailsRef, springRef] : [springRef, trailsRef, shapeTransRef, transRef], show ? [0,0.3, 0.6, 0.6] : [0, 0.3, 0.3, 0.3], 1000)
+
+  const onSubmit = (data:any)=>{
+    console.log(data)
+  }
+
+  const onRegisterClick = ()=>{
+    setShow(false)
+    request.post('ShowPage', 'Register')
+  }
+
+  /* if(!show)
+    return null */
   return (
-      <Container container justifyContent={'center'} alignItems={'center'} flexDirection={'column'} sx={{width: '100%', height: '100%'}} >
-
-        <AnimatedGrid item container sx={{width: '50%', borderRadius: 2, pr: '15%'}} alignItems={'center'} style={{...springs}}>
-          {transitions((style, item)=>(
-            <animated.div style={style}>{item}</animated.div>
+      transitions((style, show)=>(
+        show ? <Container container justifyContent={'center'} alignItems={'center'} flexDirection={'column'} sx={{width: '100%', height: '100%'}} style={style}>
+          {shapeTransistions((style, show)=>(
+            show ? <Shape src={'./assets/shapes/login2.png'} style={style}/> : null
           ))}
-          <Wrapper item xs={9} sx={{p: 10}} container spacing={6} justifyContent={'center'}>
-            <Typography variant='h3' sx={{fontFamily: 'Title', mb: 6}}>Đăng Nhập</Typography>
-            <FormControl sx={{m: 'auto', mb: 6}} variant='standard' fullWidth>
-              <Controller 
-                name='email'
-                control={control}
-                render={({field: {value, onChange}})=>(
-                  <TextField label='Email' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.email)} sx={{bgcolor: '#020101d8', borderRadius: 1, boxShadow: '0px 3px 1px  #ff0b30'}} fullWidth/>
-                )}          
-              />
-              {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
-            </FormControl>
-            <FormControl sx={{m: 'auto', mb: 6}} variant='standard' fullWidth>
-              <Controller 
-                name='password'
-                control={control}
-                render={({field: {value, onChange}})=>(
-                  <TextField label='Password' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.password)} sx={{bgcolor: '#020101d8', borderRadius: 1, boxShadow: '0px 3px 1px  #ff0b30'}}  fullWidth/>
-                )}          
-              />
-              {errors.password && <FormHelperText sx={{ color: 'error.main' }}>{errors.password.message}</FormHelperText>}
-            </FormControl>
-            <Grid container spacing={6}>
-              <Grid item xs={6}>
-                <Button variant='contained' color='primary' fullWidth>Đăng nhập</Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button variant='contained' color='warning' fullWidth>Đăng ký</Button>
-              </Grid>
-            </Grid>
+          <Wrapper item xs={9} sx={{p: 10}} container spacing={6} justifyContent={'center'} style={{...springs}}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {trails.map((props, index) => (
+                index === 0 ? <AnimatedTypography style={props} variant='h3' sx={{fontFamily: 'Title', mb: 6}}>Đăng Nhập</AnimatedTypography> : 
+                index === 1 ? <AnimatedFormControl style={props} sx={{m: 'auto', mb: 6}} variant='standard' fullWidth>
+                  <Controller 
+                    name='email'
+                    control={control}
+                    render={({field: {value, onChange}})=>(
+                      <TextField label='Email' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.email)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #ff0b30'}} fullWidth/>
+                    )}          
+                  />
+                  {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
+                </AnimatedFormControl> : 
+                index === 2 ? <AnimatedFormControl style={props} sx={{m: 'auto', mb: 6}} variant='standard' fullWidth>
+                  <Controller 
+                    name='password'
+                    control={control}
+                    render={({field: {value, onChange}})=>(
+                      <TextField label='Password' variant='outlined' type='password' value={value} onChange={onChange} error={Boolean(errors.password)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #ff0b30'}}  fullWidth/>
+                    )}          
+                  />
+                  {errors.password && <FormHelperText sx={{ color: 'error.main' }}>{errors.password.message}</FormHelperText>}
+                </AnimatedFormControl> :
+                /* index === 3 ? <AnimatedFormControl style={props} sx={{m: 'auto', mb: 6}} variant='standard' fullWidth>
+                  <Controller 
+                    name='token'
+                    control={control}
+                    render={({field: {value, onChange}})=>(
+                      <HCaptcha
+                        sitekey="bbba7fec-268d-46be-974b-f55c3a1965ca"
+                        onLoad={onLoad}
+                        onVerify={onChange}
+                        ref={captchaRef}
+                        
+                      />
+                    )}          
+                  />
+                  {errors.token && <FormHelperText sx={{ color: 'error.main' }}>{errors.token.message}</FormHelperText>}
+                </AnimatedFormControl> :  */
+                index === 4 ? <AnimatedGrid style={props} container spacing={6}>
+                  <Grid item xs={6}>
+                    <Button variant='contained' type='submit' color='primary' fullWidth>Đăng nhập</Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button variant='contained' color='warning' onClick={onRegisterClick} fullWidth>Đăng ký</Button>
+                  </Grid>
+                </AnimatedGrid> : null
+              ))}
+            </form>
           </Wrapper>
-          
-        </AnimatedGrid>
-      </Container>
+        </Container>:null
+      ))
   )
 }
 

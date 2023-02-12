@@ -41,9 +41,9 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
       contrastText: "#FFF",
     },
     secondary: {
-      light: "#7F889B",
-      main: "#6D788D",
-      dark: "#606A7C",
+      light: "#0BFF33",
+      main: "#0BFF33",
+      dark: "#0BFF33",
       contrastText: "#FFF",
     },
     success: {

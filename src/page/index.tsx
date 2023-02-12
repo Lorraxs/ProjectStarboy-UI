@@ -4,8 +4,9 @@ import HudPage from "./hud";
 import React from 'react'
 import { RootState } from "../store";
 import styled from 'styled-components'
+import RegisterPage from "./Register";
 
-const pages = [LoginPage, HudPage];
+const pages = [LoginPage, RegisterPage, HudPage];
 
 const Container = styled.div`
   width: 100%;
@@ -22,6 +23,16 @@ const Container = styled.div`
   }
 `
 
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+`
+
 function Page() {
   const playerState = useSelector((state: RootState)=>state.player)
   console.log(playerState)
@@ -30,9 +41,13 @@ function Page() {
       {pages.map((page, i)=>{
         const Page = page.element
         if(page.needLogin){
-          return playerState._id !== '' ? <Page key={i}/> : null
+          return playerState._id !== '' ? <Wrapper>
+            <Page key={i}/> 
+          </Wrapper>: null
         }else{
-          return playerState._id === '' ? <Page key={i}/> : null
+          return playerState._id === '' ? <Wrapper>
+            <Page key={i}/> 
+          </Wrapper>: null
         }
       })}
     </Container>
