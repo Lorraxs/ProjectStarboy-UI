@@ -30,9 +30,9 @@ function Page() {
       {pages.map((page, i)=>{
         const Page = page.element
         if(page.needLogin){
-          return playerState._id !== '' ? <Page/> : null
+          return playerState._id !== '' ? <Page key={i}/> : null
         }else{
-          return playerState._id === '' ? <Page/> : null
+          return playerState._id === '' ? <Page key={i}/> : null
         }
       })}
     </Container>

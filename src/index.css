@@ -10,6 +10,47 @@ body {
   
 }
 
+@font-face {
+  font-family: Title;
+  src: url('/public/assets/fonts/1FTV-Dune_Rise.otf') format('opentype');
+}
+@font-face {
+  font-family: Gilroy;
+  src: url('/public/assets/fonts/SVN-GilroyRegular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: Gilroy;
+  src: url('/public/assets/fonts/SVN-GilroyItalic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: Gilroy;
+  src: url('/public/assets/fonts/SVN-GilroyBold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: Gilroy;
+  src: url('/public/assets/fonts/SVN-GilroyBoldItalic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: Gilroy;
+  src: url('/public/assets/fonts/SVN-GilroyLight.otf') format('opentype');
+  font-weight:lighter;
+  font-style: normal;
+}
+@font-face {
+  font-family: Gilroy;
+  src: url('/public/assets/fonts/SVN-GilroyLightItalic.otf') format('opentype');
+  font-weight:lighter;
+  font-style: italic;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -18,4 +59,5 @@ body, #root{
   width: 100vw;
   height: 100vh;
   background-color: transparent;
+  color: whitesmoke;
 }

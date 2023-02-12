@@ -32,22 +32,8 @@ const themeOptions = (settings: Settings): ThemeOptions => {
       direction,
       palette: palette(mode, skin),
       typography: {
-        fontFamily:
-          userFontFamily ||
-          [
-            "Inter",
-            "sans-serif",
-            "-apple-system",
-            "BlinkMacSystemFont",
-            '"Segoe UI"',
-            "Roboto",
-            '"Helvetica Neue"',
-            "Arial",
-            "sans-serif",
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-          ].join(","),
+        fontFamily: userFontFamily || ["Gilroy"].join(","),
+        fontWeight: "regular",
       },
       shadows: shadows(mode),
       ...spacing,
