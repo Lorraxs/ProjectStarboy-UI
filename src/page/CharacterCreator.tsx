@@ -2,6 +2,7 @@ import React from 'react'
 import useShow from '../hooks/useShow'
 import styled from 'styled-components'
 import { animated } from '@react-spring/web'
+import { AnimatedGrid } from '../components/animated-mui'
 
 const Container = styled(animated.div)`
   width: 100%;
@@ -11,8 +12,12 @@ const Container = styled(animated.div)`
 
 function CharacterCreator() {
   const [show, setShow] = useShow(process.env.NODE_ENV === 'development', 'CharacterCreator', true, true, true, false)
-  return (
-    <Container>CharacterCreator</Container>
+  return (show ?
+    <Container>
+      <AnimatedGrid container>
+        
+      </AnimatedGrid>
+    </Container> : null
   )
 }
 

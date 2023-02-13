@@ -22,8 +22,8 @@ const schema = yup.object().shape({
 })
 
 const defaultValues: ILoginPlayer = {
-  email: '',
-  password: '',
+  email: 'tringuyenk19@gmail.com',
+  password: '123123',
 }
 
 const AnimatedGrid = animated(Grid)
