@@ -54,7 +54,7 @@ const Shape = styled(animated.img)`
 const request = new cRequest()
 
 const Login = () => {
-  const [show, setShow] = useShow(process.env.NODE_ENV === 'development', 'Login', true, true, true, false)
+  const [show, setShow] = useShow(false, 'Login', true, true, true, false)
   const springRef = useSpringRef()
   const springs = useSpring({
     ref: springRef,

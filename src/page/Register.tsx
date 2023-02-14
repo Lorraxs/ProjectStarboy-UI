@@ -59,7 +59,7 @@ const defaultValues = {
 }
 
 function Register() {
-  const [show, setShow] = useShow(process.env.NODE_ENV === 'development', pageInfo.name, pageInfo.hasFocus, pageInfo.hasCursor, pageInfo.keepInput, pageInfo.canClose)
+  const [show, setShow] = useShow(false, pageInfo.name, pageInfo.hasFocus, pageInfo.hasCursor, pageInfo.keepInput, pageInfo.canClose)
   const springRef = useSpringRef()
   const springs = useSpring({
     ref: springRef,
