@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import * as yup from 'yup'
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ILoginPlayer } from '../shared/interfaces';
+import { ILoginPlayer } from '../../../shared/interfaces';
 import { Box } from '@mui/system';
 import Typography from '@mui/material/Typography/Typography';
 import FormControl from '@mui/material/FormControl/FormControl';

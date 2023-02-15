@@ -5,13 +5,13 @@ import { animated } from '@react-spring/web'
 import { AnimatedBox, AnimatedGrid, AnimatedTypography } from '../components/animated-mui'
 import { Box } from '@mui/system'
 import { Button, Dialog, DialogTitle, Grid, IconButton, Slider, Tooltip, Typography } from '@mui/material'
-import { FatherFaces, IPedAppearance, IPedHeadBlend, IPedHeadOvelayNum, IPedHeadOverlayValue, IPedHeadOverlays, MotherFaces, ParentsName, defaultPedAppearance, defaultPedHeadOverlayNum } from '../shared/interfaces'
+import { FatherFaces, IPedAppearance, IPedHeadBlend, IPedHeadOvelayNum, IPedHeadOverlayValue, IPedHeadOverlays, MotherFaces, ParentsName, defaultPedAppearance, defaultPedHeadOverlayNum } from '../../../shared/interfaces'
 import _ from 'lodash'
 import { Control, Controller, FormProvider, useController, useForm, useFormContext } from 'react-hook-form'
 import { cRequest } from '../utils/request'
 import PaletteIcon from '@mui/icons-material/Palette';
 import CircleIcon from '@mui/icons-material/Circle';
-import { PED_HEAD_OVERLAY_COLORS } from '../shared/constants'
+import { PED_HEAD_OVERLAY_COLORS } from '../../../shared/constants'
 
 const request = new cRequest()
 
