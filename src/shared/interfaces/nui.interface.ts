@@ -13,7 +13,7 @@ export interface INuiMessage {
 }
 
 export interface INUIShowPageMessage {
-  component: string;
+  component: INUIPage;
   type: "show";
   data: boolean;
 }
@@ -24,3 +24,11 @@ export interface INUINotificationMessage {
   message: string;
   duration: number;
 }
+
+export interface INotification {
+  message?: string;
+  type?: "success" | "error" | "warning" | "info";
+  duration?: number;
+}
+
+export type INUIPage = "Login" | "Register" | "CharacterCreator";

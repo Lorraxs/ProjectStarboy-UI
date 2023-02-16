@@ -1,3 +1,6 @@
+import { Inventory } from "../../server/class/inventory.class";
+import { EPlayerInventorySlot, IInventory } from "./inventory.interface";
+
 export interface Vector3 {
   x: number;
   y: number;
@@ -254,11 +257,12 @@ export interface ILoginPlayer {
 
 export type IOrganization = "police" | "ambulance" | "mechanic";
 
-export type ICoords = [number, number, number];
+export type ICoords = number[];
 export type IGender = "male" | "female";
 
 export interface IPlayer {
   _id: string;
+  id: number;
   name: string;
   email: string;
   gender: IGender;
@@ -275,6 +279,7 @@ export interface IPlayer {
   blackMoney?: number;
   coords: ICoords;
   appearance?: IPedAppearance;
+  inventory: IInventory;
 }
 
 export interface ICreatePlayer {
@@ -489,3 +494,10 @@ export const defaultPedHeadOverlayNum: IPedHeadOvelayNum = {
   moleAndFreckles: 18,
   sunDamage: 11,
 };
+
+export interface IAddPlayerInventoryItemProps {
+  itemName: string;
+  slot?: EPlayerInventorySlot;
+  amount: number;
+  reason?: string;
+}
