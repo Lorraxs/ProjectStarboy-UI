@@ -6,8 +6,9 @@ import { RootState } from "../store";
 import styled from 'styled-components'
 import RegisterPage from "./Register";
 import CharacterCreatorPage from "./CharacterCreator";
+import PlayerInventoryPage from "./PlayerInventory";
 
-const pages = [LoginPage, RegisterPage, HudPage, CharacterCreatorPage];
+const pages = [LoginPage, RegisterPage, HudPage, CharacterCreatorPage, PlayerInventoryPage];
 
 const Container = styled.div`
   width: 100%;

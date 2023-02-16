@@ -1,4 +1,3 @@
-import { Inventory } from "../../server/class/inventory.class";
 import { EPlayerInventorySlot, IInventory } from "./inventory.interface";
 
 export interface Vector3 {

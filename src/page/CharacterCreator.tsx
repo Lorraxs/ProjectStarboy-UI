@@ -74,7 +74,7 @@ const ParrentItemGrid = styled(AnimatedGrid)<{selected: boolean}>`
 `
 
 function CharacterCreator() {
-  const [show, setShow] = useShow(process.env.NODE_ENV === 'development', 'CharacterCreator', true, true, true, false)
+  const [show, setShow] = useShow(false, 'CharacterCreator', true, true, true, false)
   const [overlayNums, setOverlayNums] = useState<IPedHeadOvelayNum>(defaultPedHeadOverlayNum)
   const methods= useForm({
     defaultValues:defaultPedAppearance,
