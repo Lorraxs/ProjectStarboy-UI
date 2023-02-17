@@ -42,14 +42,22 @@ function Page() {
     <Container>
       {pages.map((page, i)=>{
         const Page = page.element
-        if(page.needLogin){
-          return playerState._id !== '' ? <Wrapper>
-            <Page key={i}/> 
-          </Wrapper>: null
+        if(process.env.NODE_ENV === 'development'){
+          return(
+            <Wrapper>
+              <Page key={i}/> 
+            </Wrapper>
+          )
         }else{
-          return playerState._id === '' ? <Wrapper>
-            <Page key={i}/> 
-          </Wrapper>: null
+          if(page.needLogin){
+            return playerState._id !== '' ? <Wrapper>
+              <Page key={i}/> 
+            </Wrapper>: null
+          }else{
+            return playerState._id === '' ? <Wrapper>
+              <Page key={i}/> 
+            </Wrapper>: null
+          }
         }
       })}
     </Container>

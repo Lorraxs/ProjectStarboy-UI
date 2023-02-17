@@ -16,11 +16,12 @@ import WarningIcon from '@mui/icons-material/Warning';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import InfoIcon from '@mui/icons-material/Info';
 import ErrorIcon from '@mui/icons-material/Error';
+import useMessageEvent from './hooks/useMessageEvent';
 
 const request = new cRequest()
 
 function App() {
-
+  useMessageEvent()
   useEffect(() => {
     request.post('Ready')
   }, [])
@@ -193,22 +194,20 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store}>
-      <SettingsProvider>
-        <SettingsConsumer>
-          {({settings})=>{
-            console.log(settings)
-            return(
-              <ThemeComponent settings={settings}>
-                <Page />
-                <Toaster />
-              </ThemeComponent>
-            )
-          }}
-        </SettingsConsumer>
+    <SettingsProvider>
+      <SettingsConsumer>
+        {({settings})=>{
+          console.log(settings)
+          return(
+            <ThemeComponent settings={settings}>
+              <Page />
+              <Toaster />
+            </ThemeComponent>
+          )
+        }}
+      </SettingsConsumer>
 
-      </SettingsProvider>
-    </Provider>
+    </SettingsProvider>
   );
 }
 

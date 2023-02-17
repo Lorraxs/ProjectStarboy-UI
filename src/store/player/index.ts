@@ -1,13 +1,14 @@
 import { Dispatch } from "redux";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IPlayer } from "../../shared/interfaces";
+import { EPlayerInventorySlot } from "../../shared/interfaces/inventory.interface";
 
 const initialState: IPlayer = {
   _id: "",
   id: 1,
   name: "",
   email: "",
-  gender: "male",
+  gender: "female",
   health: 0,
   armour: 0,
   verified: false,
@@ -15,7 +16,13 @@ const initialState: IPlayer = {
   bank: 0,
   coin: 0,
   coords: [0, 0, 0],
-  inventory: {},
+  inventory: {
+    [EPlayerInventorySlot.BP_0]: {
+      name: "bread",
+      amount: 2,
+      slot: EPlayerInventorySlot.BP_0,
+    },
+  },
 };
 
 export const playerSlice = createSlice({

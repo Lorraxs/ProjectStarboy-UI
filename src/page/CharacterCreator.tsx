@@ -765,7 +765,7 @@ const ColorDialog = ({currentColor, title, setValue}:{currentColor: number, titl
 
 const CharacterCreatorPage = {
   element: CharacterCreator,
-  needLogin: false
+  needLogin: true
 }
 
 export default  CharacterCreatorPage

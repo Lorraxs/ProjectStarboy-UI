@@ -1,3 +1,12 @@
+import { EInventoryRarity } from "./inventory.interface";
+
+export type IItemType =
+  | "standard"
+  | "weapon"
+  | "ped-component"
+  | "ped-prop"
+  | "weapon-component"
+  | "weapon-ammo";
 export interface IItem {
   name: string;
   label: string;
@@ -9,11 +18,6 @@ export interface IItem {
   canDrop: boolean;
   expiration: number;
   stability: number;
-  type:
-    | "standard"
-    | "weapon"
-    | "ped-component"
-    | "ped-prop"
-    | "weapon-component"
-    | "weapon-ammo";
+  type: IItemType;
+  rarity: EInventoryRarity;
 }

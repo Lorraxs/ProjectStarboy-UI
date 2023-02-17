@@ -110,6 +110,7 @@ const Login = () => {
 
   const onRegisterClick = ()=>{
     setShow(false)
+    request.post('HidePage', 'Login')
     request.post('ShowPage', 'Register')
   }
 
