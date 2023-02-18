@@ -62,3 +62,22 @@ export const RarityColor = {
   [EInventoryRarity.EPIC]: "#f72585",
   [EInventoryRarity.LEGENDARY]: "#fb8500",
 };
+export interface IDraggableLocation {
+  droppableId: string;
+  index: number;
+}
+export interface ICombine {
+  draggableId: string;
+  droppableId: string;
+}
+export type IDropReason = "DROP" | "CANCEL";
+export type IMovementMode = "FLUID" | "SNAP";
+export interface IDropResult {
+  reason: IDropReason;
+  destination: IDraggableLocation | null | undefined;
+  combine: ICombine | null | undefined;
+  draggableId: string;
+  type: string;
+  source: IDraggableLocation;
+  mode: IMovementMode;
+}
