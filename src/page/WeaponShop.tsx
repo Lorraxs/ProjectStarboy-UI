@@ -9,59 +9,59 @@ import { cRequest } from '../utils/request'
 import { DefaultWeaponInfomation, WeaponListType, WeaponShopType, EWeaponShopTypeSubTittle } from '../shared/interfaces';
 import { AnimatedGrid } from '../components/animated-mui'
 import FormControl from '@mui/material/FormControl/FormControl';
-import { animated } from '@react-spring/web'
+import { animated, config, useChain, useSpring, useSpringRef, useTransition } from '@react-spring/web'
 
 const request = new cRequest()
 
 
-const Container = styled(Grid)`
+const Container = styled(AnimatedGrid)`
     width: 100%;
     height: 100%;
     background-color: rgba(49, 49, 49, 0.788);
     pointer-events: all;
 `
-const Body = styled(Grid)`
+const Body = styled(AnimatedGrid)`
     width: 80%;
     height: 80%;
     background-color: #111111;
 `
-const Header = styled(Grid)`
+const Header = styled(AnimatedGrid)`
     width: 100%;
     height: 13%;
     display:flex;
 `
-const Center = styled(Grid)`
+const Center = styled(AnimatedGrid)`
     width: 100%;
-    height: 70%;
+    height: 67%;
     border-bottom: 1px solid #232323;
 `
 
-const Bottom = styled(Grid)`
+const Bottom = styled(AnimatedGrid)`
     width: 100%;
     height: 17%;
 `
 
-const ParrentGrid = styled(Grid)`
+const ParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
 
 `
 
-const CenterParrentGrid = styled(Grid)`
+const CenterParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
 
 `
-const CenterParrentGridItem = styled(Grid)`
+const CenterParrentGridItem = styled(AnimatedGrid)`
     height: 100%;
 `
 
-const BottomParrentGrid = styled(Grid)`
+const BottomParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
 
 `
-const BottomParrentGridItem = styled(Grid)`
+const BottomParrentGridItem = styled(AnimatedGrid)`
     height: 90%;
     ::-webkit-scrollbar
     {   
@@ -80,7 +80,7 @@ const BottomParrentGridItem = styled(Grid)`
     }
 
 `
-const BottomParrentGridItemWeapon = styled(Grid)`
+const BottomParrentGridItemWeapon = styled(AnimatedGrid)`
     min-width: calc(20% - 15px);
     cursor: pointer;
 
@@ -113,7 +113,6 @@ const WeaponCenterImg = styled(animated.img)`
     position: relative
     width: 100%;
     height: 100%;
-    margin-top: -5%;
     
 
 `
@@ -126,7 +125,7 @@ const WeaponBottomImg = styled(animated.img)`
 
 
 function WeaponShop(){
-    const [show, setShow] = useShow(process.env.NODE_ENV === 'development', 'WeaponShop', true, true, true, false)
+    const [show] = useShow(true, 'WeaponShop', true, true, true, false)
     const [menuList, setMenuList] = useState("Meele");
     const selectedList = WeaponListType[menuList as keyof typeof WeaponListType];
     const [selectedWeapon, setselectedWeapon] = useState( selectedList[0]);
@@ -138,28 +137,62 @@ function WeaponShop(){
 
     useEffect(() => {
         setselectedWeapon(selectedList[0])
-      }, [selectedList]);
+    }, [selectedList]);
 
-      useEffect(() => {
+    useEffect(() => {
         setData({
             name: selectedWeapon,
             totalprice: weaponPrice + feeWeaponPrice,
             type: DefaultWeaponInfomation[selectedWeapon]?.type?? null,
             account: buyAccount
         })
-      }, [selectedWeapon, weaponPrice, feeWeaponPrice, buyAccount]);
+    }, [selectedWeapon, weaponPrice, feeWeaponPrice, buyAccount]);
 
-      const onSubmit = () =>{
+    const onSubmit = () =>{
         console.log(data);
         request.post('WeaponShop:Buy', data)
-      }
+    }
 
-      const switchAccount = (event: SelectChangeEvent) => {
+    const switchAccount = (event: SelectChangeEvent) => {
         setBuyAccount(event.target.value as string)
-      }
+    }
 
-    return ( show ?
-        <Container container justifyContent={'center'} alignItems={'center'}>
+    const centerSpringRef = useSpringRef();
+    const centerSpring = useSpring({
+        ref: centerSpringRef,
+        from: { x: -100, opacity: 0 },
+        to: { x: show ? 0 : -100, opacity: show ? 1 : 0 },
+    })
+
+    const bottomSpringRef = useSpringRef();
+    const bottomSpring = useSpring({
+        ref: bottomSpringRef,
+        from: { y: 100, opacity: 0 },
+        to: { y: show ? 0 : 100, opacity: show ? 1 : 0 },
+    })
+
+    const rightSpringRef = useSpringRef();
+    const rightSpring = useSpring({
+        ref: rightSpringRef,
+        from: { x: 100, opacity: 0 },
+        to: { x: show ? 0 : 100, opacity: show ? 1 : 0 },
+      })
+    
+    const transRef = useSpringRef()
+    const transitions = useTransition(show, {
+        ref: transRef,
+        from: { opacity: 0},
+        enter: { opacity: 1},
+        leave: { opacity: 0},
+        config: {...config.molasses, duration: 500}
+    })
+
+    useChain(show ? [transRef, centerSpringRef, rightSpringRef,bottomSpringRef] : [bottomSpringRef,rightSpringRef, centerSpringRef, transRef], show ? 
+        [0.0, 0.5, 0.5, 0.5]:
+        [0.0, 0.0, 0.0, 0.5], 
+        1000)
+    return transitions( (style, show) => (show ?
+        <Container container justifyContent={'center'} alignItems={'center'} style={style}>
             <Body>
                 <Header>
                     <ParrentGrid xs={9}  justifyContent={'center'} alignItems={'center'} sx={{borderBottom: "1px solid #232323", borderRight: "1px solid #232323"}}>
@@ -207,7 +240,7 @@ function WeaponShop(){
                 <Center>
                     <CenterParrentGrid>
                         <CenterParrentGridItem xs={1}></CenterParrentGridItem>
-                        <CenterParrentGridItem xs={8} sx={{width: "100%"}}>
+                        <CenterParrentGridItem style={{...centerSpring}}  xs={8} sx={{width: "100%"}}>
                             {selectedWeapon === undefined || selectedWeapon === null ? (
                                 <Grid display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{ width: "100%", height: "100%"}}>
                                     <RemoveShoppingCartIcon fontSize="large" sx={{mr:4, color: "#232323"}}></RemoveShoppingCartIcon>
@@ -215,11 +248,11 @@ function WeaponShop(){
                                 </Grid>
                             ):(
                                 <Grid sx={{width: "100%", height: "100%", m:5}}>
-                                    <Grid sx={{width:"70%", height:"18%"}}>
+                                    <Grid sx={{width:"70%", height:"20%"}}>
                                         <Typography variant='h5' sx={{fontFamily: "Title", mb:2}} color={'primary'}>{DefaultWeaponInfomation[selectedWeapon].tittle}</Typography>
                                         <Typography  sx={{fontFamily: "Gilroy", fontSize: "14px"}} color={'#ffffff'}>{DefaultWeaponInfomation[selectedWeapon].description}</Typography>
                                     </Grid>
-                                    <Grid sx={{width: "100%",height:"40%"}}>
+                                    <Grid sx={{width: "100%",height:"35%"}}>
                                         <WeaponCenterImg src={`./assets/weaponShop/${selectedWeapon}.webp`}/>
                                     </Grid>
                                     <Grid display={"flex"} flexDirection={"column"} spacing={10} justifyContent={"center"} sx={{width: "100%",height:"35%"}}>
@@ -230,6 +263,9 @@ function WeaponShop(){
                                             <Grid xs={5}  display={"flex"} alignItems={"center"}>
                                                 <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].damage}/>
                                             </Grid>
+                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].damage}</Typography>
+                                            </Grid>
                                         </Grid>
                                         <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
                                             <Grid xs={1} display={"flex"} alignItems={"center"}>
@@ -237,6 +273,9 @@ function WeaponShop(){
                                             </Grid>
                                             <Grid xs={5} display={"flex"} alignItems={"center"}>
                                                 <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].range}/>
+                                            </Grid>
+                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].range}</Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
@@ -246,6 +285,9 @@ function WeaponShop(){
                                             <Grid xs={5} display={"flex"} alignItems={"center"}>
                                                 <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].firerate}/>
                                             </Grid>
+                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].firerate}</Typography>
+                                            </Grid>
                                         </Grid>
                                         <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
                                             <Grid xs={1} display={"flex"} alignItems={"center"}>
@@ -253,6 +295,9 @@ function WeaponShop(){
                                             </Grid>
                                             <Grid xs={5} display={"flex"} alignItems={"center"}>
                                                 <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].accuracy}/>
+                                            </Grid>
+                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].accuracy}</Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
@@ -262,13 +307,16 @@ function WeaponShop(){
                                             <Grid xs={5} display={"flex"} alignItems={"center"}>
                                                 <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].control}/>
                                             </Grid>
+                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].control}</Typography>
+                                            </Grid>
                                         </Grid>
                                         
                                     </Grid>
                                 </Grid> 
                             )}  
                         </CenterParrentGridItem>
-                        <CenterParrentGridItem display={"flex"} justifyContent={"center"} alignItems={"center"} xs={3} >
+                        <CenterParrentGridItem style={{...rightSpring}} display={"flex"} justifyContent={"center"} alignItems={"center"} xs={3} >
                             <Grid sx={{ width: "80%", height: "90%", borderLeft: "2px solid #FF0B30"}}>
                                 <Grid sx={{width: "100%", height: "10%"}} xs={12} display={"flex"} justifyContent={"center"}>
                                     <Typography sx={{fontFamily: "Title", fontSize: "12px", fontWeight: "bold", width: "60%", textAlign: "center"}} color={'primary'}>chi phí</Typography>
@@ -309,7 +357,7 @@ function WeaponShop(){
                 <Bottom>
                     <BottomParrentGrid >
                         <Grid xs={1}></Grid>
-                        <BottomParrentGridItem container sx={{mt: 1,width: '100%', overflowX: 'auto', overflowY: 'hidden'}} wrap={"nowrap"} xs={10}>
+                        <BottomParrentGridItem style={{...bottomSpring}} container sx={{mt: 1,width: '100%', overflowX: 'auto', overflowY: 'hidden'}} wrap={"nowrap"} xs={10}>
                             {selectedList.length === 0 ? (
                                 <Grid display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{width: "100%", height: "100%"}}>
                                     <RemoveShoppingCartIcon fontSize="large" sx={{mr:4, color: "#232323"}}></RemoveShoppingCartIcon>
@@ -349,6 +397,7 @@ function WeaponShop(){
             </Body>
         </Container>
         : null
+    )
     );
 };
 const WeaponShopPage = {
