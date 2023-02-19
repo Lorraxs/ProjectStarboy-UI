@@ -98,7 +98,7 @@ interface SlotProps{
 function Slot({width='5vw', icon='hat', style={}, title="", placement='top', keyboard, disable=false, type='standard', slot=EPlayerInventorySlot.BP_0}:SlotProps) {
   const inventory = useSelector((state:RootState)=>state.player.inventory)
   const item = inventory[slot];
-  const itemData = item && getItemDataByName(item.name)
+  const itemData = (item && item.length > 0) ? getItemDataByName(item[0].name) : undefined
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openContext = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -112,8 +112,8 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
     if (!dragSlot) return false;
     if (!dropSlot) return false;
     const item = inventory[dragSlot];
-    if (!item) return true;
-    const itemData = getItemDataByName(item.name);
+    if (!item || item.length === 0) return true;
+    const itemData = getItemDataByName(item[0].name);
     if (!itemData) return true;
     const _isBackpackSlot = isBackpackSlot(dropSlot);
     if(_isBackpackSlot){
@@ -147,18 +147,18 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
                 {!item && <SlotIcon className={`icon-${icon}`}/>}
                 {keyboard && <SlotKeyboard>{keyboard}</SlotKeyboard>}
                 {
-                  item ? <Draggable draggableId={slot} index={0}>
+                  (item && item.length > 0) ? <Draggable draggableId={slot} index={0}>
                     {(provided, snapshot) => (
                       <SlotBlackground 
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps} 
-                        src={`https://lorraxs.com/lr_core_pro/items/${item.name}.png`}
+                        src={`https://lorraxs.com/lr_core_pro/items/${item[0].name}.png`}
                       /> 
                     )}
                   </Draggable> : null
                 }
-                {item && !isClotheSlot(slot) && <SlotItemAmount>{item.amount}</SlotItemAmount>}
+                {item && item.length > 0 && !isClotheSlot(slot) && <SlotItemAmount>{item.length}</SlotItemAmount>}
                 {itemData && <SlotRarity rarity={itemData.rarity}/>}
                 {provided.placeholder}
               </SlotContainer>
@@ -207,10 +207,10 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem >
-          {itemData !== undefined && <Typography variant='h5' sx={{color: RarityColor[itemData?.rarity]}}>{itemData?.label}</Typography>}
+          {itemData !== undefined && <Typography variant='h5' sx={{color: RarityColor[itemData.rarity]}}>{itemData?.label}</Typography>}
         </MenuItem>
         <MenuItem >
-          <Typography>Số lượng: {item?.amount}</Typography>
+          <Typography>Số lượng: {item.length}</Typography>
         </MenuItem>
         <MenuItem >
           <Typography variant='body2'>{itemData?.description}</Typography>

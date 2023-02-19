@@ -99,14 +99,12 @@ export interface IItemComponent {
 }
 export interface IInventoryItem {
   name: string;
-  slot: string;
-  amount: number;
   expiration?: number;
   stability?: number;
   component?: IItemComponent;
 }
 export interface IInventory {
-  [key: string]: IInventoryItem;
+  [key: string]: IInventoryItem[];
 }
 
 export interface IAddInventoryItem {

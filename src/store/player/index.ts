@@ -17,11 +17,12 @@ const initialState: IPlayer = {
   coin: 0,
   coords: [0, 0, 0],
   inventory: {
-    [EPlayerInventorySlot.BP_0]: {
-      name: "bread",
-      amount: 2,
-      slot: EPlayerInventorySlot.BP_0,
-    },
+    [EPlayerInventorySlot.BP_0]: [
+      {
+        name: "bread",
+        slot: EPlayerInventorySlot.BP_0,
+      },
+    ],
   },
   inventoryWeight: 0,
   maxInventoryWeight: 40000,

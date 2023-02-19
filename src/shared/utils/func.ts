@@ -193,10 +193,10 @@ export const getPlayerInventoryWeight = (intentory: IInventory): number => {
   let weight = 0;
   for (const slot of Object.values(EPlayerInventorySlot)) {
     const item = intentory[slot];
-    if (item) {
-      const itemData = getItemDataByName(item.name);
+    if (item && item.length > 0) {
+      const itemData = getItemDataByName(item[0].name);
       if (itemData) {
-        weight += itemData.weight;
+        weight += itemData.weight * item.length;
       }
     }
   }
