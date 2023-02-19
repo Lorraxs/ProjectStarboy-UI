@@ -12,7 +12,7 @@ import LockIcon from '@mui/icons-material/Lock';
 const Container = styled(Grid)`
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(49, 49, 49, 0.788) 51%, #250000 100%);
+  background-color: radial-gradient(circle, rgba(49, 49, 49, 0.788) 51%, #250000 100%);
   padding: 2%;
   pointer-events: all;
 `
@@ -23,7 +23,7 @@ const HumanPng = styled.img`
 
 
 function PlayerInventory() {
-  const [show] = useShow(process.env.NODE_ENV === 'development', 'PlayerInventory', true, true, true, true)
+  const [show] = useShow(false, 'PlayerInventory', true, true, true, true)
   const gender = useSelector((state: RootState)=>state.player.gender)
   console.log(gender)
   return (show ?
