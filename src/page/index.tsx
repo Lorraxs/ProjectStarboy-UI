@@ -7,9 +7,10 @@ import styled from 'styled-components'
 import RegisterPage from "./Register";
 import CharacterCreatorPage from "./CharacterCreator";
 import GroceryStorePage from "./GroceryStore";
+import WeaponShopPage from "./WeaponShop";
 import PlayerInventoryPage from "./PlayerInventory";
 
-const pages = [LoginPage, RegisterPage, CharacterCreatorPage, PlayerInventoryPage, GroceryStorePage];
+const pages = [LoginPage, RegisterPage, CharacterCreatorPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage];
 
 const Container = styled.div`
   width: 100%;

@@ -19,17 +19,13 @@ const request = new cRequest()
 const Container = styled(AnimatedGrid)`
     width: 100%;
     height: 100%;
-    background-color: rgba(49, 49, 49, 0.788);
+    background-color: #111111;
     pointer-events: all;
 `
-const Body = styled(AnimatedGrid)`
-    width: 80%;
-    height: 80%;
-    background-color: #111111;
-`
+
 const Header = styled(AnimatedGrid)`
     width: 100%;
-    height: 13%;
+    height: 10%;
     display:flex;
 `
 const Center = styled(AnimatedGrid)`
@@ -68,7 +64,7 @@ const BottomParrentGridItem = styled(AnimatedGrid)`
     ::-webkit-scrollbar
     {   
         background-color: transparent;
-        height:5px;
+        height:7px;
         
     }
     ::-webkit-scrollbar-thumb
@@ -127,7 +123,7 @@ const WeaponBottomImg = styled(animated.img)`
 
 
 function WeaponShop(){
-    const [show] = useShow(false, 'WeaponShop', true, true, true, false)
+    const [show] = useShow(process.env.NODE_ENV === 'development', 'WeaponShop', true, true, true, false)
     const money = useSelector((state:RootState)=>state.player.money)
     const bank = useSelector((state:RootState)=>state.player.bank)
     const [menuList, setMenuList] = useState("Meele");
@@ -197,7 +193,6 @@ function WeaponShop(){
         1000)
     return transitions( (style, show) => (show ?
         <Container container justifyContent={'center'} alignItems={'center'} style={style}>
-            <Body>
                 <Header>
                     <ParrentGrid xs={9}  justifyContent={'center'} alignItems={'center'} sx={{borderBottom: "1px solid #232323", borderRight: "1px solid #232323"}}>
                         <Tittle xs={2} sx={{m:2}}>
@@ -398,7 +393,6 @@ function WeaponShop(){
                         <Grid xs={1}></Grid>
                     </BottomParrentGrid>
                 </Bottom>
-            </Body>
         </Container>
         : null
     )
