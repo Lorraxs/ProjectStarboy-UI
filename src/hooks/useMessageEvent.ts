@@ -8,9 +8,47 @@ import {
   setPlayerData,
   setPlayerHealth,
   setPlayerInventory,
+  setPlayerInventoryWeight,
+  setPlayerMaxInventoryWeight,
   setPlayerMoney,
 } from "../store/player";
 import { IReduxNuiMessage } from "../shared/interfaces";
+
+function fallbackCopyTextToClipboard(text: string) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+
+  // Avoid scrolling to bottom
+  textArea.style.top = "0";
+  textArea.style.left = "0";
+  textArea.style.position = "fixed";
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    var successful = document.execCommand("copy");
+    var msg = successful ? "successful" : "unsuccessful";
+    console.log("Fallback: Copying text command was " + msg);
+  } catch (err) {
+    console.error("Fallback: Oops, unable to copy", err);
+  }
+
+  document.body.removeChild(textArea);
+}
+function copyTextToClipboard(text: string) {
+  fallbackCopyTextToClipboard(text);
+  return;
+  /* navigator.clipboard.writeText(text).then(
+    function () {
+      console.log("Async: Copying to clipboard was successful!");
+    },
+    function (err) {
+      console.error("Async: Could not copy text: ", err);
+    }
+  ); */
+}
 
 const useMessageEvent = () => {
   const dispatch = useDispatch();
@@ -20,6 +58,10 @@ const useMessageEvent = () => {
       const { component, event, data } = e.data;
       if (component === "Redux") {
         switch (event) {
+          case "setPlayerInventoryWeight":
+            return dispatch(setPlayerInventoryWeight(data));
+          case "setPlayerMaxInventoryWeight":
+            return dispatch(setPlayerMaxInventoryWeight(data));
           case "setPlayerData":
             return dispatch(setPlayerData(data));
           case "setPlayerArmour":
@@ -38,6 +80,8 @@ const useMessageEvent = () => {
             return dispatch(setPlayerInventory(data));
           case "setPlayerMoney":
             return dispatch(setPlayerMoney(data));
+          case "copy":
+            return copyTextToClipboard(data);
         }
       }
     };

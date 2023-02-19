@@ -50,7 +50,8 @@ export type IReduxAction =
   | "setPlayerArmour"
   | "setPlayerBlackMoney"
   | "setPlayerInventoryWeight"
-  | "setPlayerMaxInventoryWeight";
+  | "setPlayerMaxInventoryWeight"
+  | "copy";
 export interface IReduxNuiMessage {
   component: "Redux";
   event: IReduxAction;
