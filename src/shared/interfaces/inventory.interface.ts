@@ -58,6 +58,8 @@ export enum EPlayerInventorySlot {
   BP_27 = "BP_27",
   BP_28 = "BP_28",
   BP_29 = "BP_29",
+  WEAPON = "WEAPON",
+  AMMO = "AMMO",
 }
 
 export enum EPlayerTransSlot {
@@ -87,11 +89,21 @@ export enum EInventoryRarity {
   EPIC,
   LEGENDARY,
 }
-
+export interface IItemComponent {
+  skin?: string;
+  scope?: string;
+  suppressor?: string;
+  clip?: string;
+  grip?: string;
+  flashlight?: string;
+}
 export interface IInventoryItem {
   name: string;
   slot: string;
   amount: number;
+  expiration?: number;
+  stability?: number;
+  component?: IItemComponent;
 }
 export interface IInventory {
   [key: string]: IInventoryItem;

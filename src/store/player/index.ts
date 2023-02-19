@@ -23,6 +23,8 @@ const initialState: IPlayer = {
       slot: EPlayerInventorySlot.BP_0,
     },
   },
+  inventoryWeight: 0,
+  maxInventoryWeight: 40000,
 };
 
 export const playerSlice = createSlice({
@@ -46,6 +48,14 @@ export const playerSlice = createSlice({
       ...state,
       blackMoney: action.payload,
     }),
+    setPlayerInventoryWeight: (state, action) => ({
+      ...state,
+      inventoryWeight: action.payload,
+    }),
+    setPlayerMaxInventoryWeight: (state, action) => ({
+      ...state,
+      maxInventoryWeight: action.payload,
+    }),
   },
 });
 export const {
@@ -58,5 +68,7 @@ export const {
   setPlayerHealth,
   setPlayerArmour,
   setPlayerBlackMoney,
+  setPlayerInventoryWeight,
+  setPlayerMaxInventoryWeight,
 } = playerSlice.actions;
 export default playerSlice.reducer;

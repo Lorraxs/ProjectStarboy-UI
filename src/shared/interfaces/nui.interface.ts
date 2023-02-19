@@ -48,7 +48,9 @@ export type IReduxAction =
   | "setPlayerCoin"
   | "setPlayerHealth"
   | "setPlayerArmour"
-  | "setPlayerBlackMoney";
+  | "setPlayerBlackMoney"
+  | "setPlayerInventoryWeight"
+  | "setPlayerMaxInventoryWeight";
 export interface IReduxNuiMessage {
   component: "Redux";
   event: IReduxAction;

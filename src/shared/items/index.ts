@@ -1,3 +1,4 @@
+import { eAmmoType } from "../interfaces/gta.interface";
 import {
   EInventoryRarity,
   IInventoryItem,
@@ -17,7 +18,7 @@ const ITEMS: IItem[] = [
     expiration: 48 * 60 * 60,
     stability: -1,
     type: "standard",
-    rarity: EInventoryRarity.EPIC,
+    rarity: EInventoryRarity.LEGENDARY,
   },
   {
     name: "water",
@@ -33,6 +34,57 @@ const ITEMS: IItem[] = [
     type: "standard",
     rarity: EInventoryRarity.EPIC,
   },
+
+  //WEAPON HERE
+  {
+    name: "WEAPON_PISTOL",
+    label: "Pistol",
+    weight: 730,
+    limit: 1,
+    description: "Pistol",
+    canUse: true,
+    canTransfer: true,
+    canDrop: true,
+    expiration: -1,
+    stability: -1,
+    type: "weapon",
+    rarity: EInventoryRarity.UNCOMMON,
+  },
+
+  //AMMO HERE
+  {
+    name: "WEAPON_PISTOL",
+    label: "Pistol",
+    weight: 730,
+    limit: 1,
+    description: "Pistol",
+    canUse: true,
+    canTransfer: true,
+    canDrop: true,
+    expiration: -1,
+    stability: -1,
+    type: "weapon",
+    rarity: EInventoryRarity.UNCOMMON,
+  },
 ];
+
+const ammoKeys = Object.keys(eAmmoType);
+console.log(ammoKeys);
+ammoKeys.forEach(ammo=>{
+  ITEMS.push({
+    name: ammo,
+    label: "Pistol",
+    weight: 730,
+    limit: 1,
+    description: "Pistol",
+    canUse: true,
+    canTransfer: true,
+    canDrop: true,
+    expiration: -1,
+    stability: -1,
+    type: "weapon",
+    rarity: EInventoryRarity.UNCOMMON,
+  })
+})
 
 export default ITEMS;
