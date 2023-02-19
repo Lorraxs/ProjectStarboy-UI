@@ -6,10 +6,10 @@ import { RootState } from "../store";
 import styled from 'styled-components'
 import RegisterPage from "./Register";
 import CharacterCreatorPage from "./CharacterCreator";
+import GroceryStorePage from "./GroceryStore";
 import PlayerInventoryPage from "./PlayerInventory";
-import WeaponShopPage from "./WeaponShop";
 
-const pages = [LoginPage, RegisterPage, HudPage, CharacterCreatorPage, PlayerInventoryPage, WeaponShopPage];
+const pages = [LoginPage, RegisterPage, CharacterCreatorPage, PlayerInventoryPage, GroceryStorePage];
 
 const Container = styled.div`
   width: 100%;
@@ -43,14 +43,22 @@ function Page() {
     <Container>
       {pages.map((page, i)=>{
         const Page = page.element
-        if(page.needLogin){
-          return playerState._id !== '' ? <Wrapper>
-            <Page key={i}/> 
-          </Wrapper>: null
+        if(process.env.NODE_ENV === 'development'){
+          return(
+            <Wrapper>
+              <Page key={i}/> 
+            </Wrapper>
+          )
         }else{
-          return playerState._id === '' ? <Wrapper>
-            <Page key={i}/> 
-          </Wrapper>: null
+          if(page.needLogin){
+            return playerState._id !== '' ? <Wrapper>
+              <Page key={i}/> 
+            </Wrapper>: null
+          }else{
+            return playerState._id === '' ? <Wrapper>
+              <Page key={i}/> 
+            </Wrapper>: null
+          }
         }
       })}
     </Container>
@@ -58,4 +66,3 @@ function Page() {
 }
 
 export default Page
-

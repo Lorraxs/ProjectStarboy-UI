@@ -1,5 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import useShow from '../hooks/useShow';
+import { useSelector } from 'react-redux'
+import { RootState } from '../store'
 import { Grid, InputLabel, Typography, Button, MenuItem, Select, SelectChangeEvent, LinearProgress } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'; 
@@ -125,7 +127,9 @@ const WeaponBottomImg = styled(animated.img)`
 
 
 function WeaponShop(){
-    const [show] = useShow(true, 'WeaponShop', true, true, true, false)
+    const [show] = useShow(false, 'WeaponShop', true, true, true, false)
+    const money = useSelector((state:RootState)=>state.player.money)
+    const bank = useSelector((state:RootState)=>state.player.bank)
     const [menuList, setMenuList] = useState("Meele");
     const selectedList = WeaponListType[menuList as keyof typeof WeaponListType];
     const [selectedWeapon, setselectedWeapon] = useState( selectedList[0]);
@@ -221,7 +225,7 @@ function WeaponShop(){
                                 </Grid>
                                 <Grid display={'flex'}>
                                     <Grid xs={2} sx={{mb:2}}><AttachMoneyIcon fontSize='small'  color="primary" sx={{borderRadius: "50%"}}></AttachMoneyIcon></Grid>
-                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>1.000.000$</Typography></Grid>
+                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>{money} $</Typography></Grid>
                                 </Grid>
                             </MoneyPlayerItemGrid>
                             <MoneyPlayerItemGrid xs={6}>
@@ -231,7 +235,7 @@ function WeaponShop(){
                                 </Grid>
                                 <Grid display={'flex'}>
                                     <Grid xs={2} sx={{mb:2}}><AccountBalanceWalletIcon fontSize='small'  color="primary" sx={{borderRadius: "50%"}}></AccountBalanceWalletIcon></Grid>
-                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>1.000.000$</Typography></Grid>
+                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>{bank} $</Typography></Grid>
                                 </Grid>
                             </MoneyPlayerItemGrid>
                         </MoneyPlayerGrid>
@@ -402,7 +406,7 @@ function WeaponShop(){
 };
 const WeaponShopPage = {
     element : WeaponShop,
-    needLogin: false
+    needLogin: true
 }
 
 
