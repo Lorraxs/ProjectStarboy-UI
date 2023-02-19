@@ -32,6 +32,10 @@ const Center = styled(AnimatedGrid)`
     width: 100%;
     height: 67%;
     border-bottom: 1px solid #232323;
+    background-image: url("./assets/weaponShop/Michale_bg.png");
+    background-repeat: no-repeat;
+    background-size:auto;
+    background-position:75% 50%;
 `
 
 const Bottom = styled(AnimatedGrid)`
@@ -251,8 +255,9 @@ function WeaponShop(){
                                         <Typography variant='h5' sx={{fontFamily: "Title", mb:2}} color={'primary'}>{DefaultWeaponInfomation[selectedWeapon].tittle}</Typography>
                                         <Typography  sx={{fontFamily: "Gilroy", fontSize: "14px"}} color={'#ffffff'}>{DefaultWeaponInfomation[selectedWeapon].description}</Typography>
                                     </Grid>
-                                    <Grid sx={{width: "100%",height:"35%"}}>
+                                    <Grid display={"flex"} sx={{width: "100%",height:"35%"}}>
                                         <WeaponCenterImg src={`./assets/weaponShop/${selectedWeapon}.webp`}/>
+                                        
                                     </Grid>
                                     <Grid display={"flex"} flexDirection={"column"} spacing={10} justifyContent={"center"} sx={{width: "100%",height:"35%"}}>
                                         <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
@@ -318,15 +323,15 @@ function WeaponShop(){
                         <CenterParrentGridItem style={{...rightSpring}} display={"flex"} justifyContent={"center"} alignItems={"center"} xs={3} >
                             <Grid sx={{ width: "80%", height: "90%", borderLeft: "2px solid #FF0B30"}}>
                                 <Grid sx={{width: "100%", height: "10%"}} xs={12} display={"flex"} justifyContent={"center"}>
-                                    <Typography sx={{fontFamily: "Title", fontSize: "12px", fontWeight: "bold", width: "60%", textAlign: "center"}} color={'primary'}>chi phí</Typography>
+                                    <Typography variant='h5' sx={{fontFamily: "Title", fontWeight: "bold", width: "60%", textAlign: "center"}} color={'primary'}>chi phí</Typography>
                                 </Grid>
                                 <Grid sx={{width: "100%", height: "30%"}} xs={12} display={"flex"} flexDirection={"column"} >
-                                    <Typography sx={{fontFamily: "Gilroy", fontSize: "13px", fontWeight: "bold", width: "90%", ml:4, mb: 2}} color={'#ffffff'}>Thanh toán: {weaponPrice} $</Typography>
-                                    <Typography sx={{fontFamily: "Gilroy", fontSize: "13px", fontWeight: "bold", width: "90%", ml:4, mb: 4}} color={'#ffffff'}>Thuế: {feeWeaponPrice} $</Typography>
+                                    <Typography variant='body1' sx={{fontFamily: "Gilroy", fontWeight: "bold", width: "90%", ml:4, mb: 2}} color={'#ffffff'}>Thanh toán: {weaponPrice} $</Typography>
+                                    <Typography variant='body1' sx={{fontFamily: "Gilroy", fontWeight: "bold", width: "90%", ml:4, mb: 4}} color={'#ffffff'}>Thuế: {feeWeaponPrice} $</Typography>
                                     <Grid display={"flex"} justifyContent={"center"} alignItems={"center"} xs={12} sx={{p:2, mb:3}} width={"100%"}>
                                         <FormControl fullWidth>
-                                        <InputLabel sx={{fontSize:"13px", ml:2}} id="demo-simple-select-error-label">Tài khoản thanh toán</InputLabel>
-                                        <Select sx={{fontSize: "13px", ml:2}}
+                                        <InputLabel sx={{fontSize:"16px", ml:2}} id="demo-simple-select-error-label">Tài khoản thanh toán</InputLabel>
+                                        <Select sx={{fontSize: "16px", ml:2}}
                                         value={buyAccount} 
                                         label="Tài khoản thanh toán "
                                         labelId="demo-simple-select-error-label"
@@ -338,7 +343,7 @@ function WeaponShop(){
                                     </Grid>
                                     <Grid xs={12} width={"100%"} height={"30%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{ mb:3}} >
                                         <Grid width={"100%"} height={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                                            <Typography textAlign={"center"} sx={{fontFamily:"Gilroy", fontWeight:"bold",p:2,width: "92%",height: "100%", border: "1px solid #FF0B30", ml:4, backgroundColor: "rgba(255, 11, 48,0.3)"}}>Tổng: {weaponPrice + feeWeaponPrice}$</Typography>
+                                            <Typography textAlign={"center"} sx={{fontFamily:"Gilroy", fontWeight:"bold",p:2,width: "94%",height: "100%", border: "1px solid #FF0B30", ml:4, backgroundColor: "rgba(255, 11, 48,0.3)"}}>Tổng: {weaponPrice + feeWeaponPrice}$</Typography>
                                         </Grid>
                                     </Grid>
                                     <Grid xs={12} width={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{p:1}}>
