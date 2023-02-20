@@ -115,7 +115,6 @@ const WeaponCenterImg = styled(animated.img)`
     position: relative
     width: 100%;
     height: 100%;
-    
 
 `
 
@@ -137,7 +136,6 @@ function WeaponShop(){
     const feeWeaponPrice = (DefaultWeaponInfomation[selectedWeapon]?.price?? 0) * 0.1;
     const [buyAccount, setBuyAccount] = useState('money')
     const [data, setData] = useState({ name: '', totalprice: 0, type: '', account: ''});
-    console.log(buyAccount);
 
     useEffect(() => {
         setselectedWeapon(selectedList[0])

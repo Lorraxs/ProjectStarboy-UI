@@ -51,6 +51,12 @@ export const GroceryStoreListItem = { // Product list of each list
     ],
 }
 
+export enum EGroceryStoreUsesLevel { //Shop category subtittle
+    high = "Cao",
+    normal = "Trung bình",
+    low = "Thấp",
+}
+
 export interface IGroceryStoreItem {
     tittle: string,
     description: string,
@@ -58,18 +64,19 @@ export interface IGroceryStoreItem {
     price: number,
     weight: number,
     uses: string,
-
+    level: string,
 }
 
 
 export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreItem}= {
     bread: {
         tittle: "Bánh mì",
-        description: "sss",
+        description: "tiểu mập",
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     hamburger: {
         tittle: "Hamburger",
@@ -77,7 +84,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     socola: {
         tittle: "Socola",
@@ -85,7 +93,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     hotdog: {
         tittle: "Bánh Hotdog",
@@ -93,15 +102,17 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     noodles: {
         tittle: "Phở",
         description: "sss",
         type: "standard",
-        price: 1000,
+        price: 100000000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     water: {
         tittle: "Nước uống",
@@ -109,7 +120,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     redbull: {
         tittle: "Nước tăng lực RedBull",
@@ -117,7 +129,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     monster: {
         tittle: "Nước tăng lực Monster",
@@ -125,7 +138,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     wine: {
         tittle: "Rượu đế",
@@ -133,7 +147,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     beer: {
         tittle: "Bia Tiger",
@@ -141,7 +156,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     milk: {
         tittle: "Sữa tươi",
@@ -149,7 +165,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     drill: {
         tittle: "Máy khoan",
@@ -157,7 +174,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     fishingrod: {
         tittle: "Cần câu cá",
@@ -165,7 +183,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     fixkit: {
         tittle: "Bộ sửa chữa",
@@ -173,7 +192,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     pickaxe: {
         tittle: "Cuốc chim",
@@ -181,15 +201,17 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     bandage: {
-        tittle: "Hồi máu(nhỏ)",
+        tittle: "Bandage",
         description: "sss",
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     gacha_ingame: {
         tittle: "Hòm quay may mắn",
@@ -197,7 +219,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     medikit: {
         tittle: "Bộ sơ cứu",
@@ -205,7 +228,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     phone: {
         tittle: "Điện thoại",
@@ -213,7 +237,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     },
     gameboy: {
         tittle: "Máy chơi game",
@@ -221,6 +246,7 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         type: "standard",
         price: 1000,
         weight: 1000,
-        uses: "côngdung"
+        uses: "côngdung",
+        level: "high"
     }
 }
