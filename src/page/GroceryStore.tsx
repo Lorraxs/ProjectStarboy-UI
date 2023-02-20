@@ -17,7 +17,7 @@ const Container = styled(AnimatedGrid)`
 `
 
 function GroceryStore() {
-    const [show] = useShow(false, 'GroceryStore', true, true, true, false)
+    const [show] = useShow(process.env.NODE_ENV === 'development', 'GroceryStore', true, true, true, false)
 
     const transRef = useSpringRef()
     const transitions = useTransition(show, {

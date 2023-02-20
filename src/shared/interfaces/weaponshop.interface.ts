@@ -8,7 +8,8 @@ export const WeaponShopType = [
     "AssaultRifles", 
     "MachineGuns", 
     "Ammo", 
-    "Components"]
+    "Components"
+]
 
 export enum EWeaponShopTypeSubTittle {
     Meele = "Cận chiến",

@@ -127,7 +127,7 @@ const WeaponBottomImg = styled(animated.img)`
 
 
 function WeaponShop(){
-    const [show] = useShow(process.env.NODE_ENV === 'development', 'WeaponShop', true, true, true, false)
+    const [show] = useShow(false, 'WeaponShop', true, true, true, false)
     const money = useSelector((state:RootState)=>state.player.money)
     const bank = useSelector((state:RootState)=>state.player.bank)
     const [menuList, setMenuList] = useState("Meele");
