@@ -10,9 +10,19 @@ import { animated, config, useChain, useSpring, useSpringRef, useTransition } fr
 const Container = styled(AnimatedGrid)`
     margin: 0 auto;
     width: 100%;
+    min-width: 100vh;
     height: 100%;
-    background-color: rgba(49, 49, 49, 0.788);
     pointer-events: all;
+`
+
+
+const Top = styled(AnimatedGrid)`
+    height: 75%;
+
+`
+const Bottom = styled(AnimatedGrid)`
+    height: 25%;
+    background-color: blue;
 
 `
 
@@ -35,7 +45,27 @@ function GroceryStore() {
     return transitions( (style, show) => (show ?
 
         <Container style={{...style}}>
-            
+            <Top sx={{p:8}} container flexDirection={"row"} display={"flex"}>
+                <Grid xs={2} item sx={{backgroundColor:"pink"}}>
+                    <Grid xs={12} height={"10%"}  sx={{mt: 1}}>
+                        <Typography variant='h5' color={"primary"} sx={{fontFamily: "Title", fontWeight:"bold"}}>Thông tin</Typography>
+                        <Typography variant='h5' color={"white"} sx={{fontFamily: "Title", fontWeight:"bold"}}>sản phẩm</Typography>
+                    </Grid>
+                </Grid>
+                <Grid xs={8} item sx={{backgroundColor:"purple"}}>8</Grid>
+                <Grid xs={2} item sx={{backgroundColor:"pink"}}>
+                    <Grid xs={12} display={"flex"} flexDirection={"column"} height={"10%"} sx={{mt: 1}}>
+                        <Typography variant='h5' color={"primary"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>giỏ</Typography>
+                        <Typography variant='h5' color={"white"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>hàng</Typography>
+                    </Grid>
+                </Grid>
+            </Top>
+            <Bottom container justifyContent={"center"}  sx={{pl:8, pr:8}}>
+                <Grid width={"90%"} container justifyContent={"center"} alignItems={"center"} display={"flex"} flexDirection={"column"}>
+                    <Grid xs={3}>3</Grid>
+                    <Grid xs={9}>9</Grid>
+                </Grid>
+            </Bottom>
         </Container>:null
         )
     );
