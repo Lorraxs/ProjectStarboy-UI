@@ -1,5 +1,6 @@
 import { eStatus } from "./status.interface";
 import { createContext } from 'react';
+import { combineReducers } from 'redux';
 
 export const GroceryStoreType = [ //Shop category
     "Food" , 
@@ -8,6 +9,29 @@ export const GroceryStoreType = [ //Shop category
     "Items",
     "Technological", 
 ]
+
+export enum EGroceryStoreUsesLevel { //Shop category subtittle
+    high = "Cao",
+    normal = "Trung bình",
+    low = "Thấp",
+}
+
+export interface IGroceryStoreItem {
+    tittle: string,
+    description: string,
+    type: string,
+    price: number,
+    weight: number,
+    uses: string,
+    level: string,
+}
+
+export type IProductGroceryShop = {
+    name: string;
+    type: string;
+    price: number;
+    quantity: number;
+};
 
 export enum EGroceryStoreTypeSubTittle { //Shop category subtittle
     Food = "Đồ ăn",
@@ -50,23 +74,6 @@ export const GroceryStoreListItem = { // Product list of each list
         "gameboy"
     ],
 }
-
-export enum EGroceryStoreUsesLevel { //Shop category subtittle
-    high = "Cao",
-    normal = "Trung bình",
-    low = "Thấp",
-}
-
-export interface IGroceryStoreItem {
-    tittle: string,
-    description: string,
-    type: string,
-    price: number,
-    weight: number,
-    uses: string,
-    level: string,
-}
-
 
 export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreItem}= {
     bread: {
@@ -118,8 +125,8 @@ export const DefaultGroceryStoreItemInfomation : {[key:string]: IGroceryStoreIte
         tittle: "Nước uống",
         description: "sss",
         type: "standard",
-        price: 1000,
-        weight: 1000,
+        price: 2000,
+        weight: 2000,
         uses: "côngdung",
         level: "high"
     },

@@ -1,15 +1,19 @@
 import React, { useState, useEffect  } from 'react';
 import useShow from '../hooks/useShow';
-import { Grid, InputLabel, Typography, Button, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Grid, Typography, Button } from '@mui/material';
 import styled from 'styled-components';
 import { cRequest } from '../utils/request'
 import { AnimatedGrid } from '../components/animated-mui'
-import FormControl from '@mui/material/FormControl/FormControl';
-import { GroceryStoreListItem, DefaultGroceryStoreItemInfomation, EGroceryStoreUsesLevel, GroceryStoreType, EGroceryStoreTypeSubTittle } from '../shared/interfaces';
+import { GroceryStoreListItem, DefaultGroceryStoreItemInfomation, EGroceryStoreUsesLevel, GroceryStoreType, EGroceryStoreTypeSubTittle, IProductGroceryShop } from '../shared/interfaces';
 import { animated, config, useChain, useSpring, useSpringRef, useTransition } from '@react-spring/web'
 import ScaleTwoToneIcon from '@mui/icons-material/ScaleTwoTone';
 import GroupAddTwoToneIcon from '@mui/icons-material/GroupAddTwoTone';
 import LoyaltyTwoToneIcon from '@mui/icons-material/LoyaltyTwoTone';
+import { addProduct, changeQuantity } from '../store/groceryStore';
+import { RootState } from '../store';
+import { useDispatch, useSelector } from "react-redux";
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+const request = new cRequest()
 
 const Container = styled(AnimatedGrid)`
     margin: 0 auto;
@@ -38,7 +42,7 @@ const Bottom = styled(AnimatedGrid)`
 const BottomMenuItem = styled(AnimatedGrid)`
     cursor: pointer;
     &:hover{
-        background-color: #ff0b30;
+        background: linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%);
     }
     margin-right: 10px;
     border: 1px solid  #ff0b30;
@@ -46,18 +50,46 @@ const BottomMenuItem = styled(AnimatedGrid)`
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    transition: background-color 0.5s ease;
+    transition: background  0.5s ease;
 
+`
+
+const RightCenterMenuItem = styled(AnimatedGrid)`
+    min-height: 15%;
+    border: 1px dashed #FF0B30;
+    background-color: rgba(255, 11, 48, 0.1);
+    margin-bottom: 15px;
+    border-radius: 10px;
+`
+const RightCenterScrollbarItem = styled(AnimatedGrid)`
+    cursor: pointer;
+    
+    ::-webkit-scrollbar
+    {   
+        background-color: transparent;
+        width: 2px;
+    }
+    ::-webkit-scrollbar-thumb
+    {
+        background-color: #ffffff;
+        border-radius: 5px;
+        magrin-top: 3px;
+    }
+    ::-webkit-scrollbar-track
+    {
+        background-color: transparent;
+    }
+    
 `
 const GradientButton = styled(Button)({
     background: 'linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)',
 });
 
-const ItemCenterImg = styled(animated.img)<{selected: boolean}>`
-    position: relative;
-    width: 70%;
-    height: 70%;
-    object-fit:contain;
+const ItemCenterImg = styled(animated.img)`
+    
+    width: 30%;
+    height: 50%;
+    object-fit: fill;
     transition: all 0.5s ease; 
     &:hover {
         transform: scale(1.1);
@@ -65,10 +97,64 @@ const ItemCenterImg = styled(animated.img)<{selected: boolean}>`
 `
 
 const LeftCenterImg = styled(animated.img)`
-    position: relative;
-    min-width: 20%;
+    width: 30%;
     height: 100%;
-    object-fit:scale-down;
+    object-fit: fill;
+    object-postion: center;
+    transition: all 0.5s ease; 
+    &:hover {
+        transform: scale(1.1);
+    }
+`
+
+const BottoScrollbarImg = styled(animated.img)`
+    width: 35%;
+    height: 55%;
+    object-fit: fill;
+    object-postion: center;
+    transition: all 0.5s ease; 
+    &:hover {
+        transform: scale(1.1);
+    }
+    margin-left: 32%;
+    margin-top: 3%;
+`
+
+const RightScrollbarImg = styled(animated.img)`
+    margin-top: 2%;
+    position: relative;
+    height: 50px;
+    width: 80%;
+    object-fit: fill ;
+`
+
+const BottomScrollbar = styled(AnimatedGrid)`
+    display: flex;
+    justify-content: center;
+    ::-webkit-scrollbar
+    {   
+        background-color: transparent;
+        height: 5px;
+    }
+    ::-webkit-scrollbar-thumb
+    {
+        background-color: #FF0B30;
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track
+    {
+        background-color: transparent;
+    }
+    gap: 19px;
+`
+
+const BottomScrollbarItem = styled(AnimatedGrid)`
+    min-width: calc(20% - 15px);
+    height: 100%;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.5s ease; 
+
 `
 
 
@@ -78,15 +164,51 @@ function GroceryStore() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const selectedList = GroceryStoreListItem[menuList as keyof typeof GroceryStoreListItem];
     const [selectedItem, setselectedItem] = useState( selectedList[0]);
-
+    
     const handleClickCategory = (i: string) => {
         setMenuList(i);
         setSelectedCategory(i);
     };
 
+    const dispatch = useDispatch();
+
+    const products = useSelector((state: RootState) => state.cartGrocery.products);
+
+    const totalPrice = products.reduce((sum, product) => {
+        return sum + (product.price * product.quantity);
+    }, 0);
+
+    const callbackServer = {
+        products: products.map((product) => ({
+          name: product.name,
+          quantity: product.quantity,
+        })),
+        totalPrice,
+    };
+
+    const handleAddProduct = (product: IProductGroceryShop) => {
+        dispatch(addProduct(product));
+    }
+
+    const handleQuantityChange = (product:IProductGroceryShop , action: string) => {
+        let newQuantity = product.quantity;
+        if (action === 'increase') {
+            newQuantity++;
+        } else if (action === 'decrease') {
+            newQuantity--;
+        }
+        dispatch(changeQuantity({ product, quantity: newQuantity }));
+    };
+
+    const onSubmit = () =>{
+        console.log(callbackServer);
+        request.post('GroceryShop:Buy', callbackServer)
+    }
+
     useEffect(() => {
         setselectedItem(selectedList[0])
     }, [selectedList]);
+
 
     const leftSpringRef = useSpringRef();
     const leftSpring = useSpring({
@@ -94,7 +216,7 @@ function GroceryStore() {
         from: { x: -100, opacity: 0 },
         to: { x: show ? 0 : -100, opacity: show ? 1 : 0 },
     })
-    
+
     const topSpringRef = useSpringRef();
     const topSpring = useSpring({
         ref: topSpringRef,
@@ -193,16 +315,14 @@ function GroceryStore() {
                             </Grid>
                         </AnimatedGrid>
                     </AnimatedGrid>
-                    <AnimatedGrid height={"78%"} width={"100%"}  display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
-                        <AnimatedGrid width={"50%"}  height={"100%"}  display={"flex"} flexDirection={"column"} alignItems={"center"} >
-                            <ItemCenterImg  selected={true} src={`./assets/groceryShop/${selectedItem}.png`}/>
-                            <Grid width={"100%"} >
-                                <Typography variant='h5'sx={{fontFamily: "Gilroy", fontWeight: "bold", color:"#30e3b7", mt:"-5px"}} textAlign={"center"}>{(DefaultGroceryStoreItemInfomation[selectedItem].price).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
-                            </Grid> 
-                        </AnimatedGrid>
+                    <AnimatedGrid height={"78%"} width={"100%"} display={"flex"} flexDirection={"column"}   alignItems={"center"} justifyContent={"center"} >
+                        <ItemCenterImg  src={`./assets/groceryShop/${selectedItem}.png`}/>
+                        <Grid width={"100%"} sx={{mt: "2%", mb:"4%"}}>
+                            <Typography variant='h5'sx={{fontFamily: "Gilroy", fontWeight: "bold", color:"#30e3b7", mt:"-5px"}} textAlign={"center"}>{(DefaultGroceryStoreItemInfomation[selectedItem].price).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                        </Grid> 
                     </AnimatedGrid>
                     <AnimatedGrid height={"10%"} justifyContent={"center"} display={"flex"} alignItems={"center"}>
-                        <GradientButton variant='contained'size="large">Thêm vào giỏ hàng</GradientButton>
+                        <GradientButton variant='contained'size="large" sx={{fontWeight: "bold"}} onClick={() => handleAddProduct({name: selectedItem, type: DefaultGroceryStoreItemInfomation[selectedItem].type, price: DefaultGroceryStoreItemInfomation[selectedItem].price, quantity: 1})}>Thêm vào giỏ hàng</GradientButton>
                     </AnimatedGrid>
                 </ParrentGrid>
                 <ParrentGrid xs={2} style={{...rightSpring}} >
@@ -210,23 +330,112 @@ function GroceryStore() {
                         <Typography variant='h5' color={"primary"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>giỏ</Typography>
                         <Typography variant='h5' color={"white"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>hàng</Typography>
                     </Grid>
+                    <Grid xs={12} display={"flex"} height={"65%"} justifyContent={"center"} 
+                    sx={{ 
+                        mt:5, 
+                        pt: 4, 
+                        pb: 4,
+                        borderRadius: "10px",
+                        backgroundColor: "rgba(163, 162, 162, 0.1)"
+                    }}>
+                        {products.length === 0 ? (
+                            <AnimatedGrid width={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                                <RemoveShoppingCartIcon sx={{ fontSize: 60 }}></RemoveShoppingCartIcon>
+                            </AnimatedGrid>
+                        ):(
+                            <RightCenterScrollbarItem width={"90%"} flexDirection={"column"} height={"100%"} sx={{pr:2, overflowX: 'hidden', overflowY: 'auto'}}>
+                                {products.map((i) => (
+                                    <RightCenterMenuItem display={"flex"} wrap={"nowrap"} alignItems={"center"} sx={{pl:2}}>
+                                        <AnimatedGrid width={"10%"} height={"100%"}>
+                                            <Grid height={"100%"} onClick={() => handleQuantityChange(i, 'increase')}>
+                                                <Typography variant='body1' display={"flex"} justifyContent={"center"} sx={{fontWeight: "bold", backgroundColor:"red", borderRadius: "20%"}}>
+                                                    +
+                                                </Typography>
+                                            </Grid>
+                                        </AnimatedGrid>
+                                        <AnimatedGrid width={"13%"} height={"100%"}>
+                                            <Typography variant='body1' display={"flex"} justifyContent={"center"} sx={{fontSize: "11px",fontWeight: "bold", fontFamily: "Title"}}>
+                                                {i.quantity}
+                                            </Typography>
+                                        </AnimatedGrid>
+                                        <AnimatedGrid width={"10%"} height={"100%"}>
+                                            <Grid height={"100%"} onClick={() => handleQuantityChange(i, 'decrease')}>
+                                                <Typography variant='body1' display={"flex"} justifyContent={"center"} sx={{fontWeight: "bold", backgroundColor:"green", borderRadius: "20%"}}>
+                                                    -
+                                                </Typography>
+                                            </Grid>
+                                        </AnimatedGrid>
+                                        <AnimatedGrid width={"33%"} height={"100%"} sx={{ml: 2}}>
+                                            <Typography variant='body1' display={"flex"} sx={{fontWeight: "bold", fontFamily:"Gilroy", fontSize: "14px"}}>
+                                                {DefaultGroceryStoreItemInfomation[i.name].tittle}
+                                            </Typography>
+                                        </AnimatedGrid>
+                                        <AnimatedGrid width={"32%"} container height={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                                            <Grid width={"100%"} height={"100%"} sx={{}}>
+                                                <RightScrollbarImg src={`./assets/groceryShop/${i.name}.png`}></RightScrollbarImg>
+                                            </Grid>
+                                        </AnimatedGrid>
+                                    </RightCenterMenuItem>
+                                ))}
+                            </RightCenterScrollbarItem>
+                        )}
+
+                        
+                    </Grid>
+                    <Grid xs={12}  display={"flex"} height={"15%"} sx={{mt: "10%"}} wrap={"nowrap"} >
+                        {products.length === 0 ? (
+                            <Grid xs={4}>
+                                <Button variant='contained' sx={{fontSize: "10px", fontWeight: "bold", fontFamily:"Title"}} disabled>Thanh toán</Button>
+                            </Grid>
+                        ):(
+                            <Grid xs={4}>
+                                <Button variant='contained' sx={{fontSize: "10px", fontWeight: "bold", fontFamily:"Title"}} onClick={onSubmit}>Thanh toán</Button>
+                            </Grid>
+                        )}
+                        
+                        <Grid xs={8} display={"flex"} flexDirection={"column"}>
+                            <Grid width={"100%"}>
+                                <Typography variant='body1' textAlign={"right"} sx={{fontWeight: "bold", textTransform: "uppercase"}}>Tổng thanh toán</Typography>
+                            </Grid>
+                            <Grid width={"100%"} >
+                                <Typography variant='body1' textAlign={"right"} sx={{mt: 2,fontWeight: "bold", fontFamily: "Title", fontSize:"19px",color:"#30e3b7"}}>
+                                    {(totalPrice).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                 </ParrentGrid>
             </Top>
-            <Bottom  container justifyContent={"center"} flexDirection={"column"}  sx={{pl:8, pr:8}}>
+            <Bottom  container justifyContent={"center"}  sx={{pl:8, pr:8}}>
                 <ParrentGrid style={{...bottomSpring}} container width={"100%"} height={"100%"} justifyContent={"center"} >
-                    <Grid width={"90%"}  container justifyContent={"center"} alignItems={"center"} display={"flex"}flexDirection={"column"}>
-                        <Grid height={"15%"} display={"flex"} width={"60%"} wrap={"nowrap"} justifyContent={"center"}>
+                    <AnimatedGrid width={"90%"}  container justifyContent={"center"} alignItems={"center"}>
+                        <AnimatedGrid height={"15%"} display={"flex"} width={"70%"} wrap={"nowrap"} justifyContent={"center"} sx={{mt:-10}}>
                             {GroceryStoreType.map((i) => (
                                 <BottomMenuItem width={"15%"} key={i}   onClick={() => handleClickCategory(i)} sx={{
-                                    backgroundColor: selectedCategory === i ? "#ff0b30" : "rgba(255, 11, 48, 0.1)"}}>
+                                    background: selectedCategory === i || menuList === i ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
                                     <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
                                         {EGroceryStoreTypeSubTittle[i as keyof typeof EGroceryStoreTypeSubTittle]}
                                     </Typography>
                                 </BottomMenuItem>
                             ))}
-                        </Grid>
-                        <Grid height={"80%"}>9</Grid>
-                    </Grid>
+                        </AnimatedGrid>
+                        <AnimatedGrid height={"80%"} width={"90%"} sx={{borderRadius: "10px", backgroundColor: "rgba(163, 162, 162, 0.1)"}} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                            <BottomScrollbar width={"90%"} height={"80%"} wrap="nowrap" justifyContent={"flex-start"} sx={{pb: 3, overflowX: 'auto', overflowY: 'hidden'}}>
+                                {selectedList.map((i) => (
+                                    <BottomScrollbarItem  onClick={()=>setselectedItem(i)} sx={{
+                                        backgroundColor: selectedItem === i ? "rgba(255, 255, 255, 0.9)" : "rgba(255, 11, 48, 0.1)"}}>
+                                            <Grid width={"100%"} height={"100%"} justifyContent={"center"}>
+                                                <AnimatedGrid width={"100%"} justifyContent={"center"}>
+                                                    <Typography variant='body1' sx={{color: selectedItem === i ? "#ff0b30" : "#ffffff", fontWeight: "bold", textTransform: "uppercase"}} textAlign={"center"}>{DefaultGroceryStoreItemInfomation[i].tittle}</Typography>
+                                                    <Typography variant='body1' textAlign={"center"} sx={{color:"#28ad8d", fontWeight: "bold"}}>{(DefaultGroceryStoreItemInfomation[i].price).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                                                </AnimatedGrid>
+                                                <BottoScrollbarImg  src={`./assets/groceryShop/${i}.png`}/>
+                                            </Grid>
+                                    </BottomScrollbarItem>
+                                ))}
+                            </BottomScrollbar>
+                        </AnimatedGrid>
+                    </AnimatedGrid>
                 </ParrentGrid>
             </Bottom>
         </Container>:null
