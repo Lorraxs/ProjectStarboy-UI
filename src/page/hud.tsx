@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -204,10 +205,13 @@ const RightTop = ()=>{
       </Grid>
     </Box>
   )
+
 }
 
+
+
 const HudPage = {
-  element: HUD,
+  element: hud,
   needLogin: true
 };
 

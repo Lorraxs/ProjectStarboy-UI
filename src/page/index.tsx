@@ -1,14 +1,16 @@
 import { useSelector } from "react-redux";
 import LoginPage from "./Login";
-import HudPage from "./HUD";
+import HudPage from "./hud";
 import React from 'react'
 import { RootState } from "../store";
 import styled from 'styled-components'
 import RegisterPage from "./Register";
 import CharacterCreatorPage from "./CharacterCreator";
+import GroceryStorePage from "./GroceryStore";
+import WeaponShopPage from "./WeaponShop";
 import PlayerInventoryPage from "./PlayerInventory";
 
-const pages = [LoginPage, RegisterPage, HudPage, CharacterCreatorPage, PlayerInventoryPage];
+const pages = [LoginPage, RegisterPage, CharacterCreatorPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage];
 
 const Container = styled.div`
   width: 100%;
@@ -65,4 +67,3 @@ function Page() {
 }
 
 export default Page
-
