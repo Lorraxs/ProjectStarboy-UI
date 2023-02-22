@@ -7,12 +7,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+  user-select: none;
+  object-fit: contain;
 }
 
 @font-face {
   font-family: Title;
   src: url('/public/assets/fonts/1FTV-Dune_Rise.otf') format('opentype');
+}
+@font-face {
+  font-family: Phudu;
+  src: url('/public/assets/fonts/DTPhudu-Medium.otf') format('opentype');
 }
 @font-face {
   font-family: Gilroy;
@@ -50,6 +55,7 @@ body {
   font-weight:lighter;
   font-style: italic;
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

@@ -1,8 +1,8 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.eot?944643b68c74baf3408dfb2f85cdc722#iefix") format("embedded-opentype"),
-url("./icons.woff2?944643b68c74baf3408dfb2f85cdc722") format("woff2"),
-url("./icons.woff?944643b68c74baf3408dfb2f85cdc722") format("woff");
+    src: url("./icons.eot?351e18bc3cf964d0c8c39ab783dedcf1#iefix") format("embedded-opentype"),
+url("./icons.woff2?351e18bc3cf964d0c8c39ab783dedcf1") format("woff2"),
+url("./icons.woff?351e18bc3cf964d0c8c39ab783dedcf1") format("woff");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -403,6 +403,9 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-watch:before {
     content: "\f181";
 }
-.icon-weed:before {
+.icon-weapon:before {
     content: "\f182";
+}
+.icon-weed:before {
+    content: "\f183";
 }

@@ -56,7 +56,7 @@ function useShow(
         window.removeEventListener("keyup", keyHandler);
       }
     };
-  }, [show]);
+  }, [canClose, componentName, hasCursor, hasFocus, keepInput, show]);
 
   return [show, setShow];
 }

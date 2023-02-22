@@ -128,6 +128,7 @@ export type IconsId =
   | "virus"
   | "wanted"
   | "watch"
+  | "weapon"
   | "weed";
 
 export type IconsKey =
@@ -260,6 +261,7 @@ export type IconsKey =
   | "Virus"
   | "Wanted"
   | "Watch"
+  | "Weapon"
   | "Weed";
 
 export enum Icons {
@@ -392,6 +394,7 @@ export enum Icons {
   Virus = "virus",
   Wanted = "wanted",
   Watch = "watch",
+  Weapon = "weapon",
   Weed = "weed",
 }
 
@@ -525,5 +528,6 @@ export const ICONS_CODEPOINTS: { [key in Icons]: string } = {
   [Icons.Virus]: "61823",
   [Icons.Wanted]: "61824",
   [Icons.Watch]: "61825",
-  [Icons.Weed]: "61826",
+  [Icons.Weapon]: "61826",
+  [Icons.Weed]: "61827",
 };

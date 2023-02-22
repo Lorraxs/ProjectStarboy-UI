@@ -279,6 +279,8 @@ export interface IPlayer {
   coords: ICoords;
   appearance?: IPedAppearance;
   inventory: IInventory;
+  inventoryWeight?: number;
+  maxInventoryWeight?: number;
 }
 
 export interface ICreatePlayer {

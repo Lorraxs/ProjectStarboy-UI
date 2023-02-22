@@ -1,13 +1,14 @@
 import { Dispatch } from "redux";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IPlayer } from "../../shared/interfaces";
+import { EPlayerInventorySlot } from "../../shared/interfaces/inventory.interface";
 
 const initialState: IPlayer = {
   _id: "",
   id: 1,
   name: "",
   email: "",
-  gender: "male",
+  gender: "female",
   health: 0,
   armour: 0,
   verified: false,
@@ -15,7 +16,16 @@ const initialState: IPlayer = {
   bank: 0,
   coin: 0,
   coords: [0, 0, 0],
-  inventory: {},
+  inventory: {
+    [EPlayerInventorySlot.BP_0]: [
+      {
+        name: "bread",
+        slot: EPlayerInventorySlot.BP_0,
+      },
+    ],
+  },
+  inventoryWeight: 0,
+  maxInventoryWeight: 40000,
 };
 
 export const playerSlice = createSlice({
@@ -39,6 +49,14 @@ export const playerSlice = createSlice({
       ...state,
       blackMoney: action.payload,
     }),
+    setPlayerInventoryWeight: (state, action) => ({
+      ...state,
+      inventoryWeight: action.payload,
+    }),
+    setPlayerMaxInventoryWeight: (state, action) => ({
+      ...state,
+      maxInventoryWeight: action.payload,
+    }),
   },
 });
 export const {
@@ -51,5 +69,7 @@ export const {
   setPlayerHealth,
   setPlayerArmour,
   setPlayerBlackMoney,
+  setPlayerInventoryWeight,
+  setPlayerMaxInventoryWeight,
 } = playerSlice.actions;
 export default playerSlice.reducer;
