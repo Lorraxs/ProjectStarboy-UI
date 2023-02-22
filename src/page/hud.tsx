@@ -25,7 +25,7 @@ const Logo = styled.img`
 `
 
 const HUD = () => {
-  const [show] = useShow(true, 'HUD', false, false, false, false)
+  const [show] = useShow(false, 'HUD', false, false, false, false)
   return (show ? 
     <Container>
       <RightTop />
@@ -211,7 +211,7 @@ const RightTop = ()=>{
 
 
 const HudPage = {
-  element: hud,
+  element: HUD,
   needLogin: true
 };
 

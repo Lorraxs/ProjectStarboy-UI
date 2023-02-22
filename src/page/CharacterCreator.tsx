@@ -118,12 +118,12 @@ const Center = ({onCancel, onSubmit}: {onCancel: ()=>void, onSubmit: ()=>void})=
     <AnimatedGrid container item xs={6} flexDirection={'column'} justifyContent={'flex-end'} alignItems={'center'} sx={{height: '100%', width: '100%', padding: 2}} wrap={'nowrap'}>
       <Grid item container justifyContent={'center'} spacing={6}>
         <Grid item>
-          <Button variant="contained" color="secondary" size="large" onClick={onSubmit}>
+          <Button variant="contained" sx={{background: "linear-gradient(0deg, #04b57b 30%, #02f7a7 90%)"}} size="large" onClick={onSubmit}>
             Đồng ý
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="primary" size="large" onClick={onCancel}>
+          <Button variant="contained" sx={{background: "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)"}} size="large" onClick={onCancel}>
             Hủy
           </Button>
         </Grid>
@@ -138,7 +138,7 @@ const Left = ()=>{
   return(
     <AnimatedGrid container item xs={3} flexDirection={'column'}  sx={{height: '100%', bgcolor: '#1f1f1fa6', padding: 2}} wrap={'nowrap'}>
       <AnimatedGrid item sx={{height: '3%'}}>
-        <AnimatedTypography variant={'h4'} sx={{fontFamily: 'Title', bgcolor: '#ff0b30', fontWeight: 'bold'}}>CHARACTER CREATION</AnimatedTypography>
+        <AnimatedTypography variant={'h4'} sx={{fontFamily: 'Title', bgcolor: '#ff0b30', fontWeight: 'bold'}}>TUỲ CHỈNH NHÂN VẬT</AnimatedTypography>
       </AnimatedGrid>
       <AnimatedGrid item sx={{height: '16%'}}>
         <Grid container justifyContent={'flex-end'}>
@@ -147,7 +147,7 @@ const Left = ()=>{
         </Grid>
       </AnimatedGrid>
       <AnimatedGrid item flexDirection={'column'}  wrap={'nowrap'} sx={{height: '38%', mt: 6}}>
-        <AnimatedTypography variant={'body1'} sx={{fontFamily: 'Title', bgcolor: '#ff0b30', p:1, mb: 3}}>FATHER</AnimatedTypography>
+        <AnimatedTypography variant={'body1'} sx={{fontFamily: 'Title', bgcolor: '#ff0b30', p:1, mb: 3}}>GEN CHA</AnimatedTypography>
         <ParrentGrid container sx={{height: '90%', overflowY: 'auto', overflowX: 'hidden'}}>
           {FatherFaces.map(i=>(
             <ParrentItemGrid item xs={3} key={i} onClick={()=>setValue('headBlend.shapeFirst', i)} selected={headBlend.shapeFirst === i}>
@@ -158,7 +158,7 @@ const Left = ()=>{
         </ParrentGrid>
       </AnimatedGrid>
       <AnimatedGrid item flexDirection={'column'}  wrap={'nowrap'} sx={{height: '38%', mt: 6}}>
-        <AnimatedTypography variant={'body1'} sx={{fontFamily: 'Title', bgcolor: '#ff0b30', p:1, mb: 3}}>MOTHER</AnimatedTypography>
+        <AnimatedTypography variant={'body1'} sx={{fontFamily: 'Title', bgcolor: '#ff0b30', p:1, mb: 3}}>GEN MẸ</AnimatedTypography>
         <ParrentGrid container sx={{height: '90%', overflowY: 'auto', overflowX: 'hidden'}}>
           {MotherFaces.map(i=>(
             <ParrentItemGrid item xs={3} key={i} onClick={()=>setValue('headBlend.shapeSecond', i)} selected={headBlend.shapeSecond === i}>
@@ -246,7 +246,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
         <ParrentGrid item container columns={13} justifyContent={'space-between'} sx={{height: '90%', overflowY: 'auto', overflowX: 'hidden'}}>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="noseWidth" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              noseWidth
+              độ rộng mũi
             </Typography>
             <Slider aria-label='noseWidth' size='small' value={noseWidth*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -255,7 +255,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="nosePeakHigh" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              nosePeakHigh
+              Độ cao đỉnh mũi
             </Typography>
             <Slider aria-label='nosePeakHigh' size='small' value={nosePeakHigh*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -264,7 +264,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="nosePeakSize" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              nosePeakSize
+              Kích thước đỉnh mũi
             </Typography>
             <Slider aria-label='nosePeakSize' size='small' value={nosePeakSize*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -273,7 +273,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="noseBoneHigh" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              noseBoneHigh
+              Độ cao sống mũi
             </Typography>
             <Slider aria-label='noseBoneHigh' size='small' value={noseBoneHigh*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -282,7 +282,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="nosePeakLowering" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              nosePeakLowering
+              Độ thấp đỉnh mũi
             </Typography>
             <Slider aria-label='nosePeakLowering' size='small' value={nosePeakLowering*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -291,7 +291,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="noseBoneTwist" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              noseBoneTwist
+              Hình dạng mũi
             </Typography>
             <Slider aria-label='noseBoneTwist' size='small' value={noseBoneTwist*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -300,7 +300,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="eyeBrownHigh" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              eyeBrownHigh
+              Chiều cao lông mày
             </Typography>
             <Slider aria-label='eyeBrownHigh' size='small' value={eyeBrownHigh*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -309,7 +309,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="eyeBrownForward" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              eyeBrownForward
+              Vị trí lông mày
             </Typography>
             <Slider aria-label='eyeBrownForward' size='small' value={eyeBrownForward*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -318,7 +318,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="cheeksBoneHigh" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              cheeksBoneHigh
+              Độ cao gò má
             </Typography>
             <Slider aria-label='cheeksBoneHigh' size='small' value={cheeksBoneHigh*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -327,7 +327,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="cheeksBoneWidth" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              cheeksBoneWidth
+              Kích thước gò má
             </Typography>
             <Slider aria-label='cheeksBoneWidth' size='small' value={cheeksBoneWidth*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -336,7 +336,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="cheeksWidth" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              cheeksWidth
+              chiều rộng gò má
             </Typography>
             <Slider aria-label='cheeksWidth' size='small' value={cheeksWidth*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -345,7 +345,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="eyesOpening" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              eyesOpening
+              Kích thước mắt
             </Typography>
             <Slider aria-label='eyesOpening' size='small' value={eyesOpening*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -354,7 +354,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="lipsThickness" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              lipsThickness
+              Độ dày môi
             </Typography>
             <Slider aria-label='lipsThickness' size='small' value={lipsThickness*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -363,7 +363,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="jawBoneWidth" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              jawBoneWidth
+              Độ rộng xương hàm
             </Typography>
             <Slider aria-label='jawBoneWidth' size='small' value={jawBoneWidth*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -372,7 +372,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="jawBoneBackSize" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              jawBoneBackSize
+              Độ rộng xương cằm
             </Typography>
             <Slider aria-label='jawBoneBackSize' size='small' value={jawBoneBackSize*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -381,7 +381,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="chinBoneLowering" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              chinBoneLowering
+              Hạ thấp xương mặt
             </Typography>
             <Slider aria-label='chinBoneLowering' size='small' value={chinBoneLowering*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -390,7 +390,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="chinBoneLenght" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              chinBoneLenght
+              Chiều dài xương mặt
             </Typography>
             <Slider aria-label='chinBoneLenght' size='small' value={chinBoneLenght*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -399,7 +399,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="chinBoneSize" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              chinBoneSize
+              Độ rộng xương mặt
             </Typography>
             <Slider aria-label='chinBoneSize' size='small' value={chinBoneSize*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -408,7 +408,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="chinHole" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              chinHole
+              Cằm chẻ
             </Typography>
             <Slider aria-label='chinHole' size='small' value={chinHole*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -417,7 +417,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
           </Grid>
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="neckThickness" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              neckThickness
+              Độ rộng cổ
             </Typography>
             <Slider aria-label='neckThickness' size='small' value={neckThickness*100} min={-100} max={100} onChange={(e, value)=>{
               var v = Number(value)
@@ -432,7 +432,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.blemishes" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              blemishes
+              Kiểu da
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -454,7 +454,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.beard" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              beard
+              Râu
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -476,7 +476,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.eyebrows" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              eyebrows
+              Mắt
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -498,7 +498,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.ageing" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              ageing
+              Tuổi nhân vật
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -520,7 +520,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.makeUp" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              makeUp
+              Trang điểm
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -542,7 +542,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.blush" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              blush
+              Phấn má
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -564,7 +564,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.complexion" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              complexion
+              Sắc tố da
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -586,7 +586,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.sunDamage" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              sunDamage
+              Độ rám nắng
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -608,7 +608,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.lipstick" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              lipstick
+              Son môi
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -630,7 +630,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.moleAndFreckles" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              moleAndFreckles
+              Mụn và nếp nhăn
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -652,7 +652,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.chestHair" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              chestHair
+              Lông ngực
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -674,7 +674,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.bodyBlemishes" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              bodyBlemishes
+              Các vết thâm da
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>
@@ -696,7 +696,7 @@ const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
 
           <Grid item xs={6} sx={{bgcolor: '#1f1f1f', borderRadius: '1rem', p:2, mb: 2}}>
             <Typography id="headOverlays.addBodyBlemishes" align='center' variant='subtitle2' sx={{fontFamily: 'Gilroy', textTransform: 'uppercase'}} gutterBottom>
-              addBodyBlemishes
+              thêm vết thâm da
             </Typography>
             <Grid container justifyContent={'center'} alignItems={'center'}>
               <Grid item>

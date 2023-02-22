@@ -51,6 +51,12 @@ const Shape = styled(animated.img)`
   object-position: left;
 `
 
+const ButtonAction = styled(Button)`
+  &:hover {
+    transform: scale(1.1);
+  }
+`
+
 const request = new cRequest()
 
 const Login = () => {
@@ -140,7 +146,7 @@ const Login = () => {
                     name='password'
                     control={control}
                     render={({field: {value, onChange}})=>(
-                      <TextField label='Password' variant='outlined' type='password' value={value} onChange={onChange} error={Boolean(errors.password)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #ff0b30'}}  fullWidth/>
+                      <TextField label='Mật khẩu' variant='outlined' type='password' value={value} onChange={onChange} error={Boolean(errors.password)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #ff0b30'}}  fullWidth/>
                     )}          
                   />
                   {errors.password && <FormHelperText sx={{ color: 'error.main' }}>{errors.password.message}</FormHelperText>}
@@ -163,10 +169,10 @@ const Login = () => {
                 </AnimatedFormControl> :  */
                 index === 4 ? <AnimatedGrid style={props} container spacing={6}>
                   <Grid item xs={6}>
-                    <Button variant='contained' type='submit' color='primary' fullWidth>Đăng nhập</Button>
+                    <ButtonAction variant='contained' type='submit' color='primary' fullWidth>Đăng nhập</ButtonAction>
                   </Grid>
                   <Grid item xs={6}>
-                    <Button variant='contained' color='warning' onClick={onRegisterClick} fullWidth>Đăng ký</Button>
+                    <ButtonAction variant='contained' color='warning' onClick={onRegisterClick} fullWidth>Đăng ký</ButtonAction>
                   </Grid>
                 </AnimatedGrid> : null
               ))}
