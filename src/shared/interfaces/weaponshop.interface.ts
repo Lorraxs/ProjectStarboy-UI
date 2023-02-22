@@ -1,5 +1,3 @@
-import { eStatus } from "./status.interface";
-
 export const WeaponShopType = [ 
     "Meele" , 
     "Handguns" , 
@@ -20,8 +18,8 @@ export enum EWeaponShopTypeSubTittle {
     MachineGuns = "Súng máy",
     Ammo = "Đạn",
     Components = "Phụ kiện",
-    
 }
+
 export const WeaponListType = {
     Meele: [
         "weapon_dagger",

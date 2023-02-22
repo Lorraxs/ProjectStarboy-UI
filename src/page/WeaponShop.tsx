@@ -21,6 +21,7 @@ const Container = styled(AnimatedGrid)`
     height: 100%;
     background-color: #111111;
     pointer-events: all;
+    user-select: none
 `
 
 const Header = styled(AnimatedGrid)`

@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import useShow from '../hooks/useShow'
 import styled from 'styled-components'
 import { animated } from '@react-spring/web'
-import { AnimatedBox, AnimatedGrid, AnimatedTypography } from '../components/animated-mui'
-import { Box } from '@mui/system'
+import {  AnimatedGrid, AnimatedTypography } from '../components/animated-mui'
 import { Button, Dialog, DialogTitle, Grid, IconButton, Slider, Tooltip, Typography } from '@mui/material'
-import { FatherFaces, IPedAppearance, IPedHeadBlend, IPedHeadOvelayNum, IPedHeadOverlayValue, IPedHeadOverlays, MotherFaces, ParentsName, defaultPedAppearance, defaultPedHeadOverlayNum } from '../shared/interfaces'
-import _ from 'lodash'
-import { Control, Controller, FormProvider, useController, useForm, useFormContext } from 'react-hook-form'
+import { FatherFaces, IPedHeadBlend, IPedHeadOvelayNum, MotherFaces, ParentsName, defaultPedAppearance, defaultPedHeadOverlayNum } from '../shared/interfaces'
+import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { cRequest } from '../utils/request'
 import PaletteIcon from '@mui/icons-material/Palette';
 import CircleIcon from '@mui/icons-material/Circle';
@@ -74,7 +72,7 @@ const ParrentItemGrid = styled(AnimatedGrid)<{selected: boolean}>`
 `
 
 function CharacterCreator() {
-  const [show, setShow] = useShow(false, 'CharacterCreator', true, true, true, false)
+  const [show] = useShow(false, 'CharacterCreator', true, true, true, false)
   const [overlayNums, setOverlayNums] = useState<IPedHeadOvelayNum>(defaultPedHeadOverlayNum)
   
   const methods= useForm({
@@ -180,7 +178,7 @@ interface IMarks {
 
 
 const Right = ({overlayNums}:{overlayNums:IPedHeadOvelayNum}) => {
-  const {watch, setValue, control} = useFormContext();
+  const {watch, setValue} = useFormContext();
   const shapeMix = watch('headBlend.shapeMix')
   const skinMix = watch('headBlend.skinMix')
 
