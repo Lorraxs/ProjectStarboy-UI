@@ -27,6 +27,7 @@ export enum EPlayerInventorySlot {
   KEVLAR = "KEVLAR",
   DECAL = "DECAL",
   TOP = "TOP",
+  EXTEND = "EXTEND",
   BP_0 = "BP_0",
   BP_1 = "BP_1",
   BP_2 = "BP_2",
@@ -57,17 +58,53 @@ export enum EPlayerInventorySlot {
   BP_27 = "BP_27",
   BP_28 = "BP_28",
   BP_29 = "BP_29",
+  WEAPON = "WEAPON",
+  AMMO = "AMMO",
+}
+
+export enum EPlayerTransSlot {
+  P_0 = "P_0",
+  P_1 = "P_1",
+  P_2 = "P_2",
+  P_3 = "P_3",
+  P_4 = "P_4",
+  P_5 = "P_5",
+  P_6 = "P_6",
+  P_7 = "P_7",
+  T_0 = "T_0",
+  T_1 = "T_1",
+  T_2 = "T_2",
+  T_3 = "T_3",
+  T_4 = "T_4",
+  T_5 = "T_5",
+  T_6 = "T_6",
+  T_7 = "T_7",
 }
 
 export type IIventoryType = "player" | "vehicle" | "property";
-
+export enum EInventoryRarity {
+  COMMON,
+  UNCOMMON,
+  RARE,
+  EPIC,
+  LEGENDARY,
+}
+export interface IItemComponent {
+  skin?: string;
+  scope?: string;
+  suppressor?: string;
+  clip?: string;
+  grip?: string;
+  flashlight?: string;
+}
 export interface IInventoryItem {
   name: string;
-  slot: string;
-  amount: number;
+  expiration?: number;
+  stability?: number;
+  component?: IItemComponent;
 }
 export interface IInventory {
-  [key: string]: IInventoryItem;
+  [key: string]: IInventoryItem[];
 }
 
 export interface IAddInventoryItem {
