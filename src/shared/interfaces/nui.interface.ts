@@ -37,7 +37,9 @@ export type INUIPage =
   | "Login"
   | "Register"
   | "CharacterCreator"
-  | "PlayerInventory";
+  | "PlayerInventory"
+  | "GroceryStore"
+  | "WeaponShop";
 
 export type IReduxAction =
   | "setPlayerData"

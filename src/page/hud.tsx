@@ -211,7 +211,7 @@ const RightTop = ()=>{
 
 
 const HudPage = {
-  element: hud,
+  element: HUD,
   needLogin: true
 };
 

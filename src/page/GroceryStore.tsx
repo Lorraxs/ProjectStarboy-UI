@@ -33,7 +33,7 @@ const Top = styled(AnimatedGrid)`
 `
 
 const ParrentGrid = styled(AnimatedGrid)`
-    height: 100%
+    height: 100%;
 `
 const Bottom = styled(AnimatedGrid)`
     height: 25%;
@@ -159,7 +159,7 @@ const BottomScrollbarItem = styled(AnimatedGrid)`
 
 
 function GroceryStore() {
-    const [show] = useShow(process.env.NODE_ENV === 'development', 'GroceryStore', true, true, true, false)
+    const [show] = useShow(false, 'GroceryStore', true, true, true, false)
     const [menuList, setMenuList] = useState("Food");
     const [selectedCategory, setSelectedCategory] = useState('');
     const selectedList = GroceryStoreListItem[menuList as keyof typeof GroceryStoreListItem];

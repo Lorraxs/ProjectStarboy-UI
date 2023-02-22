@@ -102,7 +102,7 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openContext = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    if(!item) return
+    if((!item || item.length === 0)) return
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -144,7 +144,7 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
                 isDraggingOver={snapshot.isDraggingOver}
                 notAccept={isNotAccept(snapshot.draggingOverWith, provided.droppableProps['data-rbd-droppable-id'])}
               >
-                {!item && <SlotIcon className={`icon-${icon}`}/>}
+                {(!item || item.length === 0) && <SlotIcon className={`icon-${icon}`}/>}
                 {keyboard && <SlotKeyboard>{keyboard}</SlotKeyboard>}
                 {
                   (item && item.length > 0) ? <Draggable draggableId={slot} index={0}>
