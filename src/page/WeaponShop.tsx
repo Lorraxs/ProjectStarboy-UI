@@ -264,7 +264,7 @@ function WeaponShop(){
                                                 <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>Damage</Typography>
                                             </Grid>
                                             <Grid xs={5}  display={"flex"} alignItems={"center"}>
-                                                <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].damage}/>
+                                                <LinearProgress sx={{height: "30%", flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].damage}/>
                                             </Grid>
                                             <Grid xs={1}  display={"flex"} alignItems={"center"}>
                                                 <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].damage}</Typography>

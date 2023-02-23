@@ -231,12 +231,14 @@ function GroceryStore() {
         from: { y: 100, opacity: 0 },
         to: { y: show ? 0 : 100, opacity: show ? 1 : 0 },
     })
+
     const rightSpringRef = useSpringRef();
     const rightSpring = useSpring({
         ref: rightSpringRef,
         from: { x: 100, opacity: 0 },
         to: { x: show ? 0 : 100, opacity: show ? 1 : 0 },
     })
+    
     const transRef = useSpringRef()
     const transitions = useTransition(show, {
         ref: transRef,
