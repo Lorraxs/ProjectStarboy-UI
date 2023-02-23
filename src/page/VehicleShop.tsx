@@ -159,6 +159,7 @@ const CategoryIcon = styled(animated.img)`
     object-fit: fill;
 `
 const ButtonBottom = styled(Grid)`
+    border-radius: 10px;
     cursor: pointer;
     &:hover {
         transform: scale(1.1);
@@ -204,7 +205,8 @@ function VehicleShop() {
     const selectedList = VehicleListOnCategory[menuList as keyof typeof VehicleListOnCategory];
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedVehicle, setSelectedVehicle] = useState( selectedList[0]);
-    const price = DefaultVehicleShopInfomation[selectedVehicle].price
+    const priceVehicle = DefaultVehicleShopInfomation[selectedVehicle].price
+    const typeVehicle = DefaultVehicleShopInfomation[selectedVehicle].type
 
     const handleClickCategory = (i: string) => {
         setMenuList(i);
@@ -219,7 +221,7 @@ function VehicleShop() {
         modelname: selectedVehicle,
         color1: color1,
         color2: color2,
-        price : price,
+        price : priceVehicle,
     }
     
     const onSubmit = () => {
@@ -235,8 +237,8 @@ function VehicleShop() {
     }, [color2]);
 
     useEffect(() => {
-        request.post('VehicleShop:ViewCar', selectedVehicle)
-    }, [selectedVehicle]);
+        request.post('VehicleShop:ViewCar', selectedVehicle, typeVehicle)
+    }, [selectedVehicle, typeVehicle]);
 
     useEffect(() => {
         setSelectedVehicle(selectedList[0])
