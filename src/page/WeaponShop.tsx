@@ -8,10 +8,11 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import styled from 'styled-components';
 import { cRequest } from '../utils/request'
-import { DefaultWeaponInfomation, WeaponListType, WeaponShopType, EWeaponShopTypeSubTittle } from '../shared/interfaces';
+import {WeaponListType, WeaponShopType, EWeaponShopTypeSubTittle } from '../shared/interfaces';
 import { AnimatedGrid } from '../components/animated-mui'
 import FormControl from '@mui/material/FormControl/FormControl';
 import { animated, config, useChain, useSpring, useSpringRef, useTransition } from '@react-spring/web'
+import {DefaultWeaponInfomation} from '../shared/config/weapon'
 
 const request = new cRequest()
 
@@ -126,7 +127,7 @@ const WeaponBottomImg = styled(animated.img)`
 
 
 function WeaponShop(){
-    const [show] = useShow(false, 'WeaponShop', true, true, true, false)
+    const [show] = useShow(false, 'WeaponShop', true, true, true, true)
     const money = useSelector((state:RootState)=>state.player.money)
     const bank = useSelector((state:RootState)=>state.player.bank)
     const [menuList, setMenuList] = useState("Meele");

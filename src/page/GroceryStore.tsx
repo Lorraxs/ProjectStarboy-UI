@@ -17,7 +17,7 @@ const request = new cRequest()
 
 const Container = styled(AnimatedGrid)`
     margin: 0 auto;
-    background-image: url('/assets/groceryShop/design_bg.png');
+    background-image: url('./assets/groceryShop/design_bg.png');
     background-position: center;
     background-size: cover;
     width: 100%;
@@ -159,7 +159,7 @@ const BottomScrollbarItem = styled(AnimatedGrid)`
 
 
 function GroceryStore() {
-    const [show] = useShow(false, 'GroceryStore', true, true, true, false)
+    const [show] = useShow(process.env.NODE_ENV === 'development', 'GroceryStore', true, true, true, true)
     const [menuList, setMenuList] = useState("Food");
     const [selectedCategory, setSelectedCategory] = useState('');
     const selectedList = GroceryStoreListItem[menuList as keyof typeof GroceryStoreListItem];
@@ -246,9 +246,9 @@ function GroceryStore() {
     })
 
 
-    useChain(show ? [transRef, topSpringRef, leftSpringRef, rightSpringRef, bottomSpringRef] : [bottomSpringRef, rightSpringRef,leftSpringRef, bottomSpringRef, transRef ], show ? 
+    useChain(show ? [transRef, topSpringRef, leftSpringRef, rightSpringRef, bottomSpringRef] : [bottomSpringRef, rightSpringRef,leftSpringRef, topSpringRef, transRef ], show ? 
         [0.0, 0.5,0.5,0.5, 0.5]:
-        [0.5, 0.5,0.5,0.5, 0.0], 
+        [0.0, 0.0,0.0,0.0, 0.5], 
         1000)
     return transitions( (style, show) => (show ?
 
