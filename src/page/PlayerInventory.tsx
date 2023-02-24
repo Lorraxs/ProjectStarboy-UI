@@ -70,7 +70,6 @@ function PlayerInventory() {
   })
 
   const onDragEnd = (result: DropResult, provider: ResponderProvided)=>{
-    console.log(result)
     const {destination, draggableId, mode, reason, source, type} = result
     request.post('PlayerInventory:OnDragEnd', result)
   }

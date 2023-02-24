@@ -69,8 +69,7 @@ const ITEMS: IItem[] = [
 ];
 
 const ammoKeys = Object.keys(eAmmoType);
-console.log(ammoKeys);
-ammoKeys.forEach(ammo=>{
+ammoKeys.forEach((ammo) => {
   ITEMS.push({
     name: ammo,
     label: "Pistol",
@@ -84,7 +83,7 @@ ammoKeys.forEach(ammo=>{
     stability: -1,
     type: "weapon",
     rarity: EInventoryRarity.UNCOMMON,
-  })
-})
+  });
+});
 
 export default ITEMS;

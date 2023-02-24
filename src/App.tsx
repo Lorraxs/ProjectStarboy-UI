@@ -199,7 +199,6 @@ function App() {
     <SettingsProvider>
       <SettingsConsumer>
         {({settings})=>{
-          console.log(settings)
           return(
             <ThemeComponent settings={settings}>
               <Page />

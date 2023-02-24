@@ -39,7 +39,8 @@ export type INUIPage =
   | "CharacterCreator"
   | "PlayerInventory"
   | "GroceryStore"
-  | "WeaponShop";
+  | "WeaponShop"
+  | "Menu";
 
 export type IReduxAction =
   | "setPlayerData"
@@ -53,9 +54,19 @@ export type IReduxAction =
   | "setPlayerBlackMoney"
   | "setPlayerInventoryWeight"
   | "setPlayerMaxInventoryWeight"
+  | "setMenuData"
+  | "setMenuElements"
+  | "setMenuConversation"
+  | "setWeaponShopItems"
+  | "setWeaponShopIndex"
   | "copy";
 export interface IReduxNuiMessage {
   component: "Redux";
+  event: IReduxAction;
+  data: any;
+}
+
+export interface INuiDispatch {
   event: IReduxAction;
   data: any;
 }
