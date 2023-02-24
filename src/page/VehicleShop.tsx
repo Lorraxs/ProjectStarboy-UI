@@ -13,7 +13,7 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import PercentIcon from '@mui/icons-material/Percent';
 import ReorderIcon from '@mui/icons-material/Reorder';
 import styled from 'styled-components';
-import { DefaultVehicleColor, VehicleListOnCategory, EVehicleShopCategorySubTittle, VehicleShopCategory, DefaultVehicleShopInfomation} from '../shared/interfaces';
+import { DefaultVehicleColor, VehicleListOnCategory, EVehicleShopCategorySubTittle, VehicleShopCategory, DefaultVehicleShopInfomation, TopSpeedServer} from '../shared/interfaces';
 import { AnimatedGrid } from '../components/animated-mui';
 import { Typography, Grid, CircularProgress } from '@mui/material';
 import { cRequest } from '../utils/request';
@@ -342,7 +342,7 @@ function VehicleShop() {
                             </Grid>
                             <Grid height={"20%"} width={"100%"} display={"flex"} wrap="nowrap">
                                 <Grid height={"100%"} width={"10%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                                    <BrandLogo src={`./assets/vehicleShop/porsche.png`}></BrandLogo>
+                                    <BrandLogo src={`./assets/vehicleShop/brand_logo/${DefaultVehicleShopInfomation[selectedVehicle].brand}.png`}></BrandLogo>
                                 </Grid>
                                 <Grid width={"90%"} display={"flex"} alignItems={"center"} sx={{ml: "2%"}}>
                                     <Typography variant='body1' color={"primary"} sx={{wordBreak: "break-all", fontWeight: "bold", fontFamily:"Gilroy", fontSize: "30px"}}>{DefaultVehicleShopInfomation[selectedVehicle].title}</Typography>
@@ -410,13 +410,31 @@ function VehicleShop() {
                             <Typography sx={{pl:"2%"}}>Thông số</Typography>
                             <hr style={{width: "65%"}}/>
                         </Grid>
-                        <Grid display={"flex"} height={"30%"} width={"100%"} sx={{border: "1px solid white", gap: "2%", flexWrap: "wrap"}}>
-                            <Grid width={"49%"} height={"50%"}>
-                                <CircularProgress sx={{height: "30%", flexGrow: 1}} variant='determinate' value={60}/>
+                        <Grid display={"flex"} height={"30%"} width={"100%"} sx={{gap: "2%", flexWrap: "wrap", mt: "-4%", ml: "-3%"}}>
+                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round"}}  variant='determinate' value={(DefaultVehicleShopInfomation[selectedVehicle].speed)/TopSpeedServer * 100} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Tốc độ</Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-2%"}}>{DefaultVehicleShopInfomation[selectedVehicle].speed}</Typography>
                             </Grid>
-                            <Grid width={"49%"} height={"50%"}>2</Grid>
-                            <Grid width={"49%"} height={"50%"}>3</Grid>
-                            <Grid width={"49%"} height={"50%"}>4</Grid>
+                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round", color: "#FFB84C"}}  variant='determinate' value={DefaultVehicleShopInfomation[selectedVehicle].brake} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Phanh</Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-2%"}}>{DefaultVehicleShopInfomation[selectedVehicle].brake}</Typography>
+                            </Grid>
+                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round", color: "#1F8A70"}}  variant='determinate' value={DefaultVehicleShopInfomation[selectedVehicle].control} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Điều khiển</Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-2%"}}>{DefaultVehicleShopInfomation[selectedVehicle].control}</Typography>
+                            </Grid>
+                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round", color: "#5B8FB9"}}  variant='determinate' value={(DefaultVehicleShopInfomation[selectedVehicle].shift)* 10} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Hộp số</Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-2%"}}>{DefaultVehicleShopInfomation[selectedVehicle].shift}</Typography>
+                            </Grid>
                         </Grid>
                     </AnimatedGrid>
                 </AnimatedGrid>

@@ -1,5 +1,4 @@
-import { Dispatch } from "redux";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { IPlayer } from "../../shared/interfaces";
 import { EPlayerInventorySlot } from "../../shared/interfaces/inventory.interface";
 
