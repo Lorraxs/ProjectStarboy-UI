@@ -1,4 +1,4 @@
-import { IWeaponData } from "../interfaces";
+import { IVehicleData, IWeaponData } from "../interfaces";
 import {
   EPlayerInventorySlot,
   EPlayerTransSlot,
@@ -8,6 +8,7 @@ import {
 import { IItem, IItemType } from "../interfaces/item.interface";
 import ITEMS from "../items";
 const WEAPON_DATA: IWeaponData = require("../json/WeaponData.json");
+const VEHICLE_DATA: IVehicleData = require("../json/vehicleShop/vehicleData.json");
 
 export const Wait = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -212,6 +213,19 @@ export const getWeaponGroupByName = (weaponName: string) => {
       WEAPON_DATA[weaponHash].HashKey.toLocaleLowerCase()
     ) {
       return WEAPON_DATA[weaponHash].Group;
+    }
+  }
+};
+
+export const getVehicleGroupByName = (vehicleName: string) => {
+  
+  for (const spawncode in VEHICLE_DATA) {
+    if (
+      vehicleName.toLowerCase() ===
+      VEHICLE_DATA[spawncode].spawncode.toLocaleLowerCase()
+    ) {
+      
+      return VEHICLE_DATA[spawncode].category;
     }
   }
 };

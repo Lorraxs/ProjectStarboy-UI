@@ -5,11 +5,24 @@
   "WEAPON_STORE": "Cửa hàng vũ khí",
   "BUY_SUCCESS": "Đã mua thành công {{amount}} {{itemLabel}} với giá {{price}} {{currency}}",
   "NOT_HAVE_ENOUGHT_CASH": "Bạn không đủ tiền mặt",
-  "NOT_HAVE_ENOUGHT_BANK": "Bạn không đủ tiền trong tài khoảng",
+  "NOT_HAVE_ENOUGHT_BANK": "Bạn không đủ tiền trong tài khoản",
   "FULL_INVENTORY": "Kho đồ đã đầy",
   "REMOVED_ITEM": "Đã vứt {{amount}} {{itemName}}" ,
   "THERE_ARE_NO_ITEM": "Không có vật phẩm nào ở đây",
   "INVALID_QUANTITY": "Số lượng không hợp lệ",
-
-  "WEAPON_PISTOL": "Súng lục"
+  "WEAPON_PISTOL": "Súng lục",
+  "COMPACTS" : "Xe gia đình",
+  "SEDANS" : "Xe sedan",
+  "SUVS" : "Xe SUV",
+  "COUPES" : "Xe mui trần",
+  "MUSCLE" : "Xe cổ điển",
+  "SPORTS CLASSICS" : "Xe thể thao cổ điển",
+  "SPORTS" : "Xe thể thao",
+  "SUPER" : "Siêu xe",
+  "MOTORCYCLES" : "Xe Moto",
+  "OFFROAD" : "Xe địa hình",
+  "VANS" : "Xe tải nhỏ",
+  "CYCLES" : "abc",
+  "BOATS" : "Tàu thuyền",
+  "HELICOPTER" : "Máy bay trực thăng"
 }
