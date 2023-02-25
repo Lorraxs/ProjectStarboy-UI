@@ -198,7 +198,7 @@ const BottomScrollBarItem = styled(AnimatedGrid)`
 `
 
 function VehicleShop() {
-    const [show] = useShow(process.env.NODE_ENV === 'development', 'VehicleShop', true, true, true, false)
+    const [show] = useShow(false, 'VehicleShop', true, true, true, false)
     const [color1, setcolor1] = useState(-1);
     const [color2, setcolor2] = useState(0);
     const [menuList, setMenuList] = useState("Sedans");
@@ -248,19 +248,15 @@ function VehicleShop() {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'ArrowDown') {
                 request.post('VehicleShop:ChangeCamView', event.key)
-                console.log('ArrowDown pressed');
             }
             if (event.key === 'ArrowUp') {
                 request.post('VehicleShop:ChangeCamView', event.key)
-                console.log('ArrowUp pressed');
             }
             if (event.key === 'ArrowLeft') {
                 request.post('VehicleShop:ChangeCamView', event.key)
-                console.log('ArrowLeft pressed');
             }
             if (event.key === 'ArrowRight') {
                 request.post('VehicleShop:ChangeCamView', event.key)
-                console.log('ArrowRight pressed');
             }
         };
 
@@ -302,6 +298,7 @@ function VehicleShop() {
     })
 
     const scrollbarRef = useRef<HTMLDivElement>(null);
+
     const handleScrollLeft = () => {
         if (scrollbarRef.current) {
             scrollbarRef.current?.scrollBy({ left: -1000, behavior: 'smooth' });
@@ -317,6 +314,7 @@ function VehicleShop() {
         [0.0, 0.5, 0.5, 0.5]:
         [0.5, 0.5, 0.5, 0.0], 
     1000)
+    
     return transitions ((style, show) => (show ? 
         <Container style={{...style}}>
             <Top>
