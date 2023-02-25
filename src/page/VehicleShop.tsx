@@ -244,6 +244,33 @@ function VehicleShop() {
         setSelectedVehicle(selectedList[0])
     }, [selectedList]);
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowDown') {
+                request.post('VehicleShop:ChangeCamView', event.key)
+                console.log('ArrowDown pressed');
+            }
+            if (event.key === 'ArrowUp') {
+                request.post('VehicleShop:ChangeCamView', event.key)
+                console.log('ArrowUp pressed');
+            }
+            if (event.key === 'ArrowLeft') {
+                request.post('VehicleShop:ChangeCamView', event.key)
+                console.log('ArrowLeft pressed');
+            }
+            if (event.key === 'ArrowRight') {
+                request.post('VehicleShop:ChangeCamView', event.key)
+                console.log('ArrowRight pressed');
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
     const leftSpringRef = useSpringRef();
     const leftSpring = useSpring({
         ref: leftSpringRef,
