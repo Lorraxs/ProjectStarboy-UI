@@ -202,10 +202,7 @@ const BottomScrollBarItem = styled(AnimatedGrid)`
     flex-wrap: wrap;
 `
 
-const BottomGrid = styled(animated.div)`
-    width: 100%;
-    height: 100%;
-`
+
 
 function VehicleShop() {
     const {t} = useTranslation('common');

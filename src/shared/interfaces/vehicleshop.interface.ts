@@ -1,15 +1,3 @@
-export const VehicleShopCategory = [ 
-    "Sedans" , 
-    "Sports" ,
-    "Muscles" , 
-    "SuperCar" , 
-    "SUVs", 
-    "Vans", 
-    "Motocycles", 
-    "Boats", 
-    "Planes"
-]
-
 
 export interface IPerformanceVehicle {
    power: number,
