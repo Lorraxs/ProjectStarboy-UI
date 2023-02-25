@@ -24,7 +24,6 @@ const Container = styled(AnimatedGrid)`
     height: 100%;
     background-color: #111111;
     pointer-events: all;
-    user-select: none
 `
 
 const Header = styled(AnimatedGrid)`
@@ -50,13 +49,11 @@ const Bottom = styled(AnimatedGrid)`
 const ParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
-
 `
 
 const CenterParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
-
 `
 const CenterParrentGridItem = styled(AnimatedGrid)`
     height: 100%;
@@ -65,7 +62,6 @@ const CenterParrentGridItem = styled(AnimatedGrid)`
 const BottomParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
-
 `
 const BottomParrentGridItem = styled(AnimatedGrid)`
     height: 90%;
@@ -84,12 +80,10 @@ const BottomParrentGridItem = styled(AnimatedGrid)`
     {
         background-color: transparent;
     }
-
 `
 const BottomParrentGridItemWeapon = styled(AnimatedGrid)`
     min-width: calc(20% - 15px);
     cursor: pointer;
-
 `
 
 
@@ -120,18 +114,17 @@ const WeaponCenterImg = styled(animated.img)`
     position: relative
     width: 100%;
     height: 100%;
-
 `
 
 const WeaponBottomImg = styled(animated.img)`
     width: 90%;
     height: 90%;
-
 `
 
 
 function WeaponShop(){
-    const [show] = useShow(false, 'WeaponShop', true, true, true, false)
+    const {t, i18n} = useTranslation('common');
+    const [show] = useShow(process.env.NODE_ENV==='development', 'WeaponShop', true, true, true, true)
     const money = useSelector((state:RootState)=>state.player.money)
     const bank = useSelector((state:RootState)=>state.player.bank)
     const items = useSelector((state:RootState)=>state.weaponShop.items)
@@ -242,106 +235,106 @@ function WeaponShop(){
                                 </Typography>
                             </ParrentItemGrid>
                         ))}
-                    </ParrentGrid>
-                    <ParrentGrid xs={3} justifyContent={"center"} alignItems={"center"} sx={{borderBottom: "1px solid #232323"}}>
-                        <MoneyPlayerGrid display={"flex"}>
-                            <MoneyPlayerItemGrid xs={6}>
-                                <Grid display={'flex'}>
-                                    <Grid xs={2} sx={{mb:2}}></Grid>
-                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy', fontSize: '12px'}}>Tiền Mặt</Typography></Grid>
+                    </Grid>
+                </ParrentGrid>
+                <ParrentGrid xs={3} justifyContent={"center"} alignItems={"center"} sx={{borderBottom: "1px solid #232323"}}>
+                    <MoneyPlayerGrid display={"flex"}>
+                        <MoneyPlayerItemGrid xs={6}>
+                            <Grid display={'flex'}>
+                                <Grid xs={2} sx={{mb:2}}></Grid>
+                                <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy', fontSize: '12px'}}>{t('CASH')}</Typography></Grid>
+                            </Grid>
+                            <Grid display={'flex'}>
+                                <Grid xs={2} sx={{mb:2}}><AttachMoneyIcon fontSize='small'  color="primary" sx={{borderRadius: "50%"}}></AttachMoneyIcon></Grid>
+                                <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>{money} $</Typography></Grid>
+                            </Grid>
+                        </MoneyPlayerItemGrid>
+                        <MoneyPlayerItemGrid xs={6}>
+                            <Grid display={'flex'}>
+                                <Grid xs={2} sx={{mb:2}}></Grid>
+                                <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy', fontSize: '12px'}}>{t('ACCOUNT')}</Typography></Grid>
+                            </Grid>
+                            <Grid display={'flex'}>
+                                <Grid xs={2} sx={{mb:2}}><AccountBalanceWalletIcon fontSize='small'  color="primary" sx={{borderRadius: "50%"}}></AccountBalanceWalletIcon></Grid>
+                                <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>{bank} $</Typography></Grid>
+                            </Grid>
+                        </MoneyPlayerItemGrid>
+                    </MoneyPlayerGrid>
+                </ParrentGrid>
+            </Header>
+            <Center>
+                <CenterParrentGrid>
+                    <CenterParrentGridItem xs={1}></CenterParrentGridItem>
+                    <CenterParrentGridItem style={{...centerSpring}}  xs={8} sx={{width: "100%"}}>
+                        {selectedItem === undefined || selectedItem === null ? (
+                            <Grid display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{ width: "100%", height: "100%"}}>
+                                <RemoveShoppingCartIcon fontSize="large" sx={{mr:4, color: "#232323"}}></RemoveShoppingCartIcon>
+                                <Typography variant='h4' color={"#232323"}>{t('EMPTY_PRODUCT')}</Typography>
+                            </Grid>
+                        ):(
+                            <Grid sx={{width: "100%", height: "100%", m:5}}>
+                                <Grid sx={{width:"70%", height:"20%"}}>
+                                    <Typography variant='h5' sx={{fontFamily: "Title", mb:2}} color={'primary'}>{t(selectedItem.name)}</Typography>
+                                    <Typography  sx={{fontFamily: "Gilroy", fontSize: "14px"}} color={'#ffffff'}>{t(`${selectedItem.name.toUpperCase()}_DECRIPTION`)}</Typography>
                                 </Grid>
-                                <Grid display={'flex'}>
-                                    <Grid xs={2} sx={{mb:2}}><AttachMoneyIcon fontSize='small'  color="primary" sx={{borderRadius: "50%"}}></AttachMoneyIcon></Grid>
-                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>{money} $</Typography></Grid>
+                                <Grid display={"flex"} sx={{width: "100%",height:"35%"}}>
+                                    <WeaponCenterImg src={`./assets/weaponShop/${selectedItem.name.toLowerCase()}.webp`}/>
+                                    
                                 </Grid>
-                            </MoneyPlayerItemGrid>
-                            <MoneyPlayerItemGrid xs={6}>
-                                <Grid display={'flex'}>
-                                    <Grid xs={2} sx={{mb:2}}></Grid>
-                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy', fontSize: '12px'}}>Tài khoản</Typography></Grid>
-                                </Grid>
-                                <Grid display={'flex'}>
-                                    <Grid xs={2} sx={{mb:2}}><AccountBalanceWalletIcon fontSize='small'  color="primary" sx={{borderRadius: "50%"}}></AccountBalanceWalletIcon></Grid>
-                                    <Grid xs={9}><Typography sx={{fontFamily: 'Gilroy'}}>{bank} $</Typography></Grid>
-                                </Grid>
-                            </MoneyPlayerItemGrid>
-                        </MoneyPlayerGrid>
-                    </ParrentGrid>
-                </Header>
-                <Center>
-                    <CenterParrentGrid>
-                        <CenterParrentGridItem xs={1}></CenterParrentGridItem>
-                        <CenterParrentGridItem style={{...centerSpring}}  xs={8} sx={{width: "100%"}}>
-                            {selectedWeapon === undefined || selectedWeapon === null ? (
-                                <Grid display={"flex"} justifyContent={"center"} alignItems={"center"} sx={{ width: "100%", height: "100%"}}>
-                                    <RemoveShoppingCartIcon fontSize="large" sx={{mr:4, color: "#232323"}}></RemoveShoppingCartIcon>
-                                    <Typography variant='h4' color={"#232323"}>Không có sản phẩm</Typography>
-                                </Grid>
-                            ):(
-                                <Grid sx={{width: "100%", height: "100%", m:5}}>
-                                    <Grid sx={{width:"70%", height:"20%"}}>
-                                        <Typography variant='h5' sx={{fontFamily: "Title", mb:2}} color={'primary'}>{DefaultWeaponInfomation[selectedWeapon].tittle}</Typography>
-                                        <Typography  sx={{fontFamily: "Gilroy", fontSize: "14px"}} color={'#ffffff'}>{DefaultWeaponInfomation[selectedWeapon].description}</Typography>
+                                <Grid display={"flex"} flexDirection={"column"} spacing={10} justifyContent={"center"} sx={{width: "100%",height:"35%"}}>
+                                    <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
+                                        <Grid xs={1} display={"flex"} alignItems={"center"}>
+                                            <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>{t('DAMAGE')}</Typography>
+                                        </Grid>
+                                        <Grid xs={5}  display={"flex"} alignItems={"center"}>
+                                            <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={selectedItem.damage}/>
+                                        </Grid>
+                                        <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                            <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{selectedItem.damage}</Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid display={"flex"} sx={{width: "100%",height:"35%"}}>
-                                        <WeaponCenterImg src={`./assets/weaponShop/${selectedWeapon}.webp`}/>
-                                        
+                                    <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
+                                        <Grid xs={1} display={"flex"} alignItems={"center"}>
+                                            <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>{t('RANGE')}</Typography>
+                                        </Grid>
+                                        <Grid xs={5} display={"flex"} alignItems={"center"}>
+                                            <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={selectedItem.range}/>
+                                        </Grid>
+                                        <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                            <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{selectedItem.range}</Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid display={"flex"} flexDirection={"column"} spacing={10} justifyContent={"center"} sx={{width: "100%",height:"35%"}}>
-                                        <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
-                                            <Grid xs={1} display={"flex"} alignItems={"center"}>
-                                                <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>Damage</Typography>
-                                            </Grid>
-                                            <Grid xs={5}  display={"flex"} alignItems={"center"}>
-                                                <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].damage}/>
-                                            </Grid>
-                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
-                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].damage}</Typography>
-                                            </Grid>
+                                    <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
+                                        <Grid xs={1} display={"flex"} alignItems={"center"}>
+                                            <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>{t('SPEED')}</Typography>
                                         </Grid>
-                                        <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
-                                            <Grid xs={1} display={"flex"} alignItems={"center"}>
-                                                <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>Tầm xa</Typography>
-                                            </Grid>
-                                            <Grid xs={5} display={"flex"} alignItems={"center"}>
-                                                <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].range}/>
-                                            </Grid>
-                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
-                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].range}</Typography>
-                                            </Grid>
+                                        <Grid xs={5} display={"flex"} alignItems={"center"}>
+                                            <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={selectedItem.firerate}/>
                                         </Grid>
-                                        <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
-                                            <Grid xs={1} display={"flex"} alignItems={"center"}>
-                                                <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>Tốc độ</Typography>
-                                            </Grid>
-                                            <Grid xs={5} display={"flex"} alignItems={"center"}>
-                                                <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].firerate}/>
-                                            </Grid>
-                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
-                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].firerate}</Typography>
-                                            </Grid>
+                                        <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                            <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{selectedItem.firerate}</Typography>
                                         </Grid>
-                                        <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
-                                            <Grid xs={1} display={"flex"} alignItems={"center"}>
-                                                <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>Độ giật</Typography>
-                                            </Grid>
-                                            <Grid xs={5} display={"flex"} alignItems={"center"}>
-                                                <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].accuracy}/>
-                                            </Grid>
-                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
-                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].accuracy}</Typography>
-                                            </Grid>
+                                    </Grid>
+                                    <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
+                                        <Grid xs={1} display={"flex"} alignItems={"center"}>
+                                            <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>{t('RECOIL')}</Typography>
                                         </Grid>
-                                        <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
-                                            <Grid xs={1} display={"flex"} alignItems={"center"}>
-                                                <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>Điều khiển</Typography>
-                                            </Grid>
-                                            <Grid xs={5} display={"flex"} alignItems={"center"}>
-                                                <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={DefaultWeaponInfomation[selectedWeapon].control}/>
-                                            </Grid>
-                                            <Grid xs={1}  display={"flex"} alignItems={"center"}>
-                                                <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{DefaultWeaponInfomation[selectedWeapon].control}</Typography>
-                                            </Grid>
+                                        <Grid xs={5} display={"flex"} alignItems={"center"}>
+                                            <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={selectedItem.accuracy}/>
+                                        </Grid>
+                                        <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                            <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{selectedItem.accuracy}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid height={"20%"} display={"flex"} flexDirection={"row"}>
+                                        <Grid xs={1} display={"flex"} alignItems={"center"}>
+                                            <Typography color={"primary"}  sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px"}}>{t('CONTROL')}</Typography>
+                                        </Grid>
+                                        <Grid xs={5} display={"flex"} alignItems={"center"}>
+                                            <LinearProgress sx={{height: "30%",flexGrow: 1}} variant="determinate" value={selectedItem.control}/>
+                                        </Grid>
+                                        <Grid xs={1}  display={"flex"} alignItems={"center"}>
+                                            <Typography sx={{textTransform: "uppercase", fontFamily: "Title", fontSize: "12px", ml:1}}>{selectedItem.control}</Typography>
                                         </Grid>
                                     </Grid>
                                     
