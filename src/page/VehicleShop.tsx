@@ -212,7 +212,7 @@ function VehicleShop() {
     const [selectedCategory, setSelectedCategory] = useState('')
     const [selectedItemBottom, setSelectedItemBottom] = useState('')
     const [selectedGroup, setSelectedGroup] = useState( LIST_VEHICLE_GROUP[0]);
-    const [selectedItem, setSelectedItem] = useState<IVehicleShop>()
+    const [selectedVehicle, setSelectedItem] = useState<IVehicleShop>()
     const vehicles = useSelector((state:RootState)=>state.vehicleShop.vehicles)
     const shopIdx = useSelector((state:RootState)=>state.vehicleShop.shopIdx)
     const VEHICLE_COLOR: IColorVehicle = require("../shared/json/vehicleShop/colorVehicle.json");
@@ -257,12 +257,12 @@ function VehicleShop() {
         setcolor1(-1)
         setcolor2(0)
         setPerformanceVehicle({
-            power: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedItem?.spawncode)?.performance.topspeed ?? 0,
-            acceleration: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedItem?.spawncode)?.performance.acceleration ?? 0,
-            handling: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedItem?.spawncode)?.performance.handling ?? 0,
-            topspeed: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedItem?.spawncode)?.performance.topspeed ?? 0,
+            power: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.topspeed ?? 0,
+            acceleration: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.acceleration ?? 0,
+            handling: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.handling ?? 0,
+            topspeed: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.topspeed ?? 0,
         })
-    }, [selectedItem])
+    }, [selectedVehicle])
 
     useEffect(() => {
         request.post('VehicleShop:ChangePrimaryColor', color1)
@@ -273,16 +273,16 @@ function VehicleShop() {
     }, [color2]);
 
     useEffect(() => {
-        if(selectedItem){
+        if(selectedVehicle){
             setData({
-                spawncode: selectedItem.spawncode,
-                price: selectedItem.price,
+                spawncode: selectedVehicle.spawncode,
+                price: selectedVehicle.price,
                 color1: color1,
                 color2: color2,
                 shopIndex: shopIdx
             })
         }
-    }, [selectedItem, color1, color2, shopIdx]);
+    }, [selectedVehicle, color1, color2, shopIdx]);
 
     useEffect(() => {
         const handleKeyCam = (event: KeyboardEvent) => {
@@ -407,25 +407,25 @@ function VehicleShop() {
                                 <Typography sx={{pl:"2%"}}>Mua & Chạy thử</Typography>
                                 <hr style={{width: "55%"}}/>
                             </Grid>
-                            {selectedItem === undefined || selectedItem === null ? (
+                            {selectedVehicle === undefined || selectedVehicle === null ? (
                             <Grid width={"100%"} height={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                 <RemoveShoppingCartIcon sx={{fontSize: "100px", color: "rgba(173, 173, 173, 0.5)"}}/>
                             </Grid>
                         ):(
                             <Grid width={"100%"} height={"100%"}>
                                 <Grid height={"10%"} width={"100%"} sx={{mt: "2%", mb: "2%"}}>
-                                <Typography variant='h6' color={"#28ad8d"} sx={{fontFamily: "Title", fontWeight: "bold"}}>{selectedItem.price} $</Typography>
+                                <Typography variant='h6' color={"#28ad8d"} sx={{fontFamily: "Title", fontWeight: "bold"}}>{selectedVehicle.price} $</Typography>
                                 </Grid>
                                 <Grid height={"20%"} width={"100%"} display={"flex"} wrap="nowrap">
                                     <Grid height={"100%"} width={"10%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                                        <BrandLogo src={`${VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedItem?.spawncode)?.brandLogo}`}></BrandLogo>
+                                        <BrandLogo src={`${VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.brandLogo}`}></BrandLogo>
                                     </Grid>
                                     <Grid width={"90%"} display={"flex"} alignItems={"center"} sx={{ml: "2%"}}>
-                                        <Typography variant='body1' color={"primary"} sx={{wordBreak: "break-all", fontWeight: "bold", fontFamily:"Gilroy", fontSize: "35px"}}>{VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedItem?.spawncode)?.name}</Typography>
+                                        <Typography variant='body1' color={"primary"} sx={{wordBreak: "break-all", fontWeight: "bold", fontFamily:"Gilroy", fontSize: "35px"}}>{VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.name}</Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid height={"25%"} width={"100%"} sx={{m: "2%"}}>
-                                    <Typography variant='body1' sx={{fontSize: "14px", fontFamily:"Gilroy"}}>{selectedItem.description}</Typography>
+                                    <Typography variant='body1' sx={{fontSize: "14px", fontFamily:"Gilroy"}}>{selectedVehicle.description}</Typography>
                                 </Grid>
                                 <Grid height={"20%"} width={"100%"} sx={{mt: "2%"}}>
                                 <ButtonBuy onClick={onSubmit}>
