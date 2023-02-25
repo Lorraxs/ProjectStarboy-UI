@@ -19,7 +19,6 @@ const initialState: IPlayer = {
     [EPlayerInventorySlot.BP_0]: [
       {
         name: "bread",
-        
       },
     ],
   },

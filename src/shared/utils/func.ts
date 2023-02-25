@@ -1,3 +1,4 @@
+import { IWeaponData } from "../interfaces";
 import {
   EPlayerInventorySlot,
   EPlayerTransSlot,
@@ -6,6 +7,7 @@ import {
 } from "../interfaces/inventory.interface";
 import { IItem, IItemType } from "../interfaces/item.interface";
 import ITEMS from "../items";
+const WEAPON_DATA: IWeaponData = require("../json/WeaponData.json");
 
 export const Wait = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -201,4 +203,15 @@ export const getPlayerInventoryWeight = (intentory: IInventory): number => {
     }
   }
   return weight;
+};
+
+export const getWeaponGroupByName = (weaponName: string) => {
+  for (const weaponHash in WEAPON_DATA) {
+    if (
+      weaponName.toLowerCase() ===
+      WEAPON_DATA[weaponHash].HashKey.toLocaleLowerCase()
+    ) {
+      return WEAPON_DATA[weaponHash].Group;
+    }
+  }
 };

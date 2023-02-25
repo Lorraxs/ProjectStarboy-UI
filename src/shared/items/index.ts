@@ -52,25 +52,10 @@ const ITEMS: IItem[] = [
   },
 
   //AMMO HERE
-  {
-    name: "WEAPON_PISTOL",
-    label: "Pistol",
-    weight: 730,
-    limit: 1,
-    description: "Pistol",
-    canUse: true,
-    canTransfer: true,
-    canDrop: true,
-    expiration: -1,
-    stability: -1,
-    type: "weapon",
-    rarity: EInventoryRarity.UNCOMMON,
-  },
 ];
 
 const ammoKeys = Object.keys(eAmmoType);
-console.log(ammoKeys);
-ammoKeys.forEach(ammo=>{
+ammoKeys.forEach((ammo) => {
   ITEMS.push({
     name: ammo,
     label: "Pistol",
@@ -84,7 +69,7 @@ ammoKeys.forEach(ammo=>{
     stability: -1,
     type: "weapon",
     rarity: EInventoryRarity.UNCOMMON,
-  })
-})
+  });
+});
 
 export default ITEMS;

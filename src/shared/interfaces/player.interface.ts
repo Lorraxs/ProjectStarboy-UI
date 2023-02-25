@@ -502,3 +502,15 @@ export interface IAddPlayerInventoryItemProps {
   amount: number;
   reason?: string;
 }
+
+export interface IRaycastEntity {
+  entity: number;
+  onTarget: () => void;
+  outTarget: () => void;
+}
+
+export interface IRemovePlayerInventoryItemProps {
+  slot?: EPlayerInventorySlot;
+  itemName?: string;
+  amount?: number;
+}

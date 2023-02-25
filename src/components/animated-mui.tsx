@@ -1,4 +1,4 @@
-import { Box, FormControl, Grid, Typography } from '@mui/material'
+import { Box, Button, FormControl, Grid, Typography } from '@mui/material'
 import { useSpring, animated, config, useTransition, useSpringRef, useChain, useTrail  } from '@react-spring/web'
 import styled from 'styled-components'
 
@@ -24,3 +24,4 @@ export const ScrollingBox = styled(Box)`
     background-color: transparent;
   }
 `
+export const AnimatedButton = animated(Button)

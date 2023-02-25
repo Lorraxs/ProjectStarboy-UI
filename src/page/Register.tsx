@@ -104,7 +104,6 @@ function Register() {
   useChain(show ? [transRef, shapeTransRef, trailsRef, springRef] : [springRef, trailsRef, shapeTransRef, transRef], show ? [0,0.3, 0.6, 0.6] : [0, 0.3, 0.3, 0.3], 1000)
 
   const onSubmit = (data:any)=>{
-    console.log(data)
     request.post('Register', data)
   }
 

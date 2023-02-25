@@ -13,6 +13,12 @@ import {
   setPlayerMoney,
 } from "../store/player";
 import { IReduxNuiMessage } from "../shared/interfaces";
+import {
+  setMenuConversation,
+  setMenuData,
+  setMenuElements,
+} from "../store/menu";
+import { setWeaponShopIndex, setWeaponShopItems } from "../store/weapon-shop";
 
 function fallbackCopyTextToClipboard(text: string) {
   var textArea = document.createElement("textarea");
@@ -80,6 +86,16 @@ const useMessageEvent = () => {
             return dispatch(setPlayerInventory(data));
           case "setPlayerMoney":
             return dispatch(setPlayerMoney(data));
+          case "setMenuData":
+            return dispatch(setMenuData(data));
+          case "setMenuElements":
+            return dispatch(setMenuElements(data));
+          case "setMenuConversation":
+            return dispatch(setMenuConversation(data));
+          case "setWeaponShopItems":
+            return dispatch(setWeaponShopItems(data));
+          case "setWeaponShopIndex":
+            return dispatch(setWeaponShopIndex(data));
           case "copy":
             return copyTextToClipboard(data);
         }

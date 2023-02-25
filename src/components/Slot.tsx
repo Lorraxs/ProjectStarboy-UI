@@ -14,7 +14,10 @@ import PanToolAltIcon from '@mui/icons-material/PanToolAlt';
 import CallSplitIcon from '@mui/icons-material/CallSplit';
 import { RarityColor } from '../shared/interfaces'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
+import { cRequest } from '../utils/request'
+import { useTranslation } from 'react-i18next'
 
+const request = new cRequest()
 
 const SlotContainer = styled(Grid)<{disable: boolean, isDraggingOver: boolean, notAccept?:boolean}>`
   position: relative;
@@ -96,13 +99,14 @@ interface SlotProps{
 
 
 function Slot({width='5vw', icon='hat', style={}, title="", placement='top', keyboard, disable=false, type='standard', slot=EPlayerInventorySlot.BP_0}:SlotProps) {
+  const {t, i18n} = useTranslation('common');
   const inventory = useSelector((state:RootState)=>state.player.inventory)
   const item = inventory[slot];
   const itemData = (item && item.length > 0) ? getItemDataByName(item[0].name) : undefined
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openContext = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    if(!item) return
+    if((!item || item.length === 0)) return
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -125,6 +129,17 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
     const isAccept = isSlotAcceptItem(dropSlot, itemData);
     return !isAccept
   }
+
+  const onUse = ()=>{
+    request.post('inventory:onUse', slot)
+  }
+  const onSplit = ()=>{
+    request.post('inventory:onSplit', slot)
+  }
+  const onDrop = ()=>{
+    request.post('inventory:onDrop', slot)
+  }
+
   return (
     <>
       <Tooltip title={title} placement={placement} arrow>
@@ -144,7 +159,7 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
                 isDraggingOver={snapshot.isDraggingOver}
                 notAccept={isNotAccept(snapshot.draggingOverWith, provided.droppableProps['data-rbd-droppable-id'])}
               >
-                {!item && <SlotIcon className={`icon-${icon}`}/>}
+                {(!item || item.length === 0) && <SlotIcon className={`icon-${icon}`}/>}
                 {keyboard && <SlotKeyboard>{keyboard}</SlotKeyboard>}
                 {
                   (item && item.length > 0) ? <Draggable draggableId={slot} index={0}>
@@ -219,15 +234,15 @@ function Slot({width='5vw', icon='hat', style={}, title="", placement='top', key
         <Box >
           <Grid container  flexWrap={'nowrap'} alignItems={'center'}>
             <Grid item xs={4}>
-              <Button variant='text' color='secondary' startIcon={<PanToolAltIcon/>} fullWidth>Sử dụng</Button>
+              <Button variant='text' color='secondary' startIcon={<PanToolAltIcon/>} fullWidth onClick={onUse}>{t('USE')}</Button>
             </Grid>
             <Divider orientation="vertical" flexItem/>
             <Grid item xs={4}>
-              <Button variant='text' color='secondary' startIcon={<CallSplitIcon/>} fullWidth>Tách</Button>
+              <Button variant='text' color='secondary' startIcon={<CallSplitIcon/>} fullWidth onClick={onSplit}>{t('SPLIT')}</Button>
             </Grid>
             <Divider orientation="vertical" flexItem />
             <Grid item xs={4}>
-              <Button variant='text' color='secondary' startIcon={<DeleteForeverIcon/>} fullWidth>Vứt</Button>
+              <Button variant='text' color='secondary' startIcon={<DeleteForeverIcon/>} fullWidth onClick={onDrop}>{t('DROP')}</Button>
             </Grid>
           </Grid>
         </Box>

@@ -9,9 +9,8 @@ import CharacterCreatorPage from "./CharacterCreator";
 import GroceryStorePage from "./GroceryStore";
 import WeaponShopPage from "./WeaponShop";
 import PlayerInventoryPage from "./PlayerInventory";
-import VehicleShopPage from "./VehicleShop";
 
-const pages = [LoginPage, RegisterPage, CharacterCreatorPage, HudPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage, VehicleShopPage];
+const pages = [LoginPage, RegisterPage, CharacterCreatorPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage];
 
 const Container = styled.div`
   width: 100%;
@@ -40,7 +39,6 @@ const Wrapper = styled.div`
 
 function Page() {
   const playerState = useSelector((state: RootState)=>state.player)
-  console.log(playerState)
   return (
     <Container>
       {pages.map((page, i)=>{

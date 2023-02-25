@@ -18,6 +18,10 @@ export class cRequest {
       true
     );
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.send(JSON.stringify(data || {}));
+    if (data === undefined || data === null) {
+      xhr.send(JSON.stringify({}));
+    } else {
+      xhr.send(JSON.stringify(data));
+    }
   }
 }

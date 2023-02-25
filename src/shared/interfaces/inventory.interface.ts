@@ -114,6 +114,11 @@ export interface IAddInventoryItem {
   reason?: string;
 }
 
+export interface IPlayerCanCarryItem {
+  itemName: string;
+  amount: number;
+}
+
 export interface IHasItem {
   status: eStatus;
   slots?: string[];

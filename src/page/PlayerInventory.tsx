@@ -19,7 +19,7 @@ const request = new cRequest()
 const Container = styled(AnimatedGrid)`
   width: 100%;
   height: 100%;
-  background-color: radial-gradient(circle, rgba(49, 49, 49, 0.788) 51%, #250000 100%);
+  background-image: radial-gradient(circle, rgba(49, 49, 49, 0.788) 51%, #250000 100%);
   padding: 2%;
   pointer-events: all;
 `
@@ -70,7 +70,6 @@ function PlayerInventory() {
   })
 
   const onDragEnd = (result: DropResult, provider: ResponderProvided)=>{
-    console.log(result)
     const {destination, draggableId, mode, reason, source, type} = result
     request.post('PlayerInventory:OnDragEnd', result)
   }
