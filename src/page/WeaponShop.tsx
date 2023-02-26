@@ -8,7 +8,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import styled from 'styled-components';
 import { cRequest } from '../utils/request'
-import {WeaponListType, WeaponShopType, EWeaponShopTypeSubTittle, IWeaponData, LIST_WEAPON_GROUP, IWeaponShop, IBuyData } from '../shared/interfaces';
+import { IWeaponData, LIST_WEAPON_GROUP, IWeaponShop, IBuyData } from '../shared/interfaces';
 import { AnimatedGrid } from '../components/animated-mui'
 import FormControl from '@mui/material/FormControl/FormControl';
 import { animated, config, useChain, useSpring, useSpringRef, useTransition } from '@react-spring/web'
@@ -49,13 +49,11 @@ const Bottom = styled(AnimatedGrid)`
 const ParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
-
 `
 
 const CenterParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
-
 `
 const CenterParrentGridItem = styled(AnimatedGrid)`
     height: 100%;
@@ -64,7 +62,6 @@ const CenterParrentGridItem = styled(AnimatedGrid)`
 const BottomParrentGrid = styled(AnimatedGrid)`
     height: 100%;
     display: flex;
-
 `
 const BottomParrentGridItem = styled(AnimatedGrid)`
     height: 90%;
@@ -83,12 +80,10 @@ const BottomParrentGridItem = styled(AnimatedGrid)`
     {
         background-color: transparent;
     }
-
 `
 const BottomParrentGridItemWeapon = styled(AnimatedGrid)`
     min-width: calc(20% - 15px);
     cursor: pointer;
-
 `
 
 
@@ -119,30 +114,25 @@ const WeaponCenterImg = styled(animated.img)`
     position: relative
     width: 100%;
     height: 100%;
-
 `
 
 const WeaponBottomImg = styled(animated.img)`
     width: 90%;
     height: 90%;
-
 `
 
 
 function WeaponShop(){
     const {t, i18n} = useTranslation('common');
-    const [show] = useShow(process.env.NODE_ENV==='development', 'WeaponShop', true, true, true, true)
+    const [show] = useShow(false, 'WeaponShop', true, true, true, true)
     const money = useSelector((state:RootState)=>state.player.money)
     const bank = useSelector((state:RootState)=>state.player.bank)
     const items = useSelector((state:RootState)=>state.weaponShop.items)
     const shopIdx = useSelector((state:RootState)=>state.weaponShop.shopIdx)
     const [selectedGroup, setSelectedGroup] = useState( LIST_WEAPON_GROUP[0]);
     const [selectedItem, setSelectedItem] = useState<IWeaponShop>()
-    const weaponPrice = 0;
-    const feeWeaponPrice = 0 * 0.1;
     const [buyAccount, setBuyAccount] = useState<'cash' | 'bank'>('cash')
     const [data, setData] = useState<IBuyData>({ name: '', totalPrice: 0, type: 'ammo', paymentMethod: 'cash', storeIndex: shopIdx});
-
     const selectedGroupItems = useMemo(() => {
         const itemInGroup:IWeaponShop[] = []
         items.forEach(e=>{
@@ -153,6 +143,7 @@ function WeaponShop(){
         })
         return itemInGroup
     }, [selectedGroup])
+
 
     useEffect(() => {
         setSelectedItem(undefined)

@@ -8,15 +8,15 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
   const darkColor = "234, 234, 255";
   const mainColor = mode === "light" ? lightColor : darkColor;
 
-  const defaultBgColor = () => {
-    if (skin === "bordered" && mode === "light") {
-      return "#FFF";
-    } else if (skin === "bordered" && mode === "dark") {
-      return "#30334E";
-    } else if (mode === "light") {
-      return "#F7F7F9";
-    } else return "#282A42";
-  };
+  // const defaultBgColor = () => {
+  //   if (skin === "bordered" && mode === "light") {
+  //     return "#FFF";
+  //   } else if (skin === "bordered" && mode === "dark") {
+  //     return "#30334E";
+  //   } else if (mode === "light") {
+  //     return "#F7F7F9";
+  //   } else return "#282A42";
+  // };
 
   return {
     customColors: {
@@ -41,9 +41,9 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
       contrastText: "#FFF",
     },
     secondary: {
-      light: "#ffffff",
-      main: "#ffffff",
-      dark: "#ffffff",
+      light: "#02e399",
+      main: "#02e399",
+      dark: "#02e399",
       contrastText: "#FFF",
     },
     success: {

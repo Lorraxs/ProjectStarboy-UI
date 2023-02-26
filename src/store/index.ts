@@ -1,8 +1,9 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import player from "./player";
 import cartGrocery from "./groceryStore";
 import menu from "./menu";
 import weaponShop from "./weapon-shop";
+import vehicleShop from "./vehicleShop";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     cartGrocery,
     menu,
     weaponShop,
+    vehicleShop,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

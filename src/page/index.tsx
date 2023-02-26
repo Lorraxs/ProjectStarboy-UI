@@ -9,9 +9,9 @@ import CharacterCreatorPage from "./CharacterCreator";
 import GroceryStorePage from "./GroceryStore";
 import WeaponShopPage from "./WeaponShop";
 import PlayerInventoryPage from "./PlayerInventory";
-import Menupage from "./Menu";
+import VehicleShopPage from "./VehicleShop";
 
-const pages = [HudPage, LoginPage, RegisterPage, CharacterCreatorPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage, Menupage];
+const pages = [LoginPage, RegisterPage, CharacterCreatorPage, HudPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage, VehicleShopPage];
 
 const Container = styled.div`
   width: 100%;

@@ -6,7 +6,6 @@ import useShow from "../hooks/useShow";
 import styled from "styled-components";
 import { AnimatedGrid } from "../components/animated-mui";
 import { Box, Grid, Typography } from "@mui/material";
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PersonIcon from '@mui/icons-material/Person';
@@ -25,7 +24,7 @@ const Logo = styled.img`
 `
 
 const HUD = () => {
-  const [show] = useShow(true, 'HUD', false, false, false, false)
+  const [show] = useShow(false, 'HUD', false, false, false, false)
   return (show ? 
     <Container>
       <RightTop />

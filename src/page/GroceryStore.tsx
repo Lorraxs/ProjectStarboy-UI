@@ -24,6 +24,7 @@ const Container = styled(AnimatedGrid)`
     min-width: 100vh;
     height: 100%;
     pointer-events: all;
+    user-select: none;
 `
 
 
@@ -159,7 +160,7 @@ const BottomScrollbarItem = styled(AnimatedGrid)`
 
 
 function GroceryStore() {
-    const [show] = useShow(false, 'GroceryStore', true, true, true, true)
+    const [show] = useShow(process.env.NODE_ENV === 'development', 'GroceryStore', true, true, true, false)
     const [menuList, setMenuList] = useState("Food");
     const [selectedCategory, setSelectedCategory] = useState('');
     const selectedList = GroceryStoreListItem[menuList as keyof typeof GroceryStoreListItem];
@@ -230,12 +231,14 @@ function GroceryStore() {
         from: { y: 100, opacity: 0 },
         to: { y: show ? 0 : 100, opacity: show ? 1 : 0 },
     })
+
     const rightSpringRef = useSpringRef();
     const rightSpring = useSpring({
         ref: rightSpringRef,
         from: { x: 100, opacity: 0 },
         to: { x: show ? 0 : 100, opacity: show ? 1 : 0 },
     })
+    
     const transRef = useSpringRef()
     const transitions = useTransition(show, {
         ref: transRef,

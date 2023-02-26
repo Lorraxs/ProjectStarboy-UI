@@ -2,7 +2,7 @@ import React from 'react'
 import * as yup from 'yup'
 import { AnimatedFormControl, AnimatedGrid, AnimatedTypography } from '../components/animated-mui'
 import styled from 'styled-components'
-import { Button, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Button, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import useShow from '../hooks/useShow'
 import { animated, config, useChain, useSpring, useSpringRef, useTrail, useTransition } from '@react-spring/web'
 import { Controller, useForm } from 'react-hook-form'
@@ -40,6 +40,12 @@ const Shape = styled(animated.img)`
   position: absolute;
   object-fit: contain;
   object-position: right;
+`
+
+const ButtonAction = styled(Button)`
+  &:hover {
+    transform: scale(1.1);
+  }
 `
 
 const pageInfo = {
@@ -130,7 +136,7 @@ function Register() {
                   name='password'
                   control={control}
                   render={({field: {value, onChange}})=>(
-                    <TextField label='Password' type='password' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.password)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #0BFF33'}}  fullWidth/>
+                    <TextField label='Mật khẩu' type='password' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.password)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #0BFF33'}}  fullWidth/>
                   )}          
                 />
                 {errors.password && <FormHelperText sx={{ color: 'error.main' }}>{errors.password.message}</FormHelperText>}
@@ -140,7 +146,7 @@ function Register() {
                   name='rePassword'
                   control={control}
                   render={({field: {value, onChange}})=>(
-                    <TextField label='Confirm Password' type='password' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.rePassword)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #0BFF33'}}  fullWidth/>
+                    <TextField label='Xác nhận mật khẩu' type='password' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.rePassword)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #0BFF33'}}  fullWidth/>
                   )}          
                 />
                 {errors.rePassword && <FormHelperText sx={{ color: 'error.main' }}>{errors.rePassword.message}</FormHelperText>}
@@ -150,7 +156,7 @@ function Register() {
                   name='name'
                   control={control}
                   render={({field: {value, onChange}})=>(
-                    <TextField label='Character Name' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.name)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 2px #0BFF33'}}  fullWidth/>
+                    <TextField label='Tên nhân vật' variant='outlined' value={value} onChange={onChange} error={Boolean(errors.name)} sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 2px #0BFF33'}}  fullWidth/>
                   )}          
                 />
                 {errors.name && <FormHelperText sx={{ color: 'error.main' }}>{errors.name.message}</FormHelperText>}
@@ -160,19 +166,21 @@ function Register() {
                   name='gender'
                   control={control}
                   render={({field: {value, onChange}})=>(
-                    <>
+                    <><FormControl>
+                      <InputLabel id="gender-label" >Giới tính</InputLabel>
                       <Select 
-                        labelId='gender'
+                        labelId='gender-label'
                         id='c-gender'
                         value = {value}
                         onChange={onChange}
-                        label='Gender'
+                        label='Giới tính'
                         variant='outlined'
                         sx={{bgcolor: '#1f1f1f', borderRadius: 1, boxShadow: '0px 3px 1px  #0BFF33'}}
                       >
-                        <MenuItem value='male'>Male</MenuItem>
-                        <MenuItem value='female'>Female</MenuItem>
+                        <MenuItem value='male'>Nam</MenuItem>
+                        <MenuItem value='female'>Nữ</MenuItem>
                       </Select>
+                      </FormControl>
                     </>
                   )}          
                 />
@@ -180,10 +188,10 @@ function Register() {
               </AnimatedFormControl> :
               index === 6 ? <AnimatedGrid style={props} container spacing={6}>
                 <Grid item xs={6}>
-                  <Button variant='contained' type='submit' color='secondary' fullWidth>Đăng Ký</Button>
+                  <ButtonAction variant='contained' type='submit' color='primary' fullWidth>Đăng Ký</ButtonAction>
                 </Grid>
                 <Grid item xs={6}>
-                  <Button variant='contained' color='warning' onClick={onLoginClick} fullWidth>Đăng Nhập</Button>
+                  <ButtonAction variant='contained' color='warning' onClick={onLoginClick} fullWidth>Đăng Nhập</ButtonAction>
                 </Grid>
               </AnimatedGrid> : null
             ))}
