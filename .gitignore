@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/shared
+/src/shared
 /.pnp
 .pnp.js
 
