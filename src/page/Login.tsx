@@ -149,22 +149,6 @@ const Login = () => {
                   />
                   {errors.password && <FormHelperText sx={{ color: 'error.main' }}>{errors.password.message}</FormHelperText>}
                 </AnimatedFormControl> :
-                /* index === 3 ? <AnimatedFormControl style={props} sx={{m: 'auto', mb: 6}} variant='standard' fullWidth>
-                  <Controller 
-                    name='token'
-                    control={control}
-                    render={({field: {value, onChange}})=>(
-                      <HCaptcha
-                        sitekey="bbba7fec-268d-46be-974b-f55c3a1965ca"
-                        onLoad={onLoad}
-                        onVerify={onChange}
-                        ref={captchaRef}
-                        
-                      />
-                    )}          
-                  />
-                  {errors.token && <FormHelperText sx={{ color: 'error.main' }}>{errors.token.message}</FormHelperText>}
-                </AnimatedFormControl> :  */
                 index === 4 ? <AnimatedGrid style={props} container spacing={6}>
                   <Grid item xs={6}>
                     <ButtonAction variant='contained' type='submit' color='primary' fullWidth>Đăng nhập</ButtonAction>

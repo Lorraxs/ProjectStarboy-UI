@@ -10,8 +10,9 @@ import GroceryStorePage from "./GroceryStore";
 import WeaponShopPage from "./WeaponShop";
 import PlayerInventoryPage from "./PlayerInventory";
 import VehicleShopPage from "./VehicleShop";
+import MenuPage from "./Menu";
 
-const pages = [LoginPage, RegisterPage, CharacterCreatorPage, HudPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage, VehicleShopPage];
+const pages = [LoginPage, RegisterPage, CharacterCreatorPage, HudPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage, VehicleShopPage, MenuPage];
 
 const Container = styled.div`
   width: 100%;
@@ -46,24 +47,20 @@ function Page() {
         const Page = page.element
         if(process.env.NODE_ENV === 'development'){
           return(
-            <Wrapper>
-              <Page key={i}/> 
+            <Wrapper key={i}>
+              <Page /> 
             </Wrapper>
           )
-        }else{
-          if(page.needLogin){
-            return playerState._id !== '' ? <Wrapper>
-              <Page key={i}/> 
-            </Wrapper>: null
-          }else{
-            return playerState._id === '' ? <Wrapper>
-              <Page key={i}/> 
-            </Wrapper>: null
-          }
+        } else {
+          // Replace the if/else with a logical operator
+          return (playerState._id !== '' && page.needLogin) || (playerState._id === '' && !page.needLogin) ? <Wrapper key={i}>
+            <Page /> 
+          </Wrapper>: null
         }
       })}
     </Container>
   )
 }
+
 
 export default Page
