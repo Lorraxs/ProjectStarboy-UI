@@ -61,7 +61,7 @@ export type IAmmoType =
   | "AMMO_FLAREGUN"
   | "AMMO_FIREWORK"
   | "AMMO_RAILGUN";
-
+  
 export interface IWeaponData {
   [key: string]: {
     HashKey: string;
