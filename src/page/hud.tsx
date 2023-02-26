@@ -66,7 +66,6 @@ const RightTop = ()=>{
         <Grid 
           item 
           xs={4}
-          
         >
           <Grid 
             container
@@ -206,6 +205,8 @@ const RightTop = ()=>{
   )
 
 }
+
+
 
 
 

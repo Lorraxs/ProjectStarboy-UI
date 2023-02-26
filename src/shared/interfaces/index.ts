@@ -6,3 +6,4 @@ export * from "./nui.interface";
 export * from "./weaponshop.interface";
 export * from "./grocerystore.interface";
 export * from "./vehicleshop.interface";
+export * from "./banksystem.interface";

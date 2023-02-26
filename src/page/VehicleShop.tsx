@@ -206,7 +206,7 @@ const BottomScrollBarItem = styled(AnimatedGrid)`
 
 function VehicleShop() {
     const {t} = useTranslation('common');
-    const [show] = useShow(process.env.NODE_ENV==='development', 'VehicleShop', true, true, true, false)
+    const [show] = useShow(false, 'VehicleShop', true, true, true, false)
     const [color1, setcolor1] = useState(-1);
     const [color2, setcolor2] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState('')
@@ -262,7 +262,7 @@ function VehicleShop() {
             handling: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.handling ?? 0,
             topspeed: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.topspeed ?? 0,
         })
-    }, [selectedVehicle])
+    }, [selectedVehicle, VEHICLE_DATA])
 
     useEffect(() => {
         request.post('VehicleShop:ChangePrimaryColor', color1)
