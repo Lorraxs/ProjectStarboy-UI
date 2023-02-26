@@ -22,8 +22,8 @@ const schema = yup.object().shape({
 })
 
 const defaultValues: ILoginPlayer = {
-  email: process.env.REACT_APP_DEFAULT_EMAIL,
-  password: process.env.REACT_APP_DEFAULT_PASSWORD,
+  email: process.env.REACT_APP_DEFAULT_EMAIL || '',
+  password: process.env.REACT_APP_DEFAULT_PASSWORD || '',
 }
 
 const AnimatedGrid = animated(Grid)
