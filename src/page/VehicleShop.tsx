@@ -38,12 +38,12 @@ const Container= styled(AnimatedGrid)`
 `
 const Top = styled(AnimatedGrid)`
     height: 80%;
-    padding: 30px 25px 0px 25px
+    padding: 30px 25px 0px 25px;
 `
 
 const Bottom = styled(AnimatedGrid)`
     height: 20%;
-    padding: 0px 25px 15px 25px
+    padding: 0px 25px 15px 25px;
 `
 const TopInfoMation = styled(AnimatedGrid)`
     height: 7%;

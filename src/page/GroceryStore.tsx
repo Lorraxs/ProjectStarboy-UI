@@ -24,7 +24,7 @@ const Container = styled(AnimatedGrid)`
     min-width: 100vh;
     height: 100%;
     pointer-events: all;
-    user-select: none
+    user-select: none;
 `
 
 
@@ -160,7 +160,7 @@ const BottomScrollbarItem = styled(AnimatedGrid)`
 
 
 function GroceryStore() {
-    const [show] = useShow(false, 'GroceryStore', true, true, true, false)
+    const [show] = useShow(process.env.NODE_ENV === 'development', 'GroceryStore', true, true, true, false)
     const [menuList, setMenuList] = useState("Food");
     const [selectedCategory, setSelectedCategory] = useState('');
     const selectedList = GroceryStoreListItem[menuList as keyof typeof GroceryStoreListItem];

@@ -15,7 +15,7 @@ const Container= styled(AnimatedGrid)`
 `
 
 function DeathScreen() {
-    const [show] = useShow(false, 'GroceryStore', true, true, true, false)
+    const [show] = useShow(true, 'GroceryStore', true, true, true, false)
     const transRef = useSpringRef()
     const transitions = useTransition(show, {
         ref: transRef,
