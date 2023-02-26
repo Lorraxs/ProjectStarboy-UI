@@ -38,12 +38,12 @@ const Container= styled(AnimatedGrid)`
 `
 const Top = styled(AnimatedGrid)`
     height: 80%;
-    padding: 30px 25px 0px 25px
+    padding: 30px 25px 0px 25px;
 `
 
 const Bottom = styled(AnimatedGrid)`
     height: 20%;
-    padding: 0px 25px 15px 25px
+    padding: 0px 25px 15px 25px;
 `
 const TopInfoMation = styled(AnimatedGrid)`
     height: 7%;
@@ -206,7 +206,7 @@ const BottomScrollBarItem = styled(AnimatedGrid)`
 
 function VehicleShop() {
     const {t} = useTranslation('common');
-    const [show] = useShow(process.env.NODE_ENV==='development', 'VehicleShop', true, true, true, false)
+    const [show] = useShow(false, 'VehicleShop', true, true, true, false)
     const [color1, setcolor1] = useState(-1);
     const [color2, setcolor2] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState('')
