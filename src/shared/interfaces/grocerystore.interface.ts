@@ -1,5 +1,3 @@
-import { eStatus } from "./status.interface";
-
 
 export const GroceryStoreType = [ //Shop category
     "Food" , 
@@ -14,6 +12,8 @@ export enum EGroceryStoreUsesLevel { //Shop category subtittle
     normal = "Trung bình",
     low = "Thấp",
 }
+
+
 
 export interface IGroceryStoreItem {
     tittle: string,
