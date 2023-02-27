@@ -20,6 +20,7 @@ import {
 } from "../store/menu";
 import { setWeaponShopIndex, setWeaponShopItems } from "../store/weapon-shop";
 import { resetGroceryStore, setGroceryStore } from "../store/groceryStore";
+import { setVehicleShopData } from "../store/vehicleShop";
 
 function fallbackCopyTextToClipboard(text: string) {
   var textArea = document.createElement("textarea");
@@ -101,6 +102,8 @@ const useMessageEvent = () => {
             return dispatch(resetGroceryStore());
           case "setGroceryStore":
             return dispatch(setGroceryStore(data));
+          case "setVehicleShopData":
+            return dispatch(setVehicleShopData(data));
           case "copy":
             return copyTextToClipboard(data);
         }

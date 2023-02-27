@@ -165,7 +165,7 @@ const BottomScrollbarItem = styled(AnimatedGrid)`
 
 function GroceryStore() {
     const {t, i18n} = useTranslation('common');
-    const [show] = useShow(process.env.NODE_ENV === 'development', 'GroceryStore', true, true, true, true)
+    const [show] = useShow(process.env.NODE_ENV === 'test', 'GroceryStore', true, true, true, true)
     const [selectedCategory, setSelectedCategory] = useState<eGroceryStoreType>(eGroceryStoreType.all);
     const products = useSelector((state:RootState)=>state.groceryStore.products);
     const [selectedItem, setSelectedItem] = useState<IGroceryStoreItem | undefined>(products.length > 0 ? products[0] : undefined);
