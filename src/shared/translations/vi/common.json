@@ -24,5 +24,13 @@
   "VANS" : "Xe tải nhỏ",
   "CYCLES" : "abc",
   "BOATS" : "Tàu thuyền",
-  "HELICOPTER" : "Máy bay trực thăng"
+  "HELICOPTER" : "Máy bay trực thăng",
+  "BANK_NAME" : "Ngân hàng",
+  "BANK_DESCRIPTION" : "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora perferendis ut quaerat quos.",
+  "BANK_DEPOSIT_TITLE": "gửi tiền",
+  "BANK_DEPOSIT_DESCRIPTION": "Lorem ipsum, dolor sit amet consectetur",
+  "BANK_WITHDRAW_TITLE": "rút tiền",
+  "BANK_WITHDRAW_DESCRIPTION": "Lorem ipsum, dolor sit amet consectetur",
+  "BANK_TRANSFER_TITLE": "chuyển khoản",
+  "BANK_TRANSFER_DESCRIPTION": "Lorem ipsum, dolor sit amet consectetur"
 }

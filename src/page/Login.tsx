@@ -3,12 +3,10 @@ import * as yup from 'yup'
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ILoginPlayer } from '../shared/interfaces';
-import { Box } from '@mui/system';
 import Typography from '@mui/material/Typography/Typography';
 import FormControl from '@mui/material/FormControl/FormControl';
-import FormLabel from '@mui/material/FormLabel/FormLabel';
 import TextField from '@mui/material/TextField';
-import {Avatar, Button, FormHelperText, Grid} from '@mui/material'
+import {Button, FormHelperText, Grid} from '@mui/material'
 import styled from 'styled-components';
 import { useSpring, animated, config, useTransition, useSpringRef, useChain, useTrail  } from '@react-spring/web'
 import useShow from '../hooks/useShow';
