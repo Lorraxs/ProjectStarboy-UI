@@ -24,17 +24,17 @@ import { cRequest } from '../utils/request'
 
 const request = new cRequest()
 
-const schema = yup.object().shape({
+const schemaDialogs = yup.object().shape({
     amount: yup.number().required('123'),
     targetPlayerID: yup.number().required('456'),
     type: yup.string().required('789'),
 })
 
-// const schemaSavings = yup.object().shape({
-//     amount: yup.number().required(''),
-//     duration: yup.number().required(''),
-//     interest: yup.number().required(''),
-// })
+const schemaSavings = yup.object().shape({
+    amount: yup.number().required(''),
+    duration: yup.number().required(''),
+    interest: yup.number().required(''),
+})
 
 
 const Container= styled(AnimatedGrid)`
@@ -64,7 +64,7 @@ const DialogWithDraw = styled(animated.div)`
     left: 0;
     width: 100%;
     height: 100%;
-    background:  linear-gradient(45deg, rgba(255, 11, 48, 0.8) 50%, rgba(0, 0, 0, 0.4) 90%);
+    background:  linear-gradient(45deg, rgba(255, 11, 48, 0.9) 40%, rgba(0, 0, 0, 0.4) 90%);
     z-index: 9999;
 `
 
@@ -166,7 +166,7 @@ function BankSystem() {
         transfer: false,
     });
     
-    const [defaultValues, setDefaultValue] = useState<IDataBank>({
+    const [defaultSavingsDialogs, setDefaultSavingsDialogs] = useState<IDataBank>({
         amount: 0,
         targetPlayerID: 0,
         type: "",
@@ -183,26 +183,26 @@ function BankSystem() {
 
     useEffect(() => {
         if (openDialog.deposit) {
-            setDefaultValue({
+            setDefaultSavingsDialogs({
                 amount: 0,
                 targetPlayerID: 0,
                 type: "deposit",
             });
             } else if (openDialog.withDraw) {
-                setDefaultValue({
+                setDefaultSavingsDialogs({
                 amount: 0,
                 targetPlayerID: 0,
                 type: "withdraw",
             });
             } else if (openDialog.transfer) {
-                setDefaultValue({
+                setDefaultSavingsDialogs({
                 amount: 0,
                 targetPlayerID: 0,
                 type: "transfer",
             });
             }
             else{
-                setDefaultValue({
+                setDefaultSavingsDialogs({
                     amount: 0,
                     targetPlayerID: 0,
                     type: "",
@@ -254,16 +254,35 @@ function BankSystem() {
         [0.5, 0.5, 0.5, 0.0], 
     1000)
 
-    const {control, handleSubmit, formState: { errors}} = useForm({
-        defaultValues,
+
+
+    const {
+        control: controlDialogs, 
+        handleSubmit: handleSubmitDialogs, 
+        formState: { errors : errorsDialogs }, } = useForm({
+        defaultValues: defaultSavingsDialogs,
         mode: 'onChange',
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schemaDialogs)
+    })
+
+    const {
+        control: controlSavings, 
+        handleSubmit: handleSubmitSavings, 
+        formState: { errors : errorsSavings }, } = useForm({
+        defaultValues: defaultSavingsInfo,
+        mode: 'onChange',
+        resolver: yupResolver(schemaSavings)
     })
 
 
 
-    const onSubmit = (data: any) => {
-        console.log('123123123');
+
+    const onSubmitSavings = (data: any) => {
+        console.log(data);
+    };
+
+    const onSubmitDialogs = (data: any) => {
+        console.log(data);
     };
 
 
@@ -348,12 +367,12 @@ function BankSystem() {
                                 }}>
                                     {t('BANK_DEPOSIT_DESCRIPTION')}
                                 </Typography>
-                                <form onSubmit={handleSubmit(onSubmit)}>
+                                <form onSubmit={handleSubmitDialogs(onSubmitDialogs)}>
                                     <Controller 
                                         name='amount'
-                                        control={control}
+                                        control={controlDialogs}
                                         render={({field: { onChange}})=>(
-                                        <TextField color="warning" label={t('BANK_DEPOSIT_INPUT')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth />
+                                        <TextField color="warning" label={t('BANK_DEPOSIT_INPUT')} variant='filled' onChange={onChange} error={Boolean(errorsDialogs.amount)} fullWidth />
                                         )}      
                                     />
                                     <AnimatedGrid  width={"100%"} sx={{mt: "3%"}} display={"flex"} >
@@ -362,7 +381,7 @@ function BankSystem() {
                                                 backgroundColor:"rgba(120, 168, 84, 0.5)",
                                                 "&:hover": { backgroundColor: "rgba(120, 168, 84, 1)" , transform: "scale(1.1)"},
                                                 transition: "all 0.5s ease"
-                                            }}>{t('ACCEPT_BANK')}</Button>
+                                            }} type="submit">{t('ACCEPT_BANK')}</Button>
                                         </Grid>
                                         <Grid width={"10%"}></Grid>
                                         <Grid width={"90%"}>
@@ -469,12 +488,12 @@ function BankSystem() {
                                 }}>
                                     {t('BANK_WITHDRAW_DESCRIPTION')}
                                 </Typography>
-                                {/* <form id="form2" onSubmit={handleSubmit(onSubmitDialogs)}>
+                                <form id="form2" onSubmit={handleSubmitDialogs(onSubmitDialogs)}>
                                     <Controller 
                                         name='amount'
-                                        control={control}
+                                        control={controlDialogs}
                                         render={({field: {value, onChange}})=>(
-                                        <TextField color="warning" label={t('BANK_WITHDRAW_INPUT')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth/>
+                                        <TextField color="warning" label={t('BANK_WITHDRAW_INPUT')} variant='filled' onChange={onChange} error={Boolean(errorsDialogs.amount)} fullWidth/>
                                         )}          
                                     />
                                     <AnimatedGrid  width={"100%"} sx={{mt: "3%"}} display={"flex"} >
@@ -494,7 +513,7 @@ function BankSystem() {
                                             }} onClick={() => setOpenDialog({...openDialog, withDraw: false})}>{t('CANCEL_BANK')}</Button>
                                         </Grid>
                                     </AnimatedGrid>
-                                </form> */}
+                                </form>
                             </Grid>
                         </CenterBank>
                         <BottomBank container>
@@ -590,19 +609,19 @@ function BankSystem() {
                                 }}>
                                     {t('BANK_TRANSFER_DESCRIPTION')}
                                 </Typography>
-                                {/* <form onSubmit={handleSubmit(onSubmitDialogs)}>
+                                <form onSubmit={handleSubmitDialogs(onSubmitDialogs)}>
                                     <Controller 
                                         name='amount'
-                                        control={control}
+                                        control={controlDialogs}
                                         render={({field: {value, onChange}})=>(
-                                        <TextField sx={{mb: "2%"}}  color="warning" label={t('BANK_TRANSFER_INPUT1')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth/>
+                                        <TextField sx={{mb: "2%"}}  color="warning" label={t('BANK_TRANSFER_INPUT1')} variant='filled' onChange={onChange} error={Boolean(errorsDialogs.amount)} fullWidth/>
                                         )}        
                                     />
                                     <Controller 
                                         name='targetPlayerID'
-                                        control={control}
+                                        control={controlDialogs}
                                         render={({field: {value, onChange}})=>(
-                                        <TextField color="warning" label={t('BANK_TRANSFER_INPUT2')} variant='filled' onChange={onChange} error={Boolean(errors.targetPlayerID)} fullWidth/>
+                                        <TextField color="warning" label={t('BANK_TRANSFER_INPUT2')} variant='filled' onChange={onChange} error={Boolean(errorsDialogs.targetPlayerID)} fullWidth/>
                                         )}          
                                     />
                                     <AnimatedGrid  width={"100%"} sx={{mt: "3%"}} display={"flex"} >
@@ -622,7 +641,7 @@ function BankSystem() {
                                             }} onClick={() => setOpenDialog({...openDialog, transfer: false})}>{t('CANCEL_BANK')}</Button>
                                         </Grid>
                                     </AnimatedGrid>
-                                </form> */}
+                                </form>
                             </Grid>
                         </CenterBank>
                         <BottomBank container>
@@ -817,7 +836,7 @@ function BankSystem() {
                         <Grid width={"100%"} height={"75%"} display={"flex"} justifyContent={"center"}>
                             <Grid width={"25%"} display={"flex"} justifyContent={"center"}>
                                 <Grid width={"90%"}>
-                                    {/* <form  onSubmit={handleSubmitSavings(onSubmitSavings)}>
+                                    <form  onSubmit={handleSubmitSavings(onSubmitSavings)}>
                                         <Controller 
                                             name='amount'
                                             control={controlSavings}
@@ -825,8 +844,8 @@ function BankSystem() {
                                             <TextField color="warning" label={t('BANK_DEPOSIT_INPUT')} variant='filled' onChange={onChange} error={Boolean(errorsSavings.amount)} fullWidth/>
                                             )}          
                                         />
-                                        <Button type="submit" name="dialogs">ádasd</Button>
-                                    </form> */}
+                                        <Button type="submit">ádasd</Button>
+                                    </form>
                                 </Grid>
                             </Grid>
                             <Grid width={"70%"}>
