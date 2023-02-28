@@ -488,7 +488,7 @@ function BankSystem() {
                                 }}>
                                     {t('BANK_WITHDRAW_DESCRIPTION')}
                                 </Typography>
-                                <form id="form2" onSubmit={handleSubmitDialogs(onSubmitDialogs)}>
+                                <form onSubmit={handleSubmitDialogs(onSubmitDialogs)}>
                                     <Controller 
                                         name='amount'
                                         control={controlDialogs}
