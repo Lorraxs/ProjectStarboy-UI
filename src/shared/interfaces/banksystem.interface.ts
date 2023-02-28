@@ -5,8 +5,8 @@ export interface IDialogBank {
 }
 
 export interface IDataBank{
-    amount: number,
-    targetPlayerID: number,
+    amount?: number,
+    targetPlayerID?: number,
     type: string,
 }
 

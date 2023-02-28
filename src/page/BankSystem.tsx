@@ -48,8 +48,6 @@ const Container= styled(AnimatedGrid)`
     user-select: none;
 `
 
-
-
 const DialogDeposit = styled(animated.div)`
     position: absolute;
     top: 0;
@@ -264,14 +262,10 @@ function BankSystem() {
 
 
 
-    const onSubmitDialogs = () => {
-        
+    const onSubmit = (data: any) => {
         console.log('123123123');
     };
 
-    // const onSubmitSavings: SubmitHandler<ISavingsCreate> = (dataSavings : any) => {
-    //     console.log(dataSavings);
-    // };
 
 
 
@@ -354,12 +348,12 @@ function BankSystem() {
                                 }}>
                                     {t('BANK_DEPOSIT_DESCRIPTION')}
                                 </Typography>
-                                <form onSubmit={handleSubmit(onSubmitDialogs)}>
+                                <form onSubmit={handleSubmit(onSubmit)}>
                                     <Controller 
                                         name='amount'
                                         control={control}
                                         render={({field: { onChange}})=>(
-                                        <TextField color="warning" label={t('BANK_DEPOSIT_INPUT')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth/>
+                                        <TextField color="warning" label={t('BANK_DEPOSIT_INPUT')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth />
                                         )}      
                                     />
                                     <AnimatedGrid  width={"100%"} sx={{mt: "3%"}} display={"flex"} >
@@ -368,7 +362,7 @@ function BankSystem() {
                                                 backgroundColor:"rgba(120, 168, 84, 0.5)",
                                                 "&:hover": { backgroundColor: "rgba(120, 168, 84, 1)" , transform: "scale(1.1)"},
                                                 transition: "all 0.5s ease"
-                                            }} type="submit">{t('ACCEPT_BANK')}</Button>
+                                            }}>{t('ACCEPT_BANK')}</Button>
                                         </Grid>
                                         <Grid width={"10%"}></Grid>
                                         <Grid width={"90%"}>
