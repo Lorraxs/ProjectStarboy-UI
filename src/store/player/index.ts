@@ -12,7 +12,7 @@ const initialState: IPlayer = {
   armour: 0,
   verified: false,
   money: 0,
-  bank: 0,
+  bank: 100000,
   coin: 0,
   coords: [0, 0, 0],
   inventory: {

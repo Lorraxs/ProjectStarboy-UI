@@ -64,7 +64,6 @@ const RightCenterMenuItem = styled(AnimatedGrid)`
 `
 const RightCenterScrollbarItem = styled(AnimatedGrid)`
     cursor: pointer;
-    
     ::-webkit-scrollbar
     {   
         background-color: transparent;

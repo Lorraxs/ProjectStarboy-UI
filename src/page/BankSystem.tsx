@@ -1,16 +1,41 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { useTranslation } from "react-i18next";
 import useShow from "../hooks/useShow";
+import { RootState } from "../store";
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useSelector } from "react-redux";
 import {animated, config, useSpringRef, useSpring, useChain, useTransition } from '@react-spring/web';
 import styled from "styled-components";
 import { AnimatedGrid } from "../components/animated-mui";
-import { Grid, Typography} from "@mui/material";
-import { IDialogBank } from "../shared/interfaces"; 
+import { Button, Grid, Typography, TextField} from "@mui/material";
+import { IDialogBank , IDataBank, ISavingsCreate} from "../shared/interfaces"; 
 import PersonIcon from '@mui/icons-material/Person';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import CloseIcon from '@mui/icons-material/Close';
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import SavingsIcon from '@mui/icons-material/Savings';
+import Moment from 'moment';
+import moment from 'moment';
+import { Controller, useForm  } from "react-hook-form";
+import { cRequest } from '../utils/request'
+
+const request = new cRequest()
+
+const schema = yup.object().shape({
+    amount: yup.number().required('123'),
+    targetPlayerID: yup.number().required('456'),
+    type: yup.string().required('789'),
+})
+
+// const schemaSavings = yup.object().shape({
+//     amount: yup.number().required(''),
+//     duration: yup.number().required(''),
+//     interest: yup.number().required(''),
+// })
+
 
 const Container= styled(AnimatedGrid)`
     margin: 0 auto;
@@ -22,6 +47,8 @@ const Container= styled(AnimatedGrid)`
     pointer-events: all;
     user-select: none;
 `
+
+
 
 const DialogDeposit = styled(animated.div)`
     position: absolute;
@@ -39,7 +66,7 @@ const DialogWithDraw = styled(animated.div)`
     left: 0;
     width: 100%;
     height: 100%;
-    background:  linear-gradient(45deg, rgba(255, 11, 48, 0.7) 20%, rgba(0, 0, 0, 0.4) 90%);
+    background:  linear-gradient(45deg, rgba(255, 11, 48, 0.8) 50%, rgba(0, 0, 0, 0.4) 90%);
     z-index: 9999;
 `
 
@@ -66,6 +93,12 @@ const CenterBank = styled(AnimatedGrid)`
     justify-content: center;
 `
 
+const BottomBank = styled(AnimatedGrid)`
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: right;
+`
 const CenterButton = styled(AnimatedGrid)`
     cursor: pointer;
     min-width: 32%;
@@ -88,17 +121,97 @@ const BankLogo = styled(animated.img)`
     object-fit: fill;
 `
 
+const TransactionsListScrollBar = styled(AnimatedGrid)`
+    
+    ::-webkit-scrollbar
+    {   
+        background-color: transparent;
+        width: 0px;
+    }
+    ::-webkit-scrollbar-thumb
+    {
+        background-color: #ff0b30;
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-track
+    {
+        background-color: transparent;
+    }
+`
+
+const TransactionsListItem = styled(AnimatedGrid)`
+    cursor: pointer;
+    width: 99%;
+    height: 25%;
+    border-radius: 10px;
+`
+
 function BankSystem() {
     const {t} = useTranslation('common');
     const [show] = useShow(process.env.NODE_ENV === 'development', 'HUD', false, false, false, false)
-    
+    const bank = useSelector((state:RootState)=>state.player.bank)
+    const TransactionsList = useSelector((state:RootState)=>state.bankSystem.TransictionsList)
+    const SavingsList = useSelector((state:RootState)=>state.bankSystem.SavingsList)
+    const now = new Date();
+    const now1 =  moment();
+
+    const sortedTransactions =  [...TransactionsList].sort((a, b) => {
+        const aDiff = Math.abs(now.getTime() - new Date(a.date).getTime());
+        const bDiff = Math.abs(now.getTime() - new Date(b.date).getTime());
+        return aDiff - bDiff;
+    });
+
+
     const [openDialog, setOpenDialog] = useState<IDialogBank>({
         deposit: false,
-        widthDraw: false,
+        withDraw: false,
         transfer: false,
-      });
+    });
+    
+    const [defaultValues, setDefaultValue] = useState<IDataBank>({
+        amount: 0,
+        targetPlayerID: 0,
+        type: "",
+    });
 
-    console.log(openDialog.deposit)
+    const [defaultSavingsInfo, setDefaultSavingsInfo] = useState<ISavingsCreate>({
+        amount: 0,
+        duration: 0,
+        interest: 0,
+    });
+
+
+    
+
+    useEffect(() => {
+        if (openDialog.deposit) {
+            setDefaultValue({
+                amount: 0,
+                targetPlayerID: 0,
+                type: "deposit",
+            });
+            } else if (openDialog.withDraw) {
+                setDefaultValue({
+                amount: 0,
+                targetPlayerID: 0,
+                type: "withdraw",
+            });
+            } else if (openDialog.transfer) {
+                setDefaultValue({
+                amount: 0,
+                targetPlayerID: 0,
+                type: "transfer",
+            });
+            }
+            else{
+                setDefaultValue({
+                    amount: 0,
+                    targetPlayerID: 0,
+                    type: "",
+            });
+        }
+    }, [openDialog]);
+
 
 
     const topSpringRef = useSpringRef();
@@ -117,21 +230,58 @@ function BankSystem() {
         config: {...config.molasses, duration: 500}
     })
 
-    const transitionsDeposit = useTransition(openDialog, {
+    const leftSpringRef = useSpringRef();
+    const leftSpring = useSpring({
+        ref: leftSpringRef,
+        from: { x: -100, opacity: 0 },
+        to: { x: show ? 0 : -100, opacity: show ? 1 : 0 },
+    })
+
+    const rightSpringRef = useSpringRef();
+    const rightSpring = useSpring({
+        ref: rightSpringRef,
+        from: { x: 100, opacity: 0 },
+        to: { x: show ? 0 : 100, opacity: show ? 1 : 0 },
+    })
+
+    const transitionsDialog = useTransition(openDialog, {
         from: { opacity: 0 },
         enter: { opacity: 1 },
         leave: { opacity: 0 },
         config: {...config.molasses, duration: 300}
-      })
-
-    useChain(show ? [transRef, topSpringRef] : [ topSpringRef ,transRef ], show ? 
-        [0.0, 0.5]:
-        [0.5, 0.0], 
+    })
+    
+    useChain(show ? [transRef, topSpringRef, leftSpringRef, rightSpringRef] : [rightSpringRef, leftSpringRef, topSpringRef ,transRef ], show ? 
+        [0.0, 0.5, 0.5, 0.5]:
+        [0.5, 0.5, 0.5, 0.0], 
     1000)
 
+    const {control, handleSubmit, formState: { errors}} = useForm({
+        defaultValues,
+        mode: 'onChange',
+        resolver: yupResolver(schema)
+    })
+
+
+
+    const onSubmitDialogs = () => {
+        
+        console.log('123123123');
+    };
+
+    // const onSubmitSavings: SubmitHandler<ISavingsCreate> = (dataSavings : any) => {
+    //     console.log(dataSavings);
+    // };
+
+
+
+    const onSavingsClaim = (data: string) => {
+        request.post('BankSystem:ClaimSavings', data)
+    }
+    
     return transitions((style, show) => (show ? 
         <Container style={{...style}}>
-            {transitionsDeposit((style, openDialog) => (
+            {transitionsDialog((style, openDialog) => (
             openDialog.deposit && (
                 <DialogDeposit style={{ ...style }}>
                     <AnimatedGrid sx={{
@@ -158,7 +308,7 @@ function BankSystem() {
                                     <Grid width={"11%"} height={"16%"} display={"flex"}  justifyContent={"center"} alignItems={"center"} sx={{
                                         ml: "-5%",
                                         position: "absolute",
-                                        background: "linear-gradient(0deg, #78a854 40%, #9dd173 90%)",
+                                        background: "linear-gradient(0deg, #9dd173 40%, #78a854 90%)",
                                         borderRadius: "0px 0px 40px 40px"
                                     }}>
                                         <Grid width={"100%"} height={"50%"}>
@@ -167,7 +317,7 @@ function BankSystem() {
                                     </Grid>
                                     <Grid width={"5%"} height={"36%"} display={"flex"}  justifyContent={"center"} alignItems={"center"} sx={{
                                         position: "absolute",
-                                        background: "linear-gradient(0deg, #78a854 40%, #9dd173 90%)",
+                                        background: "linear-gradient(0deg, #9dd173 40%, #78a854 90%)",
                                         borderRadius: "0px 0px 30px 30px",
                                         left: "3%"
                                     }}>
@@ -189,12 +339,70 @@ function BankSystem() {
                                 </AnimatedGrid>
                             </AnimatedGrid>
                         </HeaderBank>
+                        <CenterBank display={"flex"} alignItems={"center"}>
+                            <Grid width={"25%"} height={"40%"}>
+                                <Typography variant="h5" textAlign={"center"} sx={{
+                                    fontFamily: "Title",
+                                    fontWeight: "bold",
+                                    mb: "2%"
+                                }}>
+                                    {t('BANK_DEPOSIT_TITLE')}
+                                </Typography>
+                                <Typography variant="body1" textAlign={"center"} sx={{
+                                    fontFamily: "Gilroy",
+                                    mb: "3%"
+                                }}>
+                                    {t('BANK_DEPOSIT_DESCRIPTION')}
+                                </Typography>
+                                <form onSubmit={handleSubmit(onSubmitDialogs)}>
+                                    <Controller 
+                                        name='amount'
+                                        control={control}
+                                        render={({field: { onChange}})=>(
+                                        <TextField color="warning" label={t('BANK_DEPOSIT_INPUT')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth/>
+                                        )}      
+                                    />
+                                    <AnimatedGrid  width={"100%"} sx={{mt: "3%"}} display={"flex"} >
+                                        <Grid width={"90%"}>
+                                            <Button variant="contained" fullWidth sx={{
+                                                backgroundColor:"rgba(120, 168, 84, 0.5)",
+                                                "&:hover": { backgroundColor: "rgba(120, 168, 84, 1)" , transform: "scale(1.1)"},
+                                                transition: "all 0.5s ease"
+                                            }} type="submit">{t('ACCEPT_BANK')}</Button>
+                                        </Grid>
+                                        <Grid width={"10%"}></Grid>
+                                        <Grid width={"90%"}>
+                                            <Button variant="contained" fullWidth sx={{
+                                                    backgroundColor:"rgba(120, 168, 84, 0.5)",
+                                                    "&:hover": { backgroundColor: "rgba(120, 168, 84, 1)" , transform: "scale(1.1)"},
+                                                    transition: "all 0.5s ease"
+                                            }} onClick={() => setOpenDialog({...openDialog, deposit: false})}>{t('CANCEL_BANK')}</Button>
+                                        </Grid>
+                                    </AnimatedGrid>
+                                </form>
+                            </Grid>
+                        </CenterBank>
+                        <BottomBank container>
+                            <AnimatedGrid item xs={5} display={"flex"} justifyContent={"right"} alignItems={"center"}>
+                                <Grid width={"30%"} display={"flex"} justifyContent={"center"} flexDirection={"column"}>
+                                    <Typography width={"100%"} variant="h6" color={"#9dd173"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('YOUR_BANK')}</Typography>
+                                    <Typography width={"100%"} variant="body1" color={"white"} sx={{mt: "2%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('BALANCE_BANK')}</Typography>
+                                </Grid>
+                                <Grid width={"30%"} display={"flex"} alignItems={"center"}>
+                                    <Typography width={"100%"} variant="h5" color={"#9dd173"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{bank.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                                </Grid>
+                                <Grid width={"40%"} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                    <hr style={{position: "absolute", right:0, bottom: "9%",width: "15%", height: "5px", backgroundColor: "#9dd173", borderRadius: "10px", border:"none"}}></hr>
+                                    <hr  style={{position: "absolute", right:0, bottom: "8%",width: "10%", height: "3px", backgroundColor: "#9dd173", borderRadius: "10px", border:"none"}}></hr>
+                                </Grid>
+                            </AnimatedGrid>
+                        </BottomBank>
                     </AnimatedGrid>
                 </DialogDeposit>
             )
             ))}
-            {transitionsDeposit((style, openDialog) => (
-            openDialog.widthDraw && (
+            {transitionsDialog((style, openDialog) => (
+            openDialog.withDraw && (
                 <DialogWithDraw style={{ ...style }}>
                     <AnimatedGrid sx={{
                         width: "100%",
@@ -235,7 +443,7 @@ function BankSystem() {
                                     }}>
                                         <CreditScoreIcon sx={{fontSize:"35px", position: "absolute", bottom: "5%"}}></CreditScoreIcon>
                                     </Grid>
-                                    <ButtonCloseDialog onClick={() => setOpenDialog({...openDialog, widthDraw: false})} width={"2%"} height={"3%"} display={"flex"}  justifyContent={"center"} alignItems={"center"} sx={{
+                                    <ButtonCloseDialog onClick={() => setOpenDialog({...openDialog, withDraw: false})} width={"2%"} height={"3%"} display={"flex"}  justifyContent={"center"} alignItems={"center"} sx={{
                                         position: "absolute",
                                         background: "linear-gradient(0deg, #ff082d 20%, #730112 90%)",
                                         borderRadius: "10px",
@@ -252,11 +460,69 @@ function BankSystem() {
                                 </AnimatedGrid>
                             </AnimatedGrid>
                         </HeaderBank>
+                        <CenterBank display={"flex"} alignItems={"center"}>
+                            <Grid width={"25%"} height={"40%"}>
+                                <Typography variant="h5" textAlign={"center"} sx={{
+                                    fontFamily: "Title",
+                                    fontWeight: "bold",
+                                    mb: "2%"
+                                }}>
+                                    {t('BANK_WITHDRAW_TITLE')}
+                                </Typography>
+                                <Typography variant="body1" textAlign={"center"} sx={{
+                                    fontFamily: "Gilroy",
+                                    mb: "3%"
+                                }}>
+                                    {t('BANK_WITHDRAW_DESCRIPTION')}
+                                </Typography>
+                                {/* <form id="form2" onSubmit={handleSubmit(onSubmitDialogs)}>
+                                    <Controller 
+                                        name='amount'
+                                        control={control}
+                                        render={({field: {value, onChange}})=>(
+                                        <TextField color="warning" label={t('BANK_WITHDRAW_INPUT')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth/>
+                                        )}          
+                                    />
+                                    <AnimatedGrid  width={"100%"} sx={{mt: "3%"}} display={"flex"} >
+                                        <Grid width={"90%"}>
+                                            <Button variant="contained" fullWidth sx={{
+                                                backgroundColor:"rgba(255, 11, 48, 0.5)",
+                                                "&:hover": { backgroundColor: "rgba(255, 11, 48, 1)" , transform: "scale(1.1)"},
+                                                transition: "all 0.5s ease"
+                                            }} type='submit'>{t('ACCEPT_BANK')}</Button>
+                                        </Grid>
+                                        <Grid width={"10%"}></Grid>
+                                        <Grid width={"90%"}>
+                                            <Button variant="contained" fullWidth sx={{
+                                                    backgroundColor:"rgba(255, 11, 48, 0.5)",
+                                                    "&:hover": { backgroundColor: "rgba(255, 11, 48, 1)" , transform: "scale(1.1)"},
+                                                    transition: "all 0.5s ease"
+                                            }} onClick={() => setOpenDialog({...openDialog, withDraw: false})}>{t('CANCEL_BANK')}</Button>
+                                        </Grid>
+                                    </AnimatedGrid>
+                                </form> */}
+                            </Grid>
+                        </CenterBank>
+                        <BottomBank container>
+                            <AnimatedGrid item xs={5} display={"flex"} justifyContent={"right"} alignItems={"center"}>
+                                <Grid width={"30%"} display={"flex"} justifyContent={"center"} flexDirection={"column"}>
+                                    <Typography width={"100%"} variant="h6" color={"#fa3e5b"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('YOUR_BANK')}</Typography>
+                                    <Typography width={"100%"} variant="body1" color={"white"} sx={{mt: "2%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('BALANCE_BANK')}</Typography>
+                                </Grid>
+                                <Grid width={"30%"} display={"flex"} alignItems={"center"}>
+                                    <Typography width={"100%"} variant="h5" color={"#fa3e5b"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{bank.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                                </Grid>
+                                <Grid width={"40%"} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                    <hr style={{position: "absolute", right:0, bottom: "9%",width: "15%", height: "5px", backgroundColor: "#fa3e5b", borderRadius: "10px", border:"none"}}></hr>
+                                    <hr  style={{position: "absolute", right:0, bottom: "8%",width: "10%", height: "3px", backgroundColor: "#fa3e5b", borderRadius: "10px", border:"none"}}></hr>
+                                </Grid>
+                            </AnimatedGrid>
+                        </BottomBank>
                     </AnimatedGrid>
                 </DialogWithDraw>
             )
             ))}
-            {transitionsDeposit((style, openDialog) => (
+            {transitionsDialog((style, openDialog) => (
             openDialog.transfer && (
                 <DialogTransfer style={{ ...style }}>
                     <AnimatedGrid sx={{
@@ -308,13 +574,78 @@ function BankSystem() {
                                         <CloseIcon sx={{fontSize:"35px"}}></CloseIcon>
                                     </ButtonCloseDialog>
                                 </AnimatedGrid>
-
                                 <AnimatedGrid width={"60%"} height={"100%"} justifyContent={"center"} sx={{pt: "2%"}}>
                                 </AnimatedGrid>
                                 <AnimatedGrid container width={"30%"} sx={{pt: "2%"}}>
                                 </AnimatedGrid>
                             </AnimatedGrid>
                         </HeaderBank>
+                        <CenterBank display={"flex"} alignItems={"center"}>
+                            <Grid width={"25%"} height={"40%"}>
+                                <Typography variant="h5" textAlign={"center"} sx={{
+                                    fontFamily: "Title",
+                                    fontWeight: "bold",
+                                    mb: "2%",
+                                    color: "#f5ca53"
+                                }}>
+                                    {t('BANK_TRANSFER_TITLE')}
+                                </Typography>
+                                <Typography variant="body1" textAlign={"center"} sx={{
+                                    fontFamily: "Gilroy",
+                                    mb: "3%"
+                                }}>
+                                    {t('BANK_TRANSFER_DESCRIPTION')}
+                                </Typography>
+                                {/* <form onSubmit={handleSubmit(onSubmitDialogs)}>
+                                    <Controller 
+                                        name='amount'
+                                        control={control}
+                                        render={({field: {value, onChange}})=>(
+                                        <TextField sx={{mb: "2%"}}  color="warning" label={t('BANK_TRANSFER_INPUT1')} variant='filled' onChange={onChange} error={Boolean(errors.amount)} fullWidth/>
+                                        )}        
+                                    />
+                                    <Controller 
+                                        name='targetPlayerID'
+                                        control={control}
+                                        render={({field: {value, onChange}})=>(
+                                        <TextField color="warning" label={t('BANK_TRANSFER_INPUT2')} variant='filled' onChange={onChange} error={Boolean(errors.targetPlayerID)} fullWidth/>
+                                        )}          
+                                    />
+                                    <AnimatedGrid  width={"100%"} sx={{mt: "3%"}} display={"flex"} >
+                                        <Grid width={"90%"}>
+                                            <Button variant="contained" fullWidth sx={{
+                                                backgroundColor:"rgba(245, 202, 83, 0.5)",
+                                                "&:hover": { backgroundColor: "rgba(245, 202, 83, 1)" , transform: "scale(1.1)"},
+                                                transition: "all 0.5s ease"
+                                            }} type='submit' name="savings">{t('ACCEPT_BANK')}</Button>
+                                        </Grid>
+                                        <Grid width={"10%"}></Grid>
+                                        <Grid width={"90%"}>
+                                            <Button variant="contained" fullWidth sx={{
+                                                    backgroundColor:"rgba(245, 202, 83, 0.5)",
+                                                    "&:hover": { backgroundColor: "rgba(245, 202, 83, 1)" , transform: "scale(1.1)"},
+                                                    transition: "all 0.5s ease"
+                                            }} onClick={() => setOpenDialog({...openDialog, transfer: false})}>{t('CANCEL_BANK')}</Button>
+                                        </Grid>
+                                    </AnimatedGrid>
+                                </form> */}
+                            </Grid>
+                        </CenterBank>
+                        <BottomBank container>
+                            <AnimatedGrid item xs={5} display={"flex"} justifyContent={"right"} alignItems={"center"}>
+                                <Grid width={"30%"} display={"flex"} justifyContent={"center"} flexDirection={"column"}>
+                                    <Typography width={"100%"} variant="h6" color={"#f5ca53"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('YOUR_BANK')}</Typography>
+                                    <Typography width={"100%"} variant="body1" color={"white"} sx={{mt: "2%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('BALANCE_BANK')}</Typography>
+                                </Grid>
+                                <Grid width={"30%"} display={"flex"} alignItems={"center"}>
+                                    <Typography width={"100%"} variant="h5" color={"#f5ca53"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{bank.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                                </Grid>
+                                <Grid width={"40%"} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                    <hr style={{position: "absolute", right:0, bottom: "9%",width: "15%", height: "5px", backgroundColor: "#f5ca53", borderRadius: "10px", border:"none"}}></hr>
+                                    <hr  style={{position: "absolute", right:0, bottom: "8%",width: "10%", height: "3px", backgroundColor: "#f5ca53", borderRadius: "10px", border:"none"}}></hr>
+                                </Grid>
+                            </AnimatedGrid>
+                        </BottomBank>
                     </AnimatedGrid>
                 </DialogTransfer>
             )
@@ -404,7 +735,7 @@ function BankSystem() {
                             borderRadius: "20px"
                         }}>
                         <Grid item xs={3} display={"flex"} alignItems={"center"} justifyContent={"center"} >
-                            <Grid width={"70%"} height={"70%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{
+                            <Grid width={"60%"} height={"70%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{
                                 borderRadius: "20%",
                                 backgroundColor:"#55763c"
                             }}>
@@ -413,10 +744,10 @@ function BankSystem() {
                         </Grid>
                         <Grid item xs={9} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
                             <Typography variant="body1" sx={{
-                                fontFamily:"Gilroy",
+                                fontFamily:"Title",
                                 fontWeight:"bold",
                                 textTransform:"uppercase",
-                                fontSize: "20px"
+                                fontSize: "15px"
                             }}>
                                 {t('BANK_DEPOSIT_TITLE')}
                             </Typography>
@@ -425,12 +756,12 @@ function BankSystem() {
                             </Typography>
                         </Grid>
                     </CenterButton>
-                    <CenterButton onClick={() => setOpenDialog({...openDialog, widthDraw: true})} container sx={{
+                    <CenterButton onClick={() => setOpenDialog({...openDialog, withDraw: true})} container sx={{
                             backgroundColor:"rgba(255, 11, 48, 0.2)",
                             borderRadius: "20px"
                         }}>
                         <Grid item xs={3} display={"flex"} alignItems={"center"} justifyContent={"center"} >
-                            <Grid width={"70%"} height={"70%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{
+                            <Grid width={"60%"} height={"70%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{
                                 borderRadius: "20%",
                                 backgroundColor:"#ff3b58"
                             }}>
@@ -439,10 +770,10 @@ function BankSystem() {
                         </Grid>
                         <Grid item xs={9} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
                             <Typography variant="body1" sx={{
-                                fontFamily:"Gilroy",
+                                fontFamily:"Title",
                                 fontWeight:"bold",
                                 textTransform:"uppercase",
-                                fontSize: "20px"
+                                fontSize: "15px"
                             }}>
                                 {t('BANK_WITHDRAW_TITLE')}
                             </Typography>
@@ -456,7 +787,7 @@ function BankSystem() {
                             borderRadius: "20px"
                         }}>
                         <Grid item xs={3} display={"flex"} alignItems={"center"} justifyContent={"center"} >
-                            <Grid width={"70%"} height={"70%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{
+                            <Grid width={"60%"} height={"70%"} display={"flex"} alignItems={"center"} justifyContent={"center"} sx={{
                                 borderRadius: "20%",
                                 backgroundColor:"#a1863f"
                             }}>
@@ -465,10 +796,10 @@ function BankSystem() {
                         </Grid>
                         <Grid item xs={9} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
                             <Typography variant="body1" sx={{
-                                fontFamily:"Gilroy",
+                                fontFamily:"Title",
                                 fontWeight:"bold",
                                 textTransform:"uppercase",
-                                fontSize: "20px"
+                                fontSize: "15px"
                             }}>
                                 {t('BANK_TRANSFER_TITLE')}
                             </Typography>
@@ -478,7 +809,127 @@ function BankSystem() {
                         </Grid>
                     </CenterButton>
                 </AnimatedGrid>
+                <AnimatedGrid item xs={8} height={"77%"} display={"flex"} justifyContent={"center"} sx={{
+                    gap: "2%", pt: "2%"
+                }}>
+                    <AnimatedGrid minWidth={"70%"} style={{...leftSpring}} sx={{
+                        background: "linear-gradient(180deg, rgba(255, 11, 48, 0.1) 30%, rgba(255, 11, 48, 0.0) 100%)",
+                        borderRadius: "20px",
+                    }}>
+                        <Grid width={"100%"} height={"10%"} sx={{mt: "1%"}} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                            <SavingsIcon/>
+                            <Typography variant="body1" sx={{ml:"2%",fontFamily:"Title", fontWeight: "bold"}}>{t('SAVINGS_BANK')}</Typography>
+                        </Grid>
+                        <Grid width={"100%"} height={"75%"} display={"flex"} justifyContent={"center"}>
+                            <Grid width={"25%"} display={"flex"} justifyContent={"center"}>
+                                <Grid width={"90%"}>
+                                    {/* <form  onSubmit={handleSubmitSavings(onSubmitSavings)}>
+                                        <Controller 
+                                            name='amount'
+                                            control={controlSavings}
+                                            render={({field: {value, onChange}})=>(
+                                            <TextField color="warning" label={t('BANK_DEPOSIT_INPUT')} variant='filled' onChange={onChange} error={Boolean(errorsSavings.amount)} fullWidth/>
+                                            )}          
+                                        />
+                                        <Button type="submit" name="dialogs">ádasd</Button>
+                                    </form> */}
+                                </Grid>
+                            </Grid>
+                            <Grid width={"70%"}>
+                                <TransactionsListScrollBar width={"100%"} height={"100%"} sx={{overflowX: 'hidden', overflowY: 'auto'}}>
+                                    {SavingsList.map((i) => (
+                                        <TransactionsListItem container sx={{
+                                            mb: "4%",
+                                            backgroundColor: "rgba(255, 11, 48, 0.2)"
+                                            
+                                        }}>
+                                            <Grid xs={12} container display={"flex"} alignItems={"center"} sx={{pl: "1%"}}>
+                                                <Grid height={"100%"} item xs={2} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                                    <Typography variant="body1" textAlign={"center"} sx={{fontSize:"14px"}}>{t('duration_bank')}</Typography>
+                                                    <Typography variant="body1" textAlign={"center"}  sx={{fontSize:"14px"}}>{i.duration}</Typography>
+                                                </Grid>
+                                                <Grid height={"100%"} item xs={3} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                                    <Typography textAlign={"center"} sx={{fontSize:"14px"}}>{t('dateStart_bank')}</Typography>
+                                                    <Typography textAlign={"center"} sx={{fontSize:"14px"}}>{Moment(i.dateStart).utcOffset(0).format('DD-MM-YYYY HH:mm:ss')}</Typography>
+                                                </Grid>
+                                                <Grid height={"100%"} item xs={2} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                                    <Typography textAlign={"center"} sx={{fontSize:"14px"}}>{t('interest_bank')}</Typography>
+                                                    <Typography textAlign={"center"} sx={{fontSize:"14px"}}>{i.interest}%</Typography>
+                                                </Grid>
+                                                <Grid height={"100%"} item xs={3} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                                    <Typography textAlign={"center"} sx={{fontSize:"14px"}}>{t('amount_bank')}</Typography>
+                                                    <Typography textAlign={"center"} sx={{fontSize:"14px"}}>{(i.amount).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                                                </Grid>
+                                                <Grid height={"100%"} item xs={2} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                                    {now1.diff(i.dateStart, 'days') > i.duration ? (
+                                                        <Button color="warning" variant="contained" sx={{mr: "20%", fontSize:"14px"}} onClick = {() => onSavingsClaim(i._id)}>Nhận</Button>
+                                                    ):(
+                                                        <Button color="warning" variant="contained" sx={{mr: "20%", fontSize:"14px"}} disabled>Nhận</Button>
+                                                    )}
+                                                    {/* <Button color="warning" variant="contained" sx={{mr: "20%", fontSize:"14px"}}>Nhận</Button> */}
+                                                </Grid>
+                                                {/* <Typography variant="body1" width={"20%"} sx={{fontSize: "12px"}} >{Moment(i.dateStart).utcOffset(0).format('DD-MM-YYYY HH:mm:ss')}</Typography> */}
+                                            </Grid>
+                                        </TransactionsListItem>
+                                    ))}
+                                </TransactionsListScrollBar>
+                            </Grid>
+                        </Grid>
+                    </AnimatedGrid>
+                    <AnimatedGrid style={{...rightSpring}} minWidth={"28%"} sx={{
+                        background: "linear-gradient(180deg, rgba(255, 11, 48, 0.1) 30%, rgba(255, 11, 48, 0.0) 100%)",
+                        borderRadius: "20px",
+                    }}>
+                        <Grid width={"100%"} height={"10%"} sx={{mb: "4%", mt: "3%"}} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                            <AccessAlarmsIcon/>
+                            <Typography variant="body1" sx={{ml:"2%",fontFamily:"Title", fontWeight: "bold"}}>{t('TRANSACTIONS_BANK')}</Typography>
+                        </Grid>
+                        <Grid width={"100%"} height={"80%"} display={"flex"} justifyContent={"center"}>
+                            <TransactionsListScrollBar width={"90%"} height={"90%"} sx={{overflowX: 'hidden', overflowY: 'auto'}}>
+                                {sortedTransactions.map((i) => (
+                                    <TransactionsListItem container sx={{
+                                        mb: "4%",
+                                        backgroundColor: i.type === "deposit" ? "rgba(64, 255, 11, 0.1)" : (i.type === "withdraw" ? "rgba(255, 11, 48, 0.1)" : "rgba(255, 198, 11, 0.1)")
+                                        
+                                    }}>
+                                        <Grid xs={8} display={"flex"} justifyContent={"center"} flexDirection={"column"} sx={{pl: "2%"}}>
+                                            <Typography variant="body1" width={"100%"} sx={{
+                                                fontFamily:"Gilroy",
+                                                fontWeight: "bold",
+                                                textTransform: "uppercase",
+                                                color: i.type === "deposit" ? "#41f011" : (i.type === "withdraw" ? "#fc2b2e" : "#ffc60b")
+                                                
+                                            }}>
+                                                {i.type === "deposit" ? t('BANK_DEPOSIT_TITLE') : (i.type === "withdraw" ? t('BANK_WITHDRAW_TITLE') : t('BANK_TRANSFER_TITLE'))}
+                                            </Typography>
+                                            <Typography variant="body1" width={"100%"} sx={{fontSize: "14px"}}>{i.description}</Typography>
+                                            <Typography variant="body1" width={"100%"} sx={{fontSize: "12px", color: i.type === "deposit" ? "#41f011" : (i.type === "withdraw" ? "#fc2b2e" : "#ffc60b")}}>{Moment(i.date).utcOffset(0).format('DD-MM-YYYY HH:mm:ss')}</Typography>
+                                        </Grid>
+                                        <Grid xs={4} display={"flex"} alignItems={"center"} sx={{pr: "2%"}}>
+                                            <Typography width={"100%"} textAlign={"right"} sx={{fontWeight: "bold", fontFamily: "Gilroy",color: i.type === "deposit" ? "#41f011" : (i.type === "withdraw" ? "#fc2b2e" : "#ffc60b")}}>{(i.amount).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                                        </Grid>
+                                    </TransactionsListItem>
+                                ))}
+                            </TransactionsListScrollBar>
+                        </Grid>
+                    </AnimatedGrid>
+                </AnimatedGrid>
             </CenterBank>
+            <BottomBank container>
+                <AnimatedGrid item xs={5} display={"flex"} justifyContent={"right"} alignItems={"center"}>
+                    <Grid width={"30%"} display={"flex"} justifyContent={"center"} flexDirection={"column"}>
+                        <Typography width={"100%"} variant="h6" color={"primary"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('YOUR_BANK')}</Typography>
+                        <Typography width={"100%"} variant="body1" color={"white"} sx={{mt: "2%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{t('BALANCE_BANK')}</Typography>
+                    </Grid>
+                    <Grid width={"30%"} display={"flex"} alignItems={"center"}>
+                        <Typography width={"100%"} variant="h5" color={"primary"} sx={{mt: "5%",fontFamily:"Title", textAlign: "right", fontWeight:"bold"}}>{bank.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
+                    </Grid>
+                    <Grid width={"40%"} display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                        <hr style={{position: "absolute", right:0, bottom: "9%",width: "15%", height: "5px", backgroundColor: "rgba(255, 11, 48, 0.7)", borderRadius: "10px", border:"none"}}></hr>
+                        <hr  style={{position: "absolute", right:0, bottom: "8%",width: "10%", height: "3px", backgroundColor: "rgba(255, 11, 48, 0.3)", borderRadius: "10px", border:"none"}}></hr>
+                    </Grid>
+                </AnimatedGrid>
+            </BottomBank>
         </Container>:null
         )
     );

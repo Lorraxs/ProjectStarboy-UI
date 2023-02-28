@@ -25,7 +25,7 @@ const initialState: IInitStateProps = {
       },
     ],
     shopIdx: 0,
-  };
+};
   
 export const vehicleShopSlice = createSlice({
     name: "vehicleShop",

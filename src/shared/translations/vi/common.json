@@ -28,9 +28,19 @@
   "BANK_NAME" : "Ngân hàng",
   "BANK_DESCRIPTION" : "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora perferendis ut quaerat quos.",
   "BANK_DEPOSIT_TITLE": "gửi tiền",
+  "BANK_DEPOSIT_INPUT": "Nhập số tiền muốn gửi",
   "BANK_DEPOSIT_DESCRIPTION": "Lorem ipsum, dolor sit amet consectetur",
   "BANK_WITHDRAW_TITLE": "rút tiền",
   "BANK_WITHDRAW_DESCRIPTION": "Lorem ipsum, dolor sit amet consectetur",
+  "BANK_WITHDRAW_INPUT": "Nhập số tiền muốn rút",
   "BANK_TRANSFER_TITLE": "chuyển khoản",
-  "BANK_TRANSFER_DESCRIPTION": "Lorem ipsum, dolor sit amet consectetur"
+  "BANK_TRANSFER_DESCRIPTION": "Lorem ipsum, dolor sit amet consectetur",
+  "BANK_TRANSFER_INPUT1": "Nhập số tiền muốn chuyển",
+  "BANK_TRANSFER_INPUT2": "Nhập ID người nhận",
+  "YOUR_BANK": "Tài khoản",
+  "BALANCE_BANK": "của bạn",
+  "TRANSACTIONS_BANK": "lịch sử giao dịch",
+  "SAVINGS_BANK": "tiết kiệm",
+  "RECEIVE_BANK": "ĐÃ NHẬN",
+  "SEND_BANK": "ĐÃ CHUYỂN"
 }
