@@ -30,8 +30,8 @@ const Header = styled(AnimatedGrid)`
 `
 
 function CraftingSystem() {
-    const [show] = useShow(process.env.NODE_ENV === 'development', 'HUD', false, false, false, false)
-    const CRAFT_DATA: ICraftingDefaultData = require("../shared/json/craftingSystem/craftingData.json")
+    const [show] = useShow(false, 'cratingSystem', false, false, false, false)
+    // const CRAFT_DATA: ICraftingDefaultData = require("../shared/json/craftingSystem/craftingData.json")
     const playerInventory = useSelector((state:RootState)=>state.player.inventory)
     
     const topSpringRef = useSpringRef();

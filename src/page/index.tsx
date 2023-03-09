@@ -12,8 +12,9 @@ import PlayerInventoryPage from "./PlayerInventory";
 import VehicleShopPage from "./VehicleShop";
 import BankSystemPage from "./BankSystem";
 import CraftingSystemPage from "./CraftingSystem";
+import GarageSystemPage from "./GarageSystem";
 
-const pages = [LoginPage, RegisterPage, CharacterCreatorPage, HudPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage, VehicleShopPage, BankSystemPage, CraftingSystemPage];
+const pages = [LoginPage, RegisterPage, CharacterCreatorPage, HudPage, PlayerInventoryPage, GroceryStorePage, WeaponShopPage, VehicleShopPage, BankSystemPage, CraftingSystemPage, GarageSystemPage];
 
 const Container = styled.div`
   width: 100%;

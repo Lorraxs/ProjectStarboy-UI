@@ -146,7 +146,7 @@ const TransactionsListItem = styled(AnimatedGrid)`
 
 function BankSystem() {
     const {t} = useTranslation('common');
-    const [show] = useShow(false, 'HUD', false, false, false, false)
+    const [show] = useShow(false, 'bankSystem', false, false, false, false)
     const bank = useSelector((state:RootState)=>state.player.bank)
     const TransactionsList = useSelector((state:RootState)=>state.bankSystem.TransictionsList)
     const SavingsList = useSelector((state:RootState)=>state.bankSystem.SavingsList)

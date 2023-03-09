@@ -28,7 +28,7 @@ const request = new cRequest();
 
 const Container= styled(AnimatedGrid)`
     margin: 0 auto;
-    background-image: url('/assets/backgrounds/bg_vehicleshop_demo.jpg');
+    ${process.env.NODE_ENV === 'test' ? `background-image: url('/assets/backgrounds/bg_vehicleshop_demo.jpg');` : `background-image: radial-gradient(circle at 50% 50%, rgba(49, 49, 49, 0) 11%, #222222 100%);`}
     background-position: center;
     background-size: cover;
     height:100%;
@@ -159,10 +159,11 @@ const ColorDialogItem = styled(AnimatedGrid)`
     };
     transition: all  0.3s ease;
 `
-const CategoryIcon = styled(animated.img)`
+const CategoryIcon = styled(animated.i)`
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    line-height: 0;
+    font-size: 3vw;
 `
 const ButtonBottom = styled(Grid)`
     border-radius: 10px;
@@ -203,10 +204,12 @@ const BottomScrollBarItem = styled(AnimatedGrid)`
 `
 
 
+const VEHICLE_COLOR: IColorVehicle = require("../shared/json/vehicleShop/colorVehicle.json");
+const VEHICLE_DATA: IVehicleData = require("../shared/json/vehicleShop/vehicleData.json");
 
 function VehicleShop() {
     const {t} = useTranslation('common');
-    const [show] = useShow(false, 'VehicleShop', true, true, true, false)
+    const [show] = useShow(false, 'VehicleShop', true, true, true, true)
     const [color1, setcolor1] = useState(-1);
     const [color2, setcolor2] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState('')
@@ -215,8 +218,9 @@ function VehicleShop() {
     const [selectedVehicle, setSelectedItem] = useState<IVehicleShop>()
     const vehicles = useSelector((state:RootState)=>state.vehicleShop.vehicles)
     const shopIdx = useSelector((state:RootState)=>state.vehicleShop.shopIdx)
-    const VEHICLE_COLOR: IColorVehicle = require("../shared/json/vehicleShop/colorVehicle.json");
-    const VEHICLE_DATA: IVehicleData = require("../shared/json/vehicleShop/vehicleData.json");
+    const testPrice = useSelector((state:RootState)=> state.vehicleShop.testPrice)
+    const primaryColor = useSelector((state:RootState)=> state.vehicleShop.primaryColor)
+    const secondaryColor = useSelector((state:RootState)=> state.vehicleShop.secondaryColor)
     const [performanceVehicle, setPerformanceVehicle] = useState<IPerformanceVehicle>({power: 0, acceleration: 0, handling: 0, topspeed: 0})
     const [data, setData] = useState<IBuyDataVehicle>({ spawncode: '', price: 0, color1: -1, color2: 0, shopIndex: shopIdx});
 
@@ -233,7 +237,7 @@ function VehicleShop() {
 
 
     const testDrive = () => {
-        request.post('VehicleShop:TestDrive')
+        request.post('VehicleShop:TestDrive', {shopIndex: shopIdx})
     };
 
     const handleCategoryBg = (i: string) => {
@@ -257,12 +261,12 @@ function VehicleShop() {
         setcolor1(-1)
         setcolor2(0)
         setPerformanceVehicle({
-            power: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.topspeed ?? 0,
-            acceleration: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.acceleration ?? 0,
-            handling: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.handling ?? 0,
-            topspeed: VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.performance.topspeed ?? 0,
+            power: vehicleData?.performance.topspeed ?? 0,
+            acceleration: vehicleData?.performance.acceleration ?? 0,
+            handling: vehicleData?.performance.handling ?? 0,
+            topspeed: vehicleData?.performance.topspeed ?? 0,
         })
-    }, [selectedVehicle, VEHICLE_DATA])
+    }, [selectedVehicle])
 
     useEffect(() => {
         request.post('VehicleShop:ChangePrimaryColor', color1)
@@ -281,34 +285,49 @@ function VehicleShop() {
                 color2: color2,
                 shopIndex: shopIdx
             })
+            request.post('VehicleShop:UpdateVehicleData', {
+                spawncode: selectedVehicle.spawncode,
+                price: selectedVehicle.price,
+                color1: color1,
+                color2: color2,
+                shopIndex: shopIdx
+            })
         }
     }, [selectedVehicle, color1, color2, shopIdx]);
 
     useEffect(() => {
-        const handleKeyCam = (event: KeyboardEvent) => {
-            if (event.key === 'ArrowDown') {
-                request.post('VehicleShop:ChangeCamView', event.key)
-            }
-            if (event.key === 'ArrowUp') {
-                request.post('VehicleShop:ChangeCamView', event.key)
-            }
-            if (event.key === 'ArrowLeft') {
-                request.post('VehicleShop:ChangeCamView', event.key)
-            }
-            if (event.key === 'ArrowRight') {
-                request.post('VehicleShop:ChangeCamView', event.key)
-            }
-        };
+        if(show === true){
+            const handleKeyCam = (event: KeyboardEvent) => {
+                console.log(event.key)
+                if (event.key === 'ArrowDown') {
+                    request.post('VehicleShop:ChangeCamView', {key: event.key, shopIndex: shopIdx})
+                }
+                if (event.key === 'ArrowUp') {
+                    request.post('VehicleShop:ChangeCamView', {key: event.key, shopIndex: shopIdx})
+                }
+                if (event.key === 'ArrowLeft') {
+                    request.post('VehicleShop:ChangeCamView', {key: event.key, shopIndex: shopIdx})
+                }
+                if (event.key === 'ArrowRight') {
+                    request.post('VehicleShop:ChangeCamView', {key: event.key, shopIndex: shopIdx})
+                }
+            };
+    
+            document.addEventListener('keydown', handleKeyCam);
+    
+            return () => {
+                document.removeEventListener('keydown', handleKeyCam);
+            };
+        }
+    }, [show]);
 
-        document.addEventListener('keydown', handleKeyCam);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyCam);
-        };
-    }, []);
+    const vehicleData = useMemo(() => {
+        if(selectedVehicle!==undefined){
+            return VEHICLE_DATA.find(e=>e.spawncode.toLowerCase() === selectedVehicle.spawncode.toLowerCase())
+        }
+    }, [selectedVehicle])
 
     const onSubmit = () =>{
-        console.log(data)
         request.post('VehicleShop:Buy', data)
     }
 
@@ -355,9 +374,10 @@ function VehicleShop() {
         }
     };
 
+    
     useChain(show ? [transRef, leftSpringRef, rightSpringRef, bottomSpringRef] : [ bottomSpringRef, rightSpringRef, leftSpringRef, transRef ], show ? 
         [0.0, 0.5, 0.5, 0.5]:
-        [0.5, 0.5, 0.5, 0.0], 
+        [0.0, 0.0, 0.0, 0.5], 
     1000)
     
     return transitions ((style, show) => (show ? 
@@ -366,18 +386,18 @@ function VehicleShop() {
                 <TopInfoMation display={"flex"} wrap="nowrap">
                     <AnimatedGrid height={"100%"} width={"30%"} display={"flex"} wrap="nowrap" alignItems={"center"}>
                         <Typography variant='h6' color={"primary"} sx={{fontFamily: "Title", fontWeight: "bold"}}>ESC</Typography>
-                        <Typography variant='body1' sx={{ml: 2,mt:-2, fontFamily: "Gilroy", fontWeight: "bold"}}>để trở lại</Typography>
+                        <Typography variant='body1' sx={{ml: 2,mt:-2, fontFamily: "Gilroy", fontWeight: "bold"}}>{t('CLOSE')}</Typography>
                     </AnimatedGrid>
                     <AnimatedGrid sx={{position: "absolute", right: 0}} height={"100%"} width={"30%"}>
                         <AnimatedGrid width={"100%"} display={"flex"} wrap="nowrap" justifyContent={"right"}>
-                            <Typography variant='body1' sx={{fontFamily: "Gilroy", fontWeight: "bold"}}>Sử dụng mũi tên để thay đổi góc nhìn</Typography>
+                            <Typography variant='body1' sx={{fontFamily: "Gilroy", fontWeight: "bold"}}>{t('USE_ARROW_TO_ROTATE')}</Typography>
                             <ArrowDownwardIcon sx={{ml:2,border:"1px solid #ff0b30", borderRadius: "5px"}}></ArrowDownwardIcon>
                             <ArrowBackIcon sx={{ml:2, border:"1px solid #ff0b30", borderRadius: "5px"}}></ArrowBackIcon>
                             <ArrowUpwardIcon sx={{ml:2, border:"1px solid #ff0b30", borderRadius: "5px"}}></ArrowUpwardIcon>
                             <ArrowForwardIcon sx={{ml:2, border:"1px solid #ff0b30", borderRadius: "5px"}}></ArrowForwardIcon>
                         </AnimatedGrid>
                         <AnimatedGrid width={"100%"} display={"flex"} wrap="nowrap" justifyContent={"right"} sx={{mt:2}}>
-                            <Typography variant='body1' textAlign={"right"} sx={{fontFamily: "Gilroy", fontWeight: "bold"}}>Sử dụng chuột để tương tác với giao diện</Typography>
+                            <Typography variant='body1' textAlign={"right"} sx={{fontFamily: "Gilroy", fontWeight: "bold"}}>{t('USE_MOUSE_TO_INTERACTION')}</Typography>
                             <MouseIcon sx={{ml: 2}}></MouseIcon>
                         </AnimatedGrid>
                     </AnimatedGrid>
@@ -389,7 +409,7 @@ function VehicleShop() {
                                 <Typography variant='h4' sx={{fontFamily:"Title", fontWeight: "bold", ml:"2%"}}>CHILL</Typography>
                                 <Typography variant='h4' sx={{mt: -2,fontFamily:"Gilroy"}}>DILLER</Typography>
                                 <Grid display={"flex"} flexDirection={"column"} sx={{ml: "5%", mt: "-2%"}} justifyContent={"center"}>
-                                    <Typography textAlign={"center"}>Dịch vụ</Typography>
+                                    <Typography textAlign={"center"}>{t('SERVICE')}</Typography>
                                     <Grid display={"flex"} wrap="nowrap" justifyContent={"center"}>
                                         <StarIcon sx={{color: "yellow"}}></StarIcon>
                                         <StarIcon sx={{color: "yellow"}}></StarIcon>
@@ -404,7 +424,7 @@ function VehicleShop() {
                         <Grid height={"35%"} width={"100%"}sx={{ mb: "10%"}}>
                             <Grid display={"flex"} height={"10%"} width={"100%"} wrap="nowrap" alignItems={"center"}>
                                 <PaidIcon></PaidIcon>
-                                <Typography sx={{pl:"2%"}}>Mua & Chạy thử</Typography>
+                                <Typography sx={{pl:"2%"}}>{t('BUY_AND_DRIVE_TEST')}</Typography>
                                 <hr style={{width: "55%"}}/>
                             </Grid>
                             {selectedVehicle === undefined || selectedVehicle === null ? (
@@ -418,22 +438,22 @@ function VehicleShop() {
                                 </Grid>
                                 <Grid height={"20%"} width={"100%"} display={"flex"} wrap="nowrap">
                                     <Grid height={"100%"} width={"10%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                                        <BrandLogo src={`${VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.brandLogo}`}></BrandLogo>
+                                        <BrandLogo src={`${vehicleData?.brandLogo}`}></BrandLogo>
                                     </Grid>
                                     <Grid width={"90%"} display={"flex"} alignItems={"center"} sx={{ml: "2%"}}>
-                                        <Typography variant='body1' color={"primary"} sx={{wordBreak: "break-all", fontWeight: "bold", fontFamily:"Gilroy", fontSize: "35px"}}>{VEHICLE_DATA.find(vehicle => vehicle.spawncode === selectedVehicle?.spawncode)?.name}</Typography>
+                                        <Typography variant='body1' color={"primary"} sx={{wordBreak: "break-all", fontWeight: "bold", fontFamily:"Gilroy", fontSize: "35px"}}>{vehicleData?.name}</Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid height={"25%"} width={"100%"} sx={{m: "2%"}}>
-                                    <Typography variant='body1' sx={{fontSize: "14px", fontFamily:"Gilroy"}}>{selectedVehicle.description}</Typography>
+                                    <Typography variant='body1' sx={{fontSize: "14px", fontFamily:"Gilroy"}}>{vehicleData?.description}</Typography>
                                 </Grid>
                                 <Grid height={"20%"} width={"100%"} sx={{mt: "2%"}}>
                                 <ButtonBuy onClick={onSubmit}>
-                                    <Typography variant='body1' sx={{fontFamily:"Gilroy", fontWeight: "bold"}} >Mua chiếc này</Typography>
+                                    <Typography variant='body1' sx={{fontFamily:"Gilroy", fontWeight: "bold"}} >{t('BUY')}</Typography>
                                 </ButtonBuy>
                                 <ButtonTestVehicle display={"flex"} wrap='nowrap' onClick={testDrive}>
-                                    <Typography  variant='body1' sx={{fontFamily:"Gilroy", fontWeight: "bold"}} >Lái thử</Typography>
-                                    <Typography  variant='body1' sx={{ml: "2%",fontFamily:"Gilroy", fontWeight: "bold", color:"#28ad8d"}}>2000$</Typography>
+                                    <Typography  variant='body1' sx={{fontFamily:"Gilroy", fontWeight: "bold"}} >{t('TEST_DRIVE')}</Typography>
+                                    <Typography  variant='body1' sx={{ml: "2%",fontFamily:"Gilroy", fontWeight: "bold", color:"#28ad8d"}}>{testPrice}$</Typography>
                                 </ButtonTestVehicle>
                             </Grid>
                             </Grid>
@@ -442,18 +462,18 @@ function VehicleShop() {
                         <Grid height={"25%"} width={"100%"}>
                             <Grid display={"flex"} height={"10%"} width={"100%"} wrap="nowrap" alignItems={"center"}>
                                 <FormatPaintIcon></FormatPaintIcon>
-                                <Typography sx={{pl:"2%"}}>Màu sắc</Typography>
+                                <Typography sx={{pl:"2%"}}>{t('COLOR')}</Typography>
                                 <hr style={{width: "70%"}}/>
                             </Grid>
                             <Grid width={"100%"} height={"65%"}>
-                                    <Typography sx={{mt: "2%"}}>Màu chính</Typography>
+                                    <Typography sx={{mt: "2%"}}>{t('PRIMARY_COLOR')}</Typography>
                                     <ColorDialog height={"50%"} sx={{overflowX: 'hidden', overflowY: 'auto'}}>
                                         {VEHICLE_COLOR.map((i) => (
                                             <ColorDialogItem sx={{backgroundColor: i.Hex}} onClick = {() => setcolor1(parseInt(i.ID))}>
                                             </ColorDialogItem>
                                         ))}
                                     </ColorDialog>
-                                    <Typography sx={{mt: "2%"}}>Màu phụ</Typography>
+                                    <Typography sx={{mt: "2%"}}>{t('SECONDARY_COLOR')}</Typography>
                                     <ColorDialog height={"50%"} sx={{overflowX: 'hidden', overflowY: 'auto'}}>
                                         {VEHICLE_COLOR.map((i) => (
                                             <ColorDialogItem sx={{backgroundColor: i.Hex}} onClick = {() => setcolor2(parseInt(i.ID) + 1)}>
@@ -467,7 +487,7 @@ function VehicleShop() {
                     <AnimatedGrid height={"100%"} width={"20%"} style={{...rightSpring}}>
                         <Grid display={"flex"} height={"10%"} width={"100%"} wrap="nowrap" alignItems={"center"}>
                             <DirectionsCarIcon></DirectionsCarIcon>
-                            <Typography sx={{pl:"2%"}}>Loại xe</Typography>
+                            <Typography sx={{pl:"2%"}}>{t('CATEGORY')}</Typography>
                             <hr style={{width: "70%"}}/>
                         </Grid>
                         <Grid width={"100%"} height={"45%"}>
@@ -476,7 +496,7 @@ function VehicleShop() {
                                     <CategoryVehicleItem display={"flex"} alignItems={"center"} onClick={ ()=> handleCategoryBg(i)}
                                     sx ={{backgroundColor: selectedCategory === i ? "#FF0B30":"rgba(128, 128, 128,0.5)"}} >
                                         <Grid width={"15%"} height={"100%"} sx={{ml: "2%", mr: "2%"}}>
-                                            <CategoryIcon src={`./assets/vehicleShop/icon_${i}.png`}/>
+                                            <CategoryIcon className={`icon-${i.toLowerCase()}`}/>
                                         </Grid>
                                         <Typography variant='body1'  sx={{fontWeight: "bold", fontFamily: "Gilroy", textTransform: "uppercase"}}>{t(i)}</Typography>
                                     </CategoryVehicleItem>
@@ -485,33 +505,41 @@ function VehicleShop() {
                         </Grid>
                         <Grid display={"flex"} height={"10%"} width={"100%"} wrap="nowrap" alignItems={"center"}>
                             <PercentIcon></PercentIcon>
-                            <Typography sx={{pl:"2%"}}>Thông số</Typography>
+                            <Typography sx={{pl:"2%"}}>{t('SPEC')}</Typography>
                             <hr style={{width: "65%"}}/>
                         </Grid>
                         <Grid display={"flex"} height={"30%"} width={"100%"} sx={{gap: "2%", flexWrap: "wrap", mt: "-4%", ml: "-3%"}}>
-                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round"}}  variant='determinate' value={performanceVehicle.topspeed} size={70} thickness={7}/>
-                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Tốc độ</Typography>
-                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-1%"}}>{performanceVehicle.topspeed}</Typography>
+                            <Grid container width={"49%"} height={"50%"} justifyContent={"center"} alignItems={'center'} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", strokeLinecap:"round", color: "#FF0B30"}}  variant='determinate' value={performanceVehicle.power} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30", bottom: 0, position: 'absolute'}}>
+                                    {t('POWER')}
+                                </Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", fontWeight: "bold"}}>{performanceVehicle.power}</Typography>
                             </Grid>
-                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round", color: "#FFB84C"}}  variant='determinate' value={performanceVehicle.power} size={70} thickness={7}/>
-                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Sức mạnh</Typography>
-                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-1%"}}>{performanceVehicle.power}</Typography>
+                            <Grid container width={"49%"} height={"50%"} justifyContent={"center"} alignItems={'center'} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", strokeLinecap:"round", color: "#FF0B30"}}  variant='determinate' value={performanceVehicle.acceleration} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30", bottom: 0, position: 'absolute'}}>
+                                    {t('ACCELERATION')}
+                                </Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", fontWeight: "bold"}}>{performanceVehicle.acceleration}</Typography>
                             </Grid>
-                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round", color: "#1F8A70"}}  variant='determinate' value={performanceVehicle.handling} size={70} thickness={7}/>
-                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Điều khiển</Typography>
-                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-1%"}}>{performanceVehicle.handling}</Typography>
+                            <Grid container width={"49%"} height={"50%"} justifyContent={"center"} alignItems={'center'} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", strokeLinecap:"round", color: "#FF0B30"}}  variant='determinate' value={performanceVehicle.handling} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30", bottom: 0, position: 'absolute'}}>
+                                    {t('HANDLING')}
+                                </Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", fontWeight: "bold"}}>{performanceVehicle.handling}</Typography>
                             </Grid>
-                            <Grid width={"49%"} height={"50%"} justifyContent={"center"} sx={{position: "relative", pt: "2%"}}>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
-                                <CircularProgress  sx={{height: "100%", width: "100%", ml: "30%", strokeLinecap:"round", color: "#5B8FB9"}}  variant='determinate' value={performanceVehicle.acceleration} size={70} thickness={7}/>
-                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}}>Gia tốc</Typography>
-                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", top: 30, fontWeight: "bold", ml: "-1%"}}>{performanceVehicle.acceleration}</Typography>
+                            <Grid container width={"49%"} height={"50%"} justifyContent={"center"} alignItems={'center'} sx={{position: "relative", pt: "2%"}}>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", color: "gray"}}  variant='determinate' value={100} size={70} thickness={7}/>
+                                <CircularProgress  sx={{height: "100%", width: "100%", position:"absolute", strokeLinecap:"round", color: "#FF0B30"}}  variant='determinate' value={performanceVehicle.acceleration} size={70} thickness={7}/>
+                                <Typography variant='body1' width={"100%"} textAlign={"center"} sx={{color: "#ff0b30",fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30", bottom: 0, position: 'absolute'}}>
+                                    {t('TOPSPEED')}
+                                </Typography>
+                                <Typography width={"100%"} textAlign={"center"} sx={{position: "absolute", fontWeight: "bold"}}>{performanceVehicle.acceleration}</Typography>
                             </Grid>
                         </Grid>
                     </AnimatedGrid>
@@ -520,7 +548,7 @@ function VehicleShop() {
             <Bottom style={{...bottomSpring}}>
                 <Grid display={"flex"} height={"10%"} width={"100%"} wrap="nowrap" alignItems={"center"} sx={{mt: "-10px", mb: "10px"}}>
                     <ReorderIcon></ReorderIcon>
-                    <Typography sx={{pl:"5px"}}>Danh sách xe</Typography>
+                    <Typography sx={{pl:"5px"}}>{t('VEHICLE_LIST')}</Typography>
                     <hr style={{width: "91%"}}/>
                 </Grid>
                 
@@ -541,7 +569,7 @@ function VehicleShop() {
                                             <Typography variant='h6' sx={{wordBreak: "break-all", textTransform: "uppercase", fontFamily: "Gilroy", color: selectedItemBottom === e.spawncode ? "#ffffff":"#ff0b30"}}>{VEHICLE_DATA.find(vehicle => vehicle.spawncode === e.spawncode)?.name}</Typography>
                                         </Grid>
                                         <Grid width={"100%"} height={"70%"} sx={{ml: "2%"}} display={"flex"} justifyContent={"center"}>
-                                            <BottomImg src={`./assets/vehicleShop/${i}.png`}></BottomImg>
+                                            <BottomImg src={`https://docs.fivem.net/vehicles/${e.spawncode.toLowerCase()}.webp`}></BottomImg>
                                         </Grid>
                                         <Grid width={"100%"} height={"10%"} sx={{ml: "2%", mt: "-4%"}}>
                                             <Typography color={"secondary"} variant='body1' sx={{wordBreak: "break-all", textTransform: "uppercase", fontFamily: "Gilroy", fontWeight: "bold"}}>{e.price} $</Typography>
