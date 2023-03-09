@@ -10,6 +10,7 @@ export type IconsId =
   | "barber"
   | "barricade"
   | "basic"
+  | "boat"
   | "brain"
   | "bulletproof"
   | "bunker"
@@ -21,6 +22,8 @@ export type IconsId =
   | "charging"
   | "clip"
   | "clothes"
+  | "compact"
+  | "coupe"
   | "craft"
   | "database"
   | "dial"
@@ -50,6 +53,7 @@ export type IconsId =
   | "handcuff"
   | "hat"
   | "head"
+  | "helicopter"
   | "home"
   | "hostage"
   | "hotel"
@@ -74,10 +78,13 @@ export type IconsId =
   | "mask"
   | "med"
   | "medkit"
+  | "motorcycle"
+  | "muscle"
   | "mushroom"
   | "mute"
   | "needle"
   | "nogun"
+  | "offroad"
   | "organization"
   | "outcoming_call"
   | "pants"
@@ -101,17 +108,22 @@ export type IconsId =
   | "scope"
   | "search_people"
   | "search"
+  | "sedan"
   | "shoes"
   | "skin"
   | "smell"
   | "socket"
   | "speedometer"
+  | "sport"
+  | "sportsclassic"
   | "star"
   | "steal_people"
   | "steal_vehicle"
   | "steering"
   | "store"
+  | "super"
   | "suppressor"
+  | "suv"
   | "tablet"
   | "tattoo"
   | "taxi"
@@ -124,6 +136,7 @@ export type IconsId =
   | "unlock"
   | "unmute"
   | "usergroup"
+  | "van"
   | "vehicle_door"
   | "virus"
   | "wanted"
@@ -143,6 +156,7 @@ export type IconsKey =
   | "Barber"
   | "Barricade"
   | "Basic"
+  | "Boat"
   | "Brain"
   | "Bulletproof"
   | "Bunker"
@@ -154,6 +168,8 @@ export type IconsKey =
   | "Charging"
   | "Clip"
   | "Clothes"
+  | "Compact"
+  | "Coupe"
   | "Craft"
   | "Database"
   | "Dial"
@@ -183,6 +199,7 @@ export type IconsKey =
   | "Handcuff"
   | "Hat"
   | "Head"
+  | "Helicopter"
   | "Home"
   | "Hostage"
   | "Hotel"
@@ -207,10 +224,13 @@ export type IconsKey =
   | "Mask"
   | "Med"
   | "Medkit"
+  | "Motorcycle"
+  | "Muscle"
   | "Mushroom"
   | "Mute"
   | "Needle"
   | "Nogun"
+  | "Offroad"
   | "Organization"
   | "OutcomingCall"
   | "Pants"
@@ -234,17 +254,22 @@ export type IconsKey =
   | "Scope"
   | "SearchPeople"
   | "Search"
+  | "Sedan"
   | "Shoes"
   | "Skin"
   | "Smell"
   | "Socket"
   | "Speedometer"
+  | "Sport"
+  | "Sportsclassic"
   | "Star"
   | "StealPeople"
   | "StealVehicle"
   | "Steering"
   | "Store"
+  | "Super"
   | "Suppressor"
+  | "Suv"
   | "Tablet"
   | "Tattoo"
   | "Taxi"
@@ -257,6 +282,7 @@ export type IconsKey =
   | "Unlock"
   | "Unmute"
   | "Usergroup"
+  | "Van"
   | "VehicleDoor"
   | "Virus"
   | "Wanted"
@@ -276,6 +302,7 @@ export enum Icons {
   Barber = "barber",
   Barricade = "barricade",
   Basic = "basic",
+  Boat = "boat",
   Brain = "brain",
   Bulletproof = "bulletproof",
   Bunker = "bunker",
@@ -287,6 +314,8 @@ export enum Icons {
   Charging = "charging",
   Clip = "clip",
   Clothes = "clothes",
+  Compact = "compact",
+  Coupe = "coupe",
   Craft = "craft",
   Database = "database",
   Dial = "dial",
@@ -316,6 +345,7 @@ export enum Icons {
   Handcuff = "handcuff",
   Hat = "hat",
   Head = "head",
+  Helicopter = "helicopter",
   Home = "home",
   Hostage = "hostage",
   Hotel = "hotel",
@@ -340,10 +370,13 @@ export enum Icons {
   Mask = "mask",
   Med = "med",
   Medkit = "medkit",
+  Motorcycle = "motorcycle",
+  Muscle = "muscle",
   Mushroom = "mushroom",
   Mute = "mute",
   Needle = "needle",
   Nogun = "nogun",
+  Offroad = "offroad",
   Organization = "organization",
   OutcomingCall = "outcoming_call",
   Pants = "pants",
@@ -367,17 +400,22 @@ export enum Icons {
   Scope = "scope",
   SearchPeople = "search_people",
   Search = "search",
+  Sedan = "sedan",
   Shoes = "shoes",
   Skin = "skin",
   Smell = "smell",
   Socket = "socket",
   Speedometer = "speedometer",
+  Sport = "sport",
+  Sportsclassic = "sportsclassic",
   Star = "star",
   StealPeople = "steal_people",
   StealVehicle = "steal_vehicle",
   Steering = "steering",
   Store = "store",
+  Super = "super",
   Suppressor = "suppressor",
+  Suv = "suv",
   Tablet = "tablet",
   Tattoo = "tattoo",
   Taxi = "taxi",
@@ -390,6 +428,7 @@ export enum Icons {
   Unlock = "unlock",
   Unmute = "unmute",
   Usergroup = "usergroup",
+  Van = "van",
   VehicleDoor = "vehicle_door",
   Virus = "virus",
   Wanted = "wanted",
@@ -410,124 +449,137 @@ export const ICONS_CODEPOINTS: { [key in Icons]: string } = {
   [Icons.Barber]: "61705",
   [Icons.Barricade]: "61706",
   [Icons.Basic]: "61707",
-  [Icons.Brain]: "61708",
-  [Icons.Bulletproof]: "61709",
-  [Icons.Bunker]: "61710",
-  [Icons.Business]: "61711",
-  [Icons.Call]: "61712",
-  [Icons.Cannabis]: "61713",
-  [Icons.Car]: "61714",
-  [Icons.ChargingBattery]: "61715",
-  [Icons.Charging]: "61716",
-  [Icons.Clip]: "61717",
-  [Icons.Clothes]: "61718",
-  [Icons.Craft]: "61719",
-  [Icons.Database]: "61720",
-  [Icons.Dial]: "61721",
-  [Icons.Document]: "61722",
-  [Icons.Donkey]: "61723",
-  [Icons.Drag]: "61724",
-  [Icons.Drift]: "61725",
-  [Icons.Earing]: "61726",
-  [Icons.Engine]: "61727",
-  [Icons.Error]: "61728",
-  [Icons.Event]: "61729",
-  [Icons.Fine]: "61730",
-  [Icons.Fist]: "61731",
-  [Icons.Fix]: "61732",
-  [Icons.Flashlight]: "61733",
-  [Icons.Food]: "61734",
-  [Icons.Freckles]: "61735",
-  [Icons.Fuel]: "61736",
-  [Icons.Garage]: "61737",
-  [Icons.Givemoney]: "61738",
-  [Icons.Glasses]: "61739",
-  [Icons.Glove]: "61740",
-  [Icons.Government]: "61741",
-  [Icons.Grip]: "61742",
-  [Icons.Hair]: "61743",
-  [Icons.Hand]: "61744",
-  [Icons.Handcuff]: "61745",
-  [Icons.Hat]: "61746",
-  [Icons.Head]: "61747",
-  [Icons.Home]: "61748",
-  [Icons.Hostage]: "61749",
-  [Icons.Hotel]: "61750",
-  [Icons.House]: "61751",
-  [Icons.IncomingCall]: "61752",
-  [Icons.Insurance]: "61753",
-  [Icons.Item]: "61754",
-  [Icons.Jacket]: "61755",
-  [Icons.Jail]: "61756",
-  [Icons.Leader]: "61757",
-  [Icons.LeftArm]: "61758",
-  [Icons.LeftLeg]: "61759",
-  [Icons.Left]: "61760",
-  [Icons.Leg]: "61761",
-  [Icons.LevelUp]: "61762",
-  [Icons.Location]: "61763",
-  [Icons.Lock]: "61764",
-  [Icons.Logo]: "61765",
-  [Icons.Logs]: "61766",
-  [Icons.Mafia]: "61767",
-  [Icons.Makeup]: "61768",
-  [Icons.Mask]: "61769",
-  [Icons.Med]: "61770",
-  [Icons.Medkit]: "61771",
-  [Icons.Mushroom]: "61772",
-  [Icons.Mute]: "61773",
-  [Icons.Needle]: "61774",
-  [Icons.Nogun]: "61775",
-  [Icons.Organization]: "61776",
-  [Icons.OutcomingCall]: "61777",
-  [Icons.Pants]: "61778",
-  [Icons.Passenger]: "61779",
-  [Icons.People]: "61780",
-  [Icons.PhoneRing]: "61781",
-  [Icons.Pill]: "61782",
-  [Icons.PlasticSurgery]: "61783",
-  [Icons.Plate]: "61784",
-  [Icons.Pointing]: "61785",
-  [Icons.Police]: "61786",
-  [Icons.Radio]: "61787",
-  [Icons.Radioactive]: "61788",
-  [Icons.Realestate]: "61789",
-  [Icons.RightArm]: "61790",
-  [Icons.RightLeg]: "61791",
-  [Icons.Right]: "61792",
-  [Icons.Rip]: "61793",
-  [Icons.SaleHouse]: "61794",
-  [Icons.Sausage]: "61795",
-  [Icons.Scope]: "61796",
-  [Icons.SearchPeople]: "61797",
-  [Icons.Search]: "61798",
-  [Icons.Shoes]: "61799",
-  [Icons.Skin]: "61800",
-  [Icons.Smell]: "61801",
-  [Icons.Socket]: "61802",
-  [Icons.Speedometer]: "61803",
-  [Icons.Star]: "61804",
-  [Icons.StealPeople]: "61805",
-  [Icons.StealVehicle]: "61806",
-  [Icons.Steering]: "61807",
-  [Icons.Store]: "61808",
-  [Icons.Suppressor]: "61809",
-  [Icons.Tablet]: "61810",
-  [Icons.Tattoo]: "61811",
-  [Icons.Taxi]: "61812",
-  [Icons.Tie]: "61813",
-  [Icons.Torso]: "61814",
-  [Icons.Tractors]: "61815",
-  [Icons.Trucker]: "61816",
-  [Icons.Trunk]: "61817",
-  [Icons.Tshirt]: "61818",
-  [Icons.Unlock]: "61819",
-  [Icons.Unmute]: "61820",
-  [Icons.Usergroup]: "61821",
-  [Icons.VehicleDoor]: "61822",
-  [Icons.Virus]: "61823",
-  [Icons.Wanted]: "61824",
-  [Icons.Watch]: "61825",
-  [Icons.Weapon]: "61826",
-  [Icons.Weed]: "61827",
+  [Icons.Boat]: "61708",
+  [Icons.Brain]: "61709",
+  [Icons.Bulletproof]: "61710",
+  [Icons.Bunker]: "61711",
+  [Icons.Business]: "61712",
+  [Icons.Call]: "61713",
+  [Icons.Cannabis]: "61714",
+  [Icons.Car]: "61715",
+  [Icons.ChargingBattery]: "61716",
+  [Icons.Charging]: "61717",
+  [Icons.Clip]: "61718",
+  [Icons.Clothes]: "61719",
+  [Icons.Compact]: "61720",
+  [Icons.Coupe]: "61721",
+  [Icons.Craft]: "61722",
+  [Icons.Database]: "61723",
+  [Icons.Dial]: "61724",
+  [Icons.Document]: "61725",
+  [Icons.Donkey]: "61726",
+  [Icons.Drag]: "61727",
+  [Icons.Drift]: "61728",
+  [Icons.Earing]: "61729",
+  [Icons.Engine]: "61730",
+  [Icons.Error]: "61731",
+  [Icons.Event]: "61732",
+  [Icons.Fine]: "61733",
+  [Icons.Fist]: "61734",
+  [Icons.Fix]: "61735",
+  [Icons.Flashlight]: "61736",
+  [Icons.Food]: "61737",
+  [Icons.Freckles]: "61738",
+  [Icons.Fuel]: "61739",
+  [Icons.Garage]: "61740",
+  [Icons.Givemoney]: "61741",
+  [Icons.Glasses]: "61742",
+  [Icons.Glove]: "61743",
+  [Icons.Government]: "61744",
+  [Icons.Grip]: "61745",
+  [Icons.Hair]: "61746",
+  [Icons.Hand]: "61747",
+  [Icons.Handcuff]: "61748",
+  [Icons.Hat]: "61749",
+  [Icons.Head]: "61750",
+  [Icons.Helicopter]: "61751",
+  [Icons.Home]: "61752",
+  [Icons.Hostage]: "61753",
+  [Icons.Hotel]: "61754",
+  [Icons.House]: "61755",
+  [Icons.IncomingCall]: "61756",
+  [Icons.Insurance]: "61757",
+  [Icons.Item]: "61758",
+  [Icons.Jacket]: "61759",
+  [Icons.Jail]: "61760",
+  [Icons.Leader]: "61761",
+  [Icons.LeftArm]: "61762",
+  [Icons.LeftLeg]: "61763",
+  [Icons.Left]: "61764",
+  [Icons.Leg]: "61765",
+  [Icons.LevelUp]: "61766",
+  [Icons.Location]: "61767",
+  [Icons.Lock]: "61768",
+  [Icons.Logo]: "61769",
+  [Icons.Logs]: "61770",
+  [Icons.Mafia]: "61771",
+  [Icons.Makeup]: "61772",
+  [Icons.Mask]: "61773",
+  [Icons.Med]: "61774",
+  [Icons.Medkit]: "61775",
+  [Icons.Motorcycle]: "61776",
+  [Icons.Muscle]: "61777",
+  [Icons.Mushroom]: "61778",
+  [Icons.Mute]: "61779",
+  [Icons.Needle]: "61780",
+  [Icons.Nogun]: "61781",
+  [Icons.Offroad]: "61782",
+  [Icons.Organization]: "61783",
+  [Icons.OutcomingCall]: "61784",
+  [Icons.Pants]: "61785",
+  [Icons.Passenger]: "61786",
+  [Icons.People]: "61787",
+  [Icons.PhoneRing]: "61788",
+  [Icons.Pill]: "61789",
+  [Icons.PlasticSurgery]: "61790",
+  [Icons.Plate]: "61791",
+  [Icons.Pointing]: "61792",
+  [Icons.Police]: "61793",
+  [Icons.Radio]: "61794",
+  [Icons.Radioactive]: "61795",
+  [Icons.Realestate]: "61796",
+  [Icons.RightArm]: "61797",
+  [Icons.RightLeg]: "61798",
+  [Icons.Right]: "61799",
+  [Icons.Rip]: "61800",
+  [Icons.SaleHouse]: "61801",
+  [Icons.Sausage]: "61802",
+  [Icons.Scope]: "61803",
+  [Icons.SearchPeople]: "61804",
+  [Icons.Search]: "61805",
+  [Icons.Sedan]: "61806",
+  [Icons.Shoes]: "61807",
+  [Icons.Skin]: "61808",
+  [Icons.Smell]: "61809",
+  [Icons.Socket]: "61810",
+  [Icons.Speedometer]: "61811",
+  [Icons.Sport]: "61812",
+  [Icons.Sportsclassic]: "61813",
+  [Icons.Star]: "61814",
+  [Icons.StealPeople]: "61815",
+  [Icons.StealVehicle]: "61816",
+  [Icons.Steering]: "61817",
+  [Icons.Store]: "61818",
+  [Icons.Super]: "61819",
+  [Icons.Suppressor]: "61820",
+  [Icons.Suv]: "61821",
+  [Icons.Tablet]: "61822",
+  [Icons.Tattoo]: "61823",
+  [Icons.Taxi]: "61824",
+  [Icons.Tie]: "61825",
+  [Icons.Torso]: "61826",
+  [Icons.Tractors]: "61827",
+  [Icons.Trucker]: "61828",
+  [Icons.Trunk]: "61829",
+  [Icons.Tshirt]: "61830",
+  [Icons.Unlock]: "61831",
+  [Icons.Unmute]: "61832",
+  [Icons.Usergroup]: "61833",
+  [Icons.Van]: "61834",
+  [Icons.VehicleDoor]: "61835",
+  [Icons.Virus]: "61836",
+  [Icons.Wanted]: "61837",
+  [Icons.Watch]: "61838",
+  [Icons.Weapon]: "61839",
+  [Icons.Weed]: "61840",
 };

@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import player from "./player";
-import cartGrocery from "./groceryStore";
+import groceryStore from "./groceryStore";
 import menu from "./menu";
 import weaponShop from "./weapon-shop";
 import vehicleShop from "./vehicleShop";
@@ -9,7 +9,7 @@ import bankSystem from "./bankSystem";
 export const store = configureStore({
   reducer: {
     player,
-    cartGrocery,
+    groceryStore,
     menu,
     weaponShop,
     vehicleShop,
