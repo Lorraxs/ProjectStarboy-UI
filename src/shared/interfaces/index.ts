@@ -7,4 +7,4 @@ export * from "./weaponshop.interface";
 export * from "./grocerystore.interface";
 export * from "./vehicleshop.interface";
 export * from "./banksystem.interface";
-export * from "./craftingSystem.interface"
+export * from "./craftingsystem.interface"
