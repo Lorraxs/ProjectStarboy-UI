@@ -1,22 +1,18 @@
-import React, { useState, useEffect, useMemo  } from 'react';
+import React, { useState, useEffect  } from 'react';
 import useShow from '../hooks/useShow';
 import { Grid, Typography, Button } from '@mui/material';
 import styled from 'styled-components';
 import { cRequest } from '../utils/request'
 import { AnimatedGrid } from '../components/animated-mui'
+import { GroceryStoreListItem, DefaultGroceryStoreItemInfomation, EGroceryStoreUsesLevel, GroceryStoreType, EGroceryStoreTypeSubTittle, IProductGroceryShop } from '../shared/interfaces';
 import { animated, config, useChain, useSpring, useSpringRef, useTransition } from '@react-spring/web'
 import ScaleTwoToneIcon from '@mui/icons-material/ScaleTwoTone';
 import GroupAddTwoToneIcon from '@mui/icons-material/GroupAddTwoTone';
 import LoyaltyTwoToneIcon from '@mui/icons-material/LoyaltyTwoTone';
+import { addProduct, changeQuantity } from '../store/groceryStore';
 import { RootState } from '../store';
 import { useDispatch, useSelector } from "react-redux";
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
-import { IGroceryStoreBuyData, IGroceryStoreCart, IGroceryStoreItem, eGroceryStoreType } from '../shared/interfaces';
-import { getItemDataByName, isNullOrUndefined } from '../shared/utils/func';
-import { addGroceryStoreCart, decreaseCartQuantity, increaseCartQuantity } from '../store/groceryStore';
-import {useTranslation} from "react-i18next";
-import _ from 'lodash';
-
 const request = new cRequest()
 
 const Container = styled(AnimatedGrid)`
@@ -163,70 +159,56 @@ const BottomScrollbarItem = styled(AnimatedGrid)`
 
 
 function GroceryStore() {
-<<<<<<< HEAD
     const [show] = useShow(false, 'GroceryStore', true, true, true, true)
     const [menuList, setMenuList] = useState("Food");
     const [selectedCategory, setSelectedCategory] = useState('');
     const selectedList = GroceryStoreListItem[menuList as keyof typeof GroceryStoreListItem];
     const [selectedItem, setselectedItem] = useState( selectedList[0]);
-=======
-    const {t, i18n} = useTranslation('common');
-    const [show] = useShow(process.env.NODE_ENV === 'test', 'GroceryStore', true, true, true, true)
-    const [selectedCategory, setSelectedCategory] = useState<eGroceryStoreType>(eGroceryStoreType.all);
-    const products = useSelector((state:RootState)=>state.groceryStore.products);
-    const [selectedItem, setSelectedItem] = useState<IGroceryStoreItem | undefined>(products.length > 0 ? products[0] : undefined);
-    const cart = useSelector((state:RootState)=>state.groceryStore.cart);
-    const storeIdx = useSelector((state:RootState)=>state.groceryStore.storeIdx)
->>>>>>> master
     
-    const handleClickCategory = (category: eGroceryStoreType) => {
-        setSelectedCategory(category)
-        console.log(category)
+    const handleClickCategory = (i: string) => {
+        setMenuList(i);
+        setSelectedCategory(i);
     };
 
     const dispatch = useDispatch();
 
+    const products = useSelector((state: RootState) => state.cartGrocery.products);
 
-    const totalPrice = cart.reduce((sum, product) => {
+    const totalPrice = products.reduce((sum, product) => {
         return sum + (product.price * product.quantity);
     }, 0);
 
-    const handleAddProduct = (product: IGroceryStoreCart) => {
-        dispatch(addGroceryStoreCart(product));
+    const callbackServer = {
+        products: products.map((product) => ({
+          name: product.name,
+          quantity: product.quantity,
+        })),
+        totalPrice,
+    };
+
+    const handleAddProduct = (product: IProductGroceryShop) => {
+        dispatch(addProduct(product));
     }
 
-    const handleIncreaseCartQuantity = (productName: string) => {
-        dispatch(increaseCartQuantity(productName))
-    }
-
-    const handleDecreaseCartQuantity = (productName: string) => {
-        dispatch(decreaseCartQuantity(productName))
-    }
+    const handleQuantityChange = (product:IProductGroceryShop , action: string) => {
+        let newQuantity = product.quantity;
+        if (action === 'increase') {
+            newQuantity++;
+        } else if (action === 'decrease') {
+            newQuantity--;
+        }
+        dispatch(changeQuantity({ product, quantity: newQuantity }));
+    };
 
     const onSubmit = () =>{
-        const data: IGroceryStoreBuyData = {
-            cart,
-            storeIdx 
-        }
-        request.post('GroceryShop:Buy', data)
+        console.log(callbackServer);
+        request.post('GroceryShop:Buy', callbackServer)
     }
 
-    const productList = useMemo(() => {
-        if(selectedCategory === eGroceryStoreType.all){
-            return products
-        }else{
-            return _.filter(products, o=> o.category === selectedCategory)
-        }
-    }, 
-    [products, selectedCategory])
+    useEffect(() => {
+        setselectedItem(selectedList[0])
+    }, [selectedList]);
 
-    const itemData = useMemo(() => {
-        if(selectedItem !== undefined){
-            return getItemDataByName(selectedItem.name)
-        }
-        return undefined
-    }, [selectedItem])
-    
 
     const leftSpringRef = useSpringRef();
     const leftSpring = useSpring({
@@ -277,33 +259,31 @@ function GroceryStore() {
                 <ParrentGrid  style={{...leftSpring}} xs={2}>
                     <AnimatedGrid xs={12} height={"10%"}  sx={{mt: 1, mb:4}} display={"flex"} flexDirection={"column"}>
                         <Grid height={"50%"}>
-                            <Typography variant='h5' color={"primary"} sx={{fontFamily: "Title", fontWeight:"bold"}}>{t('INFOMATION')}</Typography>
+                            <Typography variant='h5' color={"primary"} sx={{fontFamily: "Title", fontWeight:"bold"}}>Thông tin</Typography>
                         </Grid>
                         <Grid height={"50%"}>
-                            <Typography variant='h5' color={"white"} sx={{fontFamily: "Title", fontWeight:"bold"}}>{t('PRODUCT')}</Typography>
+                            <Typography variant='h5' color={"white"} sx={{fontFamily: "Title", fontWeight:"bold"}}>sản phẩm</Typography>
                         </Grid>
                     </AnimatedGrid>
-                    {(selectedItem !== undefined) && <AnimatedGrid xs={12} height={"10%"}  sx={{mt: 1}} display={"flex"} flexDirection={"row"}>
-                        <LeftCenterImg src={`./assets/groceryShop/${selectedItem.name}.png`}></LeftCenterImg>
+                    <AnimatedGrid xs={12} height={"10%"}  sx={{mt: 1}} display={"flex"} flexDirection={"row"}>
+                        <LeftCenterImg src={`./assets/groceryShop/${selectedItem}.png`}></LeftCenterImg>
                         <Grid sx={{ml:4}} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                            <Typography color={"primary"} variant='body1'sx={{fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}} >{itemData?.label}</Typography>
+                            <Typography color={"primary"} variant='body1'sx={{fontFamily:"Title", fontWeight: "bold", textShadow: "0 0 10px #ff0b30"}} >{DefaultGroceryStoreItemInfomation[selectedItem].tittle}</Typography>
                         </Grid>
-                    </AnimatedGrid>}
-                    {(selectedItem !== undefined) && <AnimatedGrid xs={12} height={"7%"}  sx={{mt: 1}} display={"flex"} flexDirection={"row"}>
+                    </AnimatedGrid>
+                    <AnimatedGrid xs={12} height={"7%"}  sx={{mt: 1}} display={"flex"} flexDirection={"row"}>
                         <Grid width={"100%"}>
-                            <Typography variant='body1' sx={{wordBreak: 'break-all', fontFamily: "Gilroy"}}>{itemData?.description}</Typography>
+                            <Typography variant='body1' sx={{wordBreak: 'break-all', fontFamily: "Gilroy"}}>{DefaultGroceryStoreItemInfomation[selectedItem].description}</Typography>
                         </Grid>
-                    </AnimatedGrid>}
+                    </AnimatedGrid>
                     <AnimatedGrid xs={12} height={"60%"}  sx={{mt: 1}} display={"flex"} flexDirection={"column"}>
                         <Grid sx={{mb:4 ,p:2, backgroundColor: "rgba(163, 162, 162, 0.1)", borderRadius:"10px"}} width={"100%"} display={"flex"} wrap={"nowrap"} height={"20%"} alignItems={"center"}>
                             <Grid height={"80%"} display={"flex"} alignItems={"center"} justifyContent={"center"}  width={"20%"} sx={{border: "1px solid #ff0b30", borderRadius: "10px", backgroundColor: "rgba(255, 11, 48, 0.2)"}}>
                                 <ScaleTwoToneIcon sx={{color: "#ffffff"}}></ScaleTwoToneIcon>
                             </Grid>
                             <Grid height={"80%"} display={"flex"}justifyContent={"center"}  width={"80%"} flexDirection={"column"} sx={{pl: 3}}>
-                                <Typography variant='body1' sx={{fontFamily: "Title", fontSize:"11px", color: "rgba(204, 204, 204, 0.8)"}}>{t('WEIGHT')}</Typography>
-                                {(selectedItem !== undefined) && <Typography variant='body1' sx={{fontFamily: "Gilroy"}}>
-                                    {itemData?.weight} gram
-                                </Typography>}
+                                <Typography variant='body1' sx={{fontFamily: "Title", fontSize:"11px", color: "rgba(204, 204, 204, 0.8)"}}>Trọng lượng</Typography>
+                                <Typography variant='body1' sx={{fontFamily: "Gilroy"}}>{DefaultGroceryStoreItemInfomation[selectedItem].weight} gram</Typography>
                             </Grid>
                         </Grid>
                         <Grid sx={{mb:4 ,p:2, backgroundColor: "rgba(163, 162, 162, 0.1)", borderRadius:"10px"}} width={"100%"} display={"flex"} wrap={"nowrap"} height={"20%"} alignItems={"center"}>
@@ -311,10 +291,8 @@ function GroceryStore() {
                                 <GroupAddTwoToneIcon sx={{color: "#ffffff"}}></GroupAddTwoToneIcon>
                             </Grid>
                             <Grid height={"80%"} display={"flex"}justifyContent={"center"}  width={"80%"} flexDirection={"column"} sx={{pl: 3}}>
-                                <Typography variant='body1' sx={{fontFamily: "Title", fontSize:"11px", color: "rgba(204, 204, 204, 0.8)"}}>{t('DESCRIPTION')}</Typography>
-                                {(selectedItem !== undefined) && <Typography variant='body1' sx={{fontFamily: "Gilroy"}}>
-                                    {itemData?.description}
-                                </Typography>}
+                                <Typography variant='body1' sx={{fontFamily: "Title", fontSize:"11px", color: "rgba(204, 204, 204, 0.8)"}}>Công dụng</Typography>
+                                <Typography variant='body1' sx={{fontFamily: "Gilroy"}}>{DefaultGroceryStoreItemInfomation[selectedItem].uses}</Typography>
                             </Grid>
                         </Grid>
                         <Grid sx={{mb:4 ,p:2, backgroundColor: "rgba(163, 162, 162, 0.1)", borderRadius:"10px"}} width={"100%"} display={"flex"} wrap={"nowrap"} height={"20%"} alignItems={"center"}>
@@ -322,10 +300,8 @@ function GroceryStore() {
                                 <LoyaltyTwoToneIcon sx={{color: "#ffffff"}}></LoyaltyTwoToneIcon>
                             </Grid>
                             <Grid height={"80%"} display={"flex"}justifyContent={"center"}  width={"80%"} flexDirection={"column"} sx={{pl: 3}}>
-                                <Typography variant='body1' sx={{fontFamily: "Title", fontSize:"11px", color: "rgba(204, 204, 204, 0.8)"}}>{t('RARITY')}</Typography>
-                                {(selectedItem !== undefined) && <Typography variant='body1' sx={{fontFamily: "Gilroy"}}>
-                                    {itemData?.rarity}
-                                </Typography>}
+                                <Typography variant='body1' sx={{fontFamily: "Title", fontSize:"11px", color: "rgba(204, 204, 204, 0.8)"}}>Tần suất sử dụng</Typography>
+                                <Typography variant='body1' sx={{fontFamily: "Gilroy"}}>{EGroceryStoreUsesLevel[DefaultGroceryStoreItemInfomation[selectedItem].level as keyof typeof EGroceryStoreUsesLevel]}</Typography>
                             </Grid>
                         </Grid>
                     </AnimatedGrid>
@@ -334,39 +310,27 @@ function GroceryStore() {
                     <AnimatedGrid height={"12%"} display={"flex"} justifyContent={"center"} sx={{pt:1}}>
                         <AnimatedGrid xs={8} justifyContent={"center"} >
                             <Grid>
-                                {(selectedItem !== undefined) && <Typography variant='h5' textAlign={"center"} color='primary' sx={{fontFamily: "Title",fontWeight: "bold", textShadow: "0 0 15px #ff0b30"}}>
-                                    {itemData?.label}
-                                </Typography>}
+                                <Typography variant='h5' textAlign={"center"} color='primary' sx={{fontFamily: "Title",fontWeight: "bold", textShadow: "0 0 15px #ff0b30"}}>{DefaultGroceryStoreItemInfomation[selectedItem].tittle}</Typography>
                             </Grid>
                             <Grid>
-                                {(selectedItem !== undefined) &&  <Typography variant='body1' textAlign={"center"} sx={{fontFamily: "Gilroy",wordBreak: 'break-all', color:"#6B728E"}}>
-                                    {itemData?.description}
-                                </Typography>}
+                                <Typography variant='body1' textAlign={"center"} sx={{fontFamily: "Gilroy",wordBreak: 'break-all', color:"#6B728E"}}>{DefaultGroceryStoreItemInfomation[selectedItem].description}</Typography>
                             </Grid>
                         </AnimatedGrid>
                     </AnimatedGrid>
                     <AnimatedGrid height={"78%"} width={"100%"} display={"flex"} flexDirection={"column"}   alignItems={"center"} justifyContent={"center"} >
-                        <ItemCenterImg  src={`./assets/groceryShop/${selectedItem?.name}.png`}/>
+                        <ItemCenterImg  src={`./assets/groceryShop/${selectedItem}.png`}/>
                         <Grid width={"100%"} sx={{mt: "2%", mb:"4%"}}>
-                            {(selectedItem !== undefined) &&  <Typography variant='h5'sx={{fontFamily: "Gilroy", fontWeight: "bold", color:"#30e3b7", mt:"-5px"}} textAlign={"center"}>
-                                {selectedItem.price.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $
-                            </Typography>}
+                            <Typography variant='h5'sx={{fontFamily: "Gilroy", fontWeight: "bold", color:"#30e3b7", mt:"-5px"}} textAlign={"center"}>{(DefaultGroceryStoreItemInfomation[selectedItem].price).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
                         </Grid> 
                     </AnimatedGrid>
                     <AnimatedGrid height={"10%"} justifyContent={"center"} display={"flex"} alignItems={"center"}>
-                        {(selectedItem !== undefined) && <GradientButton variant='contained'size="large" sx={{fontWeight: "bold"}} onClick={() => handleAddProduct({
-                            name: selectedItem.name,
-                            price: selectedItem.price,
-                            quantity: 1
-                        })}>
-                            {t('ADD_TO_CART')}
-                        </GradientButton>}
+                        <GradientButton variant='contained'size="large" sx={{fontWeight: "bold"}} onClick={() => handleAddProduct({name: selectedItem, type: DefaultGroceryStoreItemInfomation[selectedItem].type, price: DefaultGroceryStoreItemInfomation[selectedItem].price, quantity: 1})}>Thêm vào giỏ hàng</GradientButton>
                     </AnimatedGrid>
                 </ParrentGrid>
                 <ParrentGrid xs={2} style={{...rightSpring}} >
                     <Grid xs={12} display={"flex"} flexDirection={"column"} height={"10%"} sx={{mt: 1}}>
-                        <Typography variant='h5' color={"primary"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>{t('SHOP')}</Typography>
-                        <Typography variant='h5' color={"white"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>{t('CART')}</Typography>
+                        <Typography variant='h5' color={"primary"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>giỏ</Typography>
+                        <Typography variant='h5' color={"white"} sx={{fontFamily: "Title", fontWeight:"bold", float:"right", textAlign:"right"}}>hàng</Typography>
                     </Grid>
                     <Grid xs={12} display={"flex"} height={"65%"} justifyContent={"center"} 
                     sx={{ 
@@ -376,16 +340,16 @@ function GroceryStore() {
                         borderRadius: "10px",
                         backgroundColor: "rgba(163, 162, 162, 0.1)"
                     }}>
-                        {cart.length === 0 ? (
+                        {products.length === 0 ? (
                             <AnimatedGrid width={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                 <RemoveShoppingCartIcon sx={{ fontSize: 60 }}></RemoveShoppingCartIcon>
                             </AnimatedGrid>
                         ):(
                             <RightCenterScrollbarItem width={"90%"} flexDirection={"column"} height={"100%"} sx={{pr:2, overflowX: 'hidden', overflowY: 'auto'}}>
-                                {cart.map((i) => (
+                                {products.map((i) => (
                                     <RightCenterMenuItem display={"flex"} wrap={"nowrap"} alignItems={"center"} sx={{pl:2}}>
                                         <AnimatedGrid width={"10%"} height={"100%"}>
-                                            <Grid height={"100%"} onClick={() => handleIncreaseCartQuantity(i.name)}>
+                                            <Grid height={"100%"} onClick={() => handleQuantityChange(i, 'increase')}>
                                                 <Typography variant='body1' display={"flex"} justifyContent={"center"} sx={{fontWeight: "bold", backgroundColor:"red", borderRadius: "20%"}}>
                                                     +
                                                 </Typography>
@@ -397,16 +361,16 @@ function GroceryStore() {
                                             </Typography>
                                         </AnimatedGrid>
                                         <AnimatedGrid width={"10%"} height={"100%"}>
-                                            <Grid height={"100%"} onClick={() => handleDecreaseCartQuantity(i.name)}>
+                                            <Grid height={"100%"} onClick={() => handleQuantityChange(i, 'decrease')}>
                                                 <Typography variant='body1' display={"flex"} justifyContent={"center"} sx={{fontWeight: "bold", backgroundColor:"green", borderRadius: "20%"}}>
                                                     -
                                                 </Typography>
                                             </Grid>
                                         </AnimatedGrid>
                                         <AnimatedGrid width={"33%"} height={"100%"} sx={{ml: 2}}>
-                                            {selectedItem !== undefined && <Typography variant='body1' display={"flex"} sx={{fontWeight: "bold", fontFamily:"Gilroy", fontSize: "14px"}}>
-                                                {itemData?.label}
-                                            </Typography>}
+                                            <Typography variant='body1' display={"flex"} sx={{fontWeight: "bold", fontFamily:"Gilroy", fontSize: "14px"}}>
+                                                {DefaultGroceryStoreItemInfomation[i.name].tittle}
+                                            </Typography>
                                         </AnimatedGrid>
                                         <AnimatedGrid width={"32%"} container height={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                             <Grid width={"100%"} height={"100%"} sx={{}}>
@@ -421,19 +385,19 @@ function GroceryStore() {
                         
                     </Grid>
                     <Grid xs={12}  display={"flex"} height={"15%"} sx={{mt: "10%"}} wrap={"nowrap"} >
-                        {cart.length === 0 ? (
+                        {products.length === 0 ? (
                             <Grid xs={4}>
-                                <Button variant='contained' sx={{fontSize: "10px", fontWeight: "bold", fontFamily:"Title"}} disabled>{t('PAY')}</Button>
+                                <Button variant='contained' sx={{fontSize: "10px", fontWeight: "bold", fontFamily:"Title"}} disabled>Thanh toán</Button>
                             </Grid>
                         ):(
                             <Grid xs={4}>
-                                <Button variant='contained' sx={{fontSize: "10px", fontWeight: "bold", fontFamily:"Title"}} onClick={onSubmit}>{t('PAY')}</Button>
+                                <Button variant='contained' sx={{fontSize: "10px", fontWeight: "bold", fontFamily:"Title"}} onClick={onSubmit}>Thanh toán</Button>
                             </Grid>
                         )}
                         
                         <Grid xs={8} display={"flex"} flexDirection={"column"}>
                             <Grid width={"100%"}>
-                                <Typography variant='body1' textAlign={"right"} sx={{fontWeight: "bold", textTransform: "uppercase"}}>{t('TOTAL')}</Typography>
+                                <Typography variant='body1' textAlign={"right"} sx={{fontWeight: "bold", textTransform: "uppercase"}}>Tổng thanh toán</Typography>
                             </Grid>
                             <Grid width={"100%"} >
                                 <Typography variant='body1' textAlign={"right"} sx={{mt: 2,fontWeight: "bold", fontFamily: "Title", fontSize:"19px",color:"#30e3b7"}}>
@@ -448,62 +412,29 @@ function GroceryStore() {
                 <ParrentGrid style={{...bottomSpring}} container width={"100%"} height={"100%"} justifyContent={"center"} >
                     <AnimatedGrid width={"90%"}  container justifyContent={"center"} alignItems={"center"}>
                         <AnimatedGrid height={"15%"} display={"flex"} width={"70%"} wrap={"nowrap"} justifyContent={"center"} sx={{mt:-10}}>
-                            <BottomMenuItem width={"15%"} onClick={() => handleClickCategory(eGroceryStoreType.all)} sx={{
-                                background: selectedCategory === eGroceryStoreType.all ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
-                                <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
-                                    {t('ALL')}
-                                </Typography>
-                            </BottomMenuItem>
-                            <BottomMenuItem width={"15%"} onClick={() => handleClickCategory(eGroceryStoreType.food)} sx={{
-                                background: selectedCategory === eGroceryStoreType.food ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
-                                <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
-                                    {t('FOOD')}
-                                </Typography>
-                            </BottomMenuItem>
-                            <BottomMenuItem width={"15%"} onClick={() => handleClickCategory(eGroceryStoreType.drink)} sx={{
-                                background: selectedCategory === eGroceryStoreType.drink ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
-                                <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
-                                    {t('DRINK')}
-                                </Typography>
-                            </BottomMenuItem>
-                            <BottomMenuItem width={"15%"} onClick={() => handleClickCategory(eGroceryStoreType.tools)} sx={{
-                                background: selectedCategory === eGroceryStoreType.tools ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
-                                <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
-                                    {t('TOOLS')}
-                                </Typography>
-                            </BottomMenuItem>
-                            <BottomMenuItem width={"15%"} onClick={() => handleClickCategory(eGroceryStoreType.items)} sx={{
-                                background: selectedCategory === eGroceryStoreType.items ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
-                                <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
-                                    {t('ITEMS')}
-                                </Typography>
-                            </BottomMenuItem>
-                            <BottomMenuItem width={"15%"} onClick={() => handleClickCategory(eGroceryStoreType.technology)} sx={{
-                                background: selectedCategory === eGroceryStoreType.technology ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
-                                <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
-                                    {t('TECHNOLOGY')}
-                                </Typography>
-                            </BottomMenuItem>
+                            {GroceryStoreType.map((i) => (
+                                <BottomMenuItem width={"15%"} key={i}   onClick={() => handleClickCategory(i)} sx={{
+                                    background: selectedCategory === i || menuList === i ? "linear-gradient(0deg, #ff0b30 30%, #ff3d5b 90%)" : "rgba(255, 11, 48, 0.1)"}}>
+                                    <Typography sx={{color: "#fffffff", fontFamily: 'Gilroy', fontWeight: 'bold'}}>
+                                        {EGroceryStoreTypeSubTittle[i as keyof typeof EGroceryStoreTypeSubTittle]}
+                                    </Typography>
+                                </BottomMenuItem>
+                            ))}
                         </AnimatedGrid>
                         <AnimatedGrid height={"80%"} width={"90%"} sx={{borderRadius: "10px", backgroundColor: "rgba(163, 162, 162, 0.1)"}} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                             <BottomScrollbar width={"90%"} height={"80%"} wrap="nowrap" justifyContent={"flex-start"} sx={{pb: 3, overflowX: 'auto', overflowY: 'hidden'}}>
-                                {productList.map((item) => (
-                                    <BottomScrollbarItem  onClick={()=>setSelectedItem(item)} sx={{
-                                        backgroundColor: selectedItem === item ? "rgba(255, 255, 255, 0.9)" : "rgba(255, 11, 48, 0.1)"}}>
+                                {selectedList.map((i) => (
+                                    <BottomScrollbarItem  onClick={()=>setselectedItem(i)} sx={{
+                                        backgroundColor: selectedItem === i ? "rgba(255, 255, 255, 0.9)" : "rgba(255, 11, 48, 0.1)"}}>
                                             <Grid width={"100%"} height={"100%"} justifyContent={"center"}>
                                                 <AnimatedGrid width={"100%"} justifyContent={"center"}>
-                                                    <Typography variant='body1' sx={{color: selectedItem === item ? "#ff0b30" : "#ffffff", fontWeight: "bold", textTransform: "uppercase"}} textAlign={"center"}>
-                                                        {getItemDataByName(item.name)?.label}
-                                                    </Typography>
-                                                    <Typography variant='body1' textAlign={"center"} sx={{color:"#28ad8d", fontWeight: "bold"}}>
-                                                        {item.price.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $
-                                                    </Typography>
+                                                    <Typography variant='body1' sx={{color: selectedItem === i ? "#ff0b30" : "#ffffff", fontWeight: "bold", textTransform: "uppercase"}} textAlign={"center"}>{DefaultGroceryStoreItemInfomation[i].tittle}</Typography>
+                                                    <Typography variant='body1' textAlign={"center"} sx={{color:"#28ad8d", fontWeight: "bold"}}>{(DefaultGroceryStoreItemInfomation[i].price).toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,')} $</Typography>
                                                 </AnimatedGrid>
-                                                <BottoScrollbarImg  src={`./assets/groceryShop/${item.name.toLowerCase()}.png`}/>
+                                                <BottoScrollbarImg  src={`./assets/groceryShop/${i}.png`}/>
                                             </Grid>
                                     </BottomScrollbarItem>
                                 ))}
-
                             </BottomScrollbar>
                         </AnimatedGrid>
                     </AnimatedGrid>

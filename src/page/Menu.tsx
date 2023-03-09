@@ -151,9 +151,9 @@ function Menu() {
   ))
 }
 
-const MenuPage = {
+const Menupage = {
   element: Menu,
   needLogin: true
 };
 
-export default MenuPage
+export default Menupage

@@ -1,65 +1,53 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  IGroceryStoreCart,
-  IGroceryStoreItem,
-  eGroceryStoreType,
-} from "../../shared/interfaces";
+import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IProductGroceryShop } from "../../shared/interfaces";
 
-interface IInitialState {
-  products: IGroceryStoreItem[];
-  cart: IGroceryStoreCart[];
-  storeIdx: number;
+interface ICart {
+    products: IProductGroceryShop[];
 }
 
-const initialState: IInitialState = {
-  products: [
-    {
-      name: "bread",
-      price: 1500,
-      category: eGroceryStoreType.food,
-    },
-  ],
-  cart: [],
-  storeIdx: 0,
+const initialState: ICart = {
+    products: [],
 };
 
 const cartSlice = createSlice({
-  name: "groceryStore",
-  initialState,
-  reducers: {
-    setGroceryStore: (state, action) => action.payload,
-    addGroceryStoreCart: (state, action) => {
-      const cartItem = state.cart.find((e) => e.name === action.payload.name);
-      if (cartItem !== undefined) {
-        cartItem.quantity += action.payload.quantity;
-      } else {
-        state.cart.push(action.payload);
-      }
+name: "cartGrocery",
+initialState,
+reducers: {
+    addProduct: (state, action: PayloadAction<IProductGroceryShop>) => {
+    const existingProduct = state.products.find(
+        (p) => p.name === action.payload.name
+    );
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        state.products.push({ ...action.payload, quantity: 1 });
+    }
     },
-    resetGroceryStore: () => initialState,
-    increaseCartQuantity: (state, action) => {
-      const cartItem = state.cart.find((e) => e.name === action.payload);
-      if (cartItem) {
-        cartItem.quantity++;
-      }
-      return state;
+    // removeProduct: (state, action: PayloadAction<IProductGroceryShop>) => {
+    // state.products = state.products.filter(
+    //     (p) => p.name !== action.payload.name
+    // );
+    // },
+    changeQuantity: (
+        state,
+        action: PayloadAction<{ product: IProductGroceryShop; quantity: number }>
+    ) => {
+    if (action.payload.quantity <= 0) {
+        state.products = state.products.filter(
+            (p) => p.name !== action.payload.product.name
+        );
+    } else {
+        const product = state.products.find(
+            (p) => p.name === action.payload.product.name
+        );
+        if (product) {
+            product.quantity = action.payload.quantity;
+        }
+    }
     },
-    decreaseCartQuantity: (state, action) => {
-      const cartItem = state.cart.find((e) => e.name === action.payload);
-      if (cartItem) {
-        cartItem.quantity--;
-      }
-      return state;
-    },
-  },
+},
 });
 
-export const {
-  setGroceryStore,
-  addGroceryStoreCart,
-  resetGroceryStore,
-  increaseCartQuantity,
-  decreaseCartQuantity,
-} = cartSlice.actions;
+export const { addProduct, changeQuantity } = cartSlice.actions;
 
 export default cartSlice.reducer;

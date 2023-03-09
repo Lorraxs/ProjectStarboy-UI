@@ -42,7 +42,7 @@ function App() {
           borderRadius: '1vw',
           px: 5,
           py: 2,
-          border: '1px solid #0BFF33',
+          border: '1px solid #0BFF33'
         }}
       >
         <Grid xs={1} item sx={{
@@ -56,8 +56,7 @@ function App() {
         </Grid>
       </Grid>
     }, {
-      duration: 5000,
-      position: 'bottom-center'
+      duration: 5000
     })
     const messageHandler = (e: MessageEvent<INUINotificationMessage>) => {
       const component = e.data.component;
@@ -94,8 +93,7 @@ function App() {
               </Grid>
             </Grid>
           }, {
-            duration: duration,
-            position: 'bottom-center'
+            duration: duration
           })
         case "error":
           return toast.custom((t)=>{
@@ -125,8 +123,7 @@ function App() {
               </Grid>
             </Grid>
           }, {
-            duration: duration,
-            position: 'bottom-center'
+            duration: duration
           });
         case "warning":
           return toast.custom((t)=>{
@@ -156,8 +153,7 @@ function App() {
               </Grid>
             </Grid>
           }, {
-            duration: duration,
-            position: 'bottom-center'
+            duration: duration
           });
         case "info":
           return toast.custom((t)=>{
@@ -187,8 +183,7 @@ function App() {
               </Grid>
             </Grid>
           }, {
-            duration: duration,
-            position: 'bottom-center'
+            duration: duration
           });
         default:
           break;
