@@ -219,8 +219,6 @@ function VehicleShop() {
     const vehicles = useSelector((state:RootState)=>state.vehicleShop.vehicles)
     const shopIdx = useSelector((state:RootState)=>state.vehicleShop.shopIdx)
     const testPrice = useSelector((state:RootState)=> state.vehicleShop.testPrice)
-    const primaryColor = useSelector((state:RootState)=> state.vehicleShop.primaryColor)
-    const secondaryColor = useSelector((state:RootState)=> state.vehicleShop.secondaryColor)
     const [performanceVehicle, setPerformanceVehicle] = useState<IPerformanceVehicle>({power: 0, acceleration: 0, handling: 0, topspeed: 0})
     const [data, setData] = useState<IBuyDataVehicle>({ spawncode: '', price: 0, color1: -1, color2: 0, shopIndex: shopIdx});
 
