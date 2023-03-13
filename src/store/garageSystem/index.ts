@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IGarageData } from "../../shared/interfaces";
+
 interface IInitStateProps {
     vehicle: IGarageData[];
-    shopIdx: number;
+    garageIdx: number;
     returnPrice: number;
     garageName: string,
 }
@@ -316,7 +317,7 @@ const initialState: IInitStateProps = {
             inGarage: false
         },
     ],
-    shopIdx: 0,
+    garageIdx: 0,
     garageName: "Example Garage",
     returnPrice: 2000,
 };
@@ -325,9 +326,29 @@ export const garageSystemSlice = createSlice({
     name: "garageSystem",
     initialState,
     reducers: {
-        setGarageData: (state, action) => ({ ...state, ...action.payload }),
+        setGarageVehicle: (state, action) => ({
+            ...state,
+            vehicle: action.payload,
+        }),
+        setGarageIndex: (state, action) => ({
+            ...state,
+            garageIdx: action.payload,
+        }),
+        setGarageName: (state, action) => ({
+            ...state,
+            garageName: action.payload,
+        }),
+        setGarageReturnPrice: (state, action) => ({
+            ...state,
+            returnPrice: action.payload,
+        }),
     },
 });
 
-export const { setGarageData } = garageSystemSlice.actions;
+export const { 
+    setGarageVehicle, 
+    setGarageIndex , 
+    setGarageName, 
+    setGarageReturnPrice
+} = garageSystemSlice.actions;
 export default garageSystemSlice.reducer;

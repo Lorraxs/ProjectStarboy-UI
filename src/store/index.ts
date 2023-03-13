@@ -6,6 +6,7 @@ import weaponShop from "./weapon-shop";
 import vehicleShop from "./vehicleShop";
 import bankSystem from "./bankSystem";
 import garageSystem from "./garageSystem";
+import craftingSystem from "./craftingSystem";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     vehicleShop,
     bankSystem,
     garageSystem,
+    craftingSystem
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

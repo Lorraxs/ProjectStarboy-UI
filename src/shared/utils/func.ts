@@ -1,4 +1,4 @@
-import { IVehicleData, IWeaponData } from "../interfaces";
+import { IVehicleData, IWeaponData, ICraftingDefaultData } from "../interfaces";
 import {
   EPlayerInventorySlot,
   EPlayerTransSlot,
@@ -216,6 +216,7 @@ export const getWeaponGroupByName = (weaponName: string) => {
     }
   }
 };
+
 
 export const getVehicleGroupByName = (vehicleName: string) => {
   

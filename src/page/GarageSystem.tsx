@@ -11,7 +11,7 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import NoTransferIcon from '@mui/icons-material/NoTransfer';
 import CarRentalIcon from '@mui/icons-material/CarRental';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { Search as SearchIcon } from "@mui/icons-material";
+
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
 import { Grid, Typography, Box, Button , LinearProgress} from '@mui/material';
@@ -71,7 +71,7 @@ const ScrollBarItem = styled(AnimatedGrid)`
 `
 function GarageSystem() {
     const {t} = useTranslation('common');
-    const [show] = useShow(process.env.NODE_ENV === 'development', 'garageSystem', false, false, false, false)
+    const [show] = useShow(false, 'garageSystem', false, false, false, false)
     const transRef = useSpringRef()
     const allVehicle = useSelector((state:RootState)=>state.garageSystem.vehicle);
     const garageName = useSelector((state:RootState)=>state.garageSystem.garageName);

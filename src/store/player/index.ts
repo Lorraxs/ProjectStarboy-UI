@@ -20,6 +20,12 @@ const initialState: IPlayer = {
       {
         name: "bread",
       },
+      {
+        name: "bread",
+      },
+      {
+        name: "bread",
+      },
     ],
   },
   inventoryWeight: 0,
